@@ -1,6 +1,8 @@
 package at.fhv.ae.domain.customer;
 
-public class BankAccount {
+import java.io.Serializable;
+
+public class BankAccount implements Serializable {
 
     private Bank bank;
     private String iban;

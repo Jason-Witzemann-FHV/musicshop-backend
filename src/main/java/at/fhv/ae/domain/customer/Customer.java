@@ -2,7 +2,9 @@ package at.fhv.ae.domain.customer;
 
 import org.bson.types.ObjectId;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
 
     private ObjectId id;
     private Address address;

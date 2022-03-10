@@ -14,19 +14,16 @@ import org.bson.types.ObjectId;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Optional;
 
-public class RemoteCustomerRepository extends UnicastRemoteObject implements CustomerRepository {
+public class RemoteCustomerRepositoryImpl extends UnicastRemoteObject implements CustomerRepository {
 
     private static final String connectionStr
             = "mongodb://AdminSammy:admin@10.0.40.161:27017/customer?authSource=admin";
 
     private final MongoCollection<Customer> customers;
 
-    private static final int rmiPort = 8765;
-
-    public RemoteCustomerRepository() throws RemoteException {
-        super(rmiPort);
+    public RemoteCustomerRepositoryImpl() throws RemoteException {
+        super();
 
         CodecRegistry cr = CodecRegistries.fromRegistries(
                 MongoClientSettings.getDefaultCodecRegistry(),
@@ -39,11 +36,11 @@ public class RemoteCustomerRepository extends UnicastRemoteObject implements Cus
     }
 
     @Override
-    public Optional<Customer> find(String id) {
+    public Customer find(String id) {
 
-        return Optional.ofNullable(customers
+        return customers
                 .find(new BsonDocument("_id", new BsonObjectId(new ObjectId(id))))
-                .limit(1).cursor().tryNext());
+                .limit(1).cursor().tryNext();
 
     }
 }

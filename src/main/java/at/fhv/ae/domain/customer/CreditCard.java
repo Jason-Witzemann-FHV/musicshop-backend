@@ -1,6 +1,8 @@
 package at.fhv.ae.domain.customer;
 
-public class CreditCard {
+import java.io.Serializable;
+
+public class CreditCard implements Serializable {
 
     private String cvc;
     private String number;

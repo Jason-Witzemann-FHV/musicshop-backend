@@ -2,10 +2,11 @@ package at.fhv.ae.domain.repositories;
 
 import at.fhv.ae.domain.customer.Customer;
 
-import java.util.Optional;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-public interface CustomerRepository {
+public interface CustomerRepository extends Remote {
 
-    Optional<Customer> find(String id);
+    Customer find(String id) throws RemoteException;
 
 }

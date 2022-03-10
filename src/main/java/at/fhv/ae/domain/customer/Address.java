@@ -1,6 +1,8 @@
 package at.fhv.ae.domain.customer;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
 
     private String country;
     private String locality;
