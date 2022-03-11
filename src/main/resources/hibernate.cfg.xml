@@ -25,7 +25,7 @@
         <property name="hibernate.dbcp.minIdle">5</property>
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
 
-        <!-- TODO: ADD OUR DOMAIN OBJECTS HERE -->
-        <mapping class="at.fhv.ae.backend.domain.model.work.Work" />
+        <!-- TODO: ADD OUR DOMAIN OBJECTS HERE
+        <mapping class="at.fhv.ae.backend.domain.model.work.Work" />-->
     </session-factory>
 </hibernate-configuration>

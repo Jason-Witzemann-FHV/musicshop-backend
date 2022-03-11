@@ -1,0 +1,13 @@
+<persistence-unit name="test">
+    <description>Hibernate EntityManager Demo</description>
+    <!--<class>at.fhv.ae.backend.domain.model.work.Work</class>-->
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+        <property name="hibernate.hbm2ddl.auto" value="update"/>
+        <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+        <property name="javax.persistence.jdbc.url" value="jdbc:postgres://localhost:5432/postgres?useSSL=false"/>
+        <property name="javax.persistence.jdbc.user" value="postgres"/>
+        <property name="javax.persistence.jdbc.password" value="x52RJVKP5go"/>
+    </properties>
+</persistence-unit>
