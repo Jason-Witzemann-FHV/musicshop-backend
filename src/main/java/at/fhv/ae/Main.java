@@ -8,19 +8,30 @@ public class Main {
 
     public static void main(String[] args) {
 
-        EntityManagerFactory em = Persistence.createEntityManagerFactory("test");
-        EntityManager eManager = em.createEntityManager();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
+        EntityManager em = emf.createEntityManager();
 
         try {
-            eManager.getTransaction().begin();
-            eManager.createNativeQuery("CREATE TABLE Persons (\n" +
+            em.getTransaction().begin();
+            em.createNativeQuery("CREATE TABLE Persons (\n" +
                     "    PersonID int,\n" +
                     "    LastName varchar(255),\n" +
-                    "    FirstName varchar(255),\n" +
-                    ");");
-            eManager.getTransaction().commit();
+                    "    FirstName varchar(255)\n" +
+                    ");").executeUpdate();
+            em.getTransaction().commit();
+            System.out.println("commited");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        try {
+            em.getTransaction().begin();
+            em.createNativeQuery("INSERT INTO Persons values ('1', 'Tobias', 'Kurz'  )").executeUpdate();
+            em.getTransaction().commit();
+            System.out.println("commited");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 }
