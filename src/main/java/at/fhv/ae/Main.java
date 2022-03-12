@@ -1,8 +1,12 @@
 package at.fhv.ae;
 
+import at.fhv.ae.backend.domain.model.sale.*;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
+import java.util.UUID;
 
 public class Main {
 
@@ -11,27 +15,14 @@ public class Main {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
         EntityManager em = emf.createEntityManager();
 
-        try {
-            em.getTransaction().begin();
-            em.createNativeQuery("CREATE TABLE Persons (\n" +
-                    "    PersonID int,\n" +
-                    "    LastName varchar(255),\n" +
-                    "    FirstName varchar(255)\n" +
-                    ");").executeUpdate();
-            em.getTransaction().commit();
-            System.out.println("commited");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        List<Item> list = List.of(
+                new Item(null, "4", 1, 6.99 ),
+                new Item(null, "5", 1, 7.99 )
+        );
 
-        try {
-            em.getTransaction().begin();
-            em.createNativeQuery("INSERT INTO Persons values ('1', 'Tobias', 'Kurz'  )").executeUpdate();
-            em.getTransaction().commit();
-            System.out.println("commited");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
+        em.getTransaction().begin();
+        Sale sale = new Sale(null, new SaleId(UUID.randomUUID()), "1", "1", PaymentType.Cash, SaleType.InPerson, list);
+        em.persist(sale);
+        em.getTransaction().commit();
     }
 }

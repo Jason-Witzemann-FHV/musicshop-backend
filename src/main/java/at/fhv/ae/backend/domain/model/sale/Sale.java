@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.domain.model.sale;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -14,9 +15,9 @@ import java.util.List;
 public class Sale {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     @Getter(AccessLevel.NONE)
-    private Long id;
+    private Long saleIdInternal;
 
     @Embedded
     private SaleId saleId;
@@ -29,8 +30,22 @@ public class Sale {
 
     private SaleType saleType;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Item> items;
+
+    public Sale() {
+
+    }
+
+    public Sale(Long saleIdInternal, SaleId saleId, String employeeId, String customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
+        this.saleIdInternal = saleIdInternal;
+        this.saleId = saleId;
+        this.employeeId = employeeId;
+        this.customerId = customerId;
+        this.paymentType = paymentType;
+        this.saleType = saleType;
+        this.items = items;
+    }
 
     public List<Item> items() {
         return Collections.unmodifiableList(this.items);

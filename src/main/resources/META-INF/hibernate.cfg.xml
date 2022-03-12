@@ -27,5 +27,10 @@
 
         <!-- TODO: ADD OUR DOMAIN OBJECTS HERE
         <mapping class="at.fhv.ae.backend.domain.model.work.Work" />-->
+        <mapping class="at.fhv.ae.backend.domain.model.sale.Sale"/>
+        <mapping class="at.fhv.ae.backend.domain.model.sale.Item"/>
+
+
+
     </session-factory>
 </hibernate-configuration>
