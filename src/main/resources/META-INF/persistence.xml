@@ -5,9 +5,11 @@
              version="2.1">
 <persistence-unit name="Test">
     <description>Hibernate EntityManager Demo</description>
-    <!--<class>at.fhv.ae.backend.domain.model.work.Work</class>-->
     <class>at.fhv.ae.backend.domain.model.sale.Sale</class>
     <class>at.fhv.ae.backend.domain.model.sale.Item</class>
+    <class>at.fhv.ae.backend.domain.model.release.Label</class>
+    <class>at.fhv.ae.backend.domain.model.release.Release</class>
+    <class>at.fhv.ae.backend.domain.model.release.Supplier</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>

@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.domain.model.sale;
+package at.fhv.ae.backend.domain.model.release;
 
 import lombok.Value;
 
@@ -7,17 +7,17 @@ import java.util.UUID;
 
 @Value
 @Embeddable
-public class SaleId {
+public class ReleaseId {
 
     UUID id;
 
     // called by Hibernate
     @SuppressWarnings("ProtectedMemberInFinalClass")
-    protected SaleId() {
+    protected ReleaseId() {
         this.id = null;
     }
 
-    public SaleId(UUID id) {
+    public ReleaseId(UUID id) {
         this.id = id;
     }
 }
