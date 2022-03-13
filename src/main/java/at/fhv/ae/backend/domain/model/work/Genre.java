@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.domain.model.work;
 
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,21 +9,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter
 @ToString
-public class Work {
+@Getter
+public class Genre {
 
     @Id
     @GeneratedValue
     @Getter(AccessLevel.NONE)
-    private Long workIdInternal;
+    private Long genreIdInternal;
 
-    private String title;
+    private String name;
 
-    protected Work() { } // called by Hibernate
+    protected Genre() { } // called by Hibernate
 
-    public Work(String title) {
-        this.title = title;
+    public Genre(String name) {
+        this.name = name;
     }
 
 }

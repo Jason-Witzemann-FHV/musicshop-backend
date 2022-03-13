@@ -10,21 +10,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter
 @ToString
-public class Work {
+@Getter
+public class Artist {
 
     @Id
     @GeneratedValue
     @Getter(AccessLevel.NONE)
-    private Long workIdInternal;
+    private Long artistIdInternal;
 
-    private String title;
+    private String name;
 
-    protected Work() { } // called by Hibernate
+    protected Artist() { } // called by Hibernate
 
-    public Work(String title) {
-        this.title = title;
+    public Artist(String name) {
+        this.name = name;
     }
 
 }
