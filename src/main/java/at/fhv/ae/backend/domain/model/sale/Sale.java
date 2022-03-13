@@ -1,7 +1,6 @@
 package at.fhv.ae.backend.domain.model.sale;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -33,12 +32,11 @@ public class Sale {
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Item> items;
 
-    public Sale() {
+    protected Sale() {
 
     }
 
-    public Sale(Long saleIdInternal, SaleId saleId, String employeeId, String customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
-        this.saleIdInternal = saleIdInternal;
+    public Sale(SaleId saleId, String employeeId, String customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
         this.saleId = saleId;
         this.employeeId = employeeId;
         this.customerId = customerId;

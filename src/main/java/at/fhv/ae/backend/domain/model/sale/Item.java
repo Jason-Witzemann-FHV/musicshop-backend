@@ -24,8 +24,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(Long id, String releaseId, int amount, double price) {
-        this.id = id;
+    public Item(String releaseId, int amount, double price) {
         this.releaseId = releaseId;
         this.amount = amount;
         this.price = price;
