@@ -2,6 +2,7 @@ package at.fhv.ae;
 
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.sale.*;
+import at.fhv.ae.backend.domain.model.work.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,10 +28,30 @@ public class Main {
         Label label = new Label("Hello", "World");
         Release release = new Release(new ReleaseId(UUID.randomUUID()), 5, "Some title", Medium.CD, label, List.of(supplier));
         Sale sale = new Sale(new SaleId(UUID.randomUUID()), "1", "1", PaymentType.CASH, SaleType.INPERSON, list);
+        Recording recording = getDemoRecording();
+
         em.persist(sale);
         em.persist(supplier);
         em.persist(label);
         em.persist(release);
+        em.persist(recording);
         em.getTransaction().commit();
+
+    }
+
+    private static Recording getDemoRecording() {
+        RecordingId recordingId = new RecordingId(UUID.randomUUID());
+        Work work = new Work("Counting Stars");
+        List<Artist> artists = List.of(new Artist("One Republic"));
+        List<Genre> genres = List.of(new Genre("Pop"), new Genre("Electro"));
+        return new Recording(
+                recordingId,
+                "Counting Stars, original",
+                241,
+                2013,
+                work,
+                artists,
+                genres
+        );
     }
 }

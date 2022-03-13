@@ -10,6 +10,10 @@
     <class>at.fhv.ae.backend.domain.model.release.Label</class>
     <class>at.fhv.ae.backend.domain.model.release.Release</class>
     <class>at.fhv.ae.backend.domain.model.release.Supplier</class>
+    <class>at.fhv.ae.backend.domain.model.work.Recording</class>
+    <class>at.fhv.ae.backend.domain.model.work.Work</class>
+    <class>at.fhv.ae.backend.domain.model.work.Artist</class>
+    <class>at.fhv.ae.backend.domain.model.work.Genre</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
