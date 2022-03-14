@@ -1,8 +1,8 @@
 package at.fhv.ae;
 
 
+import at.fhv.ae.customer.infrastructure.RemoteCustomerRepositoryImpl;
 import at.fhv.ae.shared.repository.CustomerRepository;
-import at.fhv.ae.user_backend.infrastructure.RemoteCustomerRepositoryImpl;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
