@@ -1,14 +1,9 @@
 package at.fhv.ae;
 
-import at.fhv.ae.backend.domain.model.release.*;
-import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.work.*;
 import at.fhv.ae.shared.dto.customer.Customer;
 import at.fhv.ae.shared.repository.CustomerRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;

@@ -19,4 +19,8 @@ public class RecordingId {
     protected RecordingId() {
         this.id = null;
     }
+
+    public RecordingId(UUID id) {
+        this.id = id;
+    }
 }
