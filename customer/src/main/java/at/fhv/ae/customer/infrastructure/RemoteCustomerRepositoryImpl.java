@@ -1,4 +1,4 @@
-package at.fhv.ae.user_backend.infrastructure;
+package at.fhv.ae.customer.infrastructure;
 
 import at.fhv.ae.shared.dto.customer.Customer;
 import at.fhv.ae.shared.repository.CustomerRepository;
