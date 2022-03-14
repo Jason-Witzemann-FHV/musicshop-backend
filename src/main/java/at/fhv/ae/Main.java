@@ -3,8 +3,8 @@ package at.fhv.ae;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.work.*;
-import at.fhv.ae.domain.repositories.CustomerRepository;
-import at.fhv.ae.infrastructure.RemoteCustomerRepositoryImpl;
+import at.fhv.ae.shared.dto.customer.Customer;
+import at.fhv.ae.shared.repository.CustomerRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,17 +18,16 @@ import java.util.UUID;
 
 
 public class Main {
-    public static void main(String[] args) throws RemoteException {
-
-        /*
+    public static void main(String[] args) {
+/*
         try {
-            CustomerRepository stub = (CustomerRepository)Naming.lookup("rmi://10.0.40.161/customer-repository");
-            var result = stub.find("6221173ce0db2b163e992b7f");
-            System.out.println(result);
-        } catch (NotBoundException | MalformedURLException e) {
+            System.out.println(retrieveExampleCustomer(connectToRemoteCustomerRepository()));
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
             e.printStackTrace();
         }
-        */
+*/
+
+/*
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
         EntityManager em = emf.createEntityManager();
@@ -37,7 +36,6 @@ public class Main {
                 new Item("4", 1, 6.99 ),
                 new Item("5", 1, 7.99 )
         );
-
 
         em.getTransaction().begin();
         Supplier supplier = new Supplier("Gebrüder Weiß", "Musterstraße 1");
@@ -52,6 +50,22 @@ public class Main {
         em.persist(release);
         em.persist(recording);
         em.getTransaction().commit();
+*/
+
+    }
+
+    private static CustomerRepository connectToRemoteCustomerRepository()
+            throws MalformedURLException, NotBoundException, RemoteException {
+
+        final String rmiUrl = "rmi://10.0.40.161/customer-repository";
+        return (CustomerRepository) Naming.lookup(rmiUrl);
+    }
+
+    private static Customer retrieveExampleCustomer(CustomerRepository repo)
+            throws RemoteException {
+
+        final String id = "6221173ce0db2b163e992b7f";
+        return repo.find(id);
     }
 
     private static Recording getDemoRecording() {
@@ -68,5 +82,6 @@ public class Main {
                 artists,
                 genres
         );
+
     }
 }

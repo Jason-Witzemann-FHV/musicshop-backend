@@ -1,6 +1,6 @@
-package at.fhv.ae.domain.repositories;
+package at.fhv.ae.shared.repository;
 
-import at.fhv.ae.domain.customer.Customer;
+import at.fhv.ae.shared.dto.customer.Customer;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -8,5 +8,4 @@ import java.rmi.RemoteException;
 public interface CustomerRepository extends Remote {
 
     Customer find(String id) throws RemoteException;
-
 }

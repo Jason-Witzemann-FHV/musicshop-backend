@@ -1,7 +1,7 @@
-package at.fhv.ae.infrastructure;
+package at.fhv.ae.user_backend.infrastructure;
 
-import at.fhv.ae.domain.customer.Customer;
-import at.fhv.ae.domain.repositories.CustomerRepository;
+import at.fhv.ae.shared.dto.customer.Customer;
+import at.fhv.ae.shared.repository.CustomerRepository;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -29,7 +29,7 @@ public class RemoteCustomerRepositoryImpl extends UnicastRemoteObject implements
                 MongoClientSettings.getDefaultCodecRegistry(),
                 CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
-        customers = MongoClients.create(connectionStr)
+        this.customers = MongoClients.create(connectionStr)
                 .getDatabase("customer")
                 .getCollection("customers", Customer.class)
                 .withCodecRegistry(cr);
