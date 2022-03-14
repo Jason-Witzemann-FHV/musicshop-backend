@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+
+group 'at.fhv'
+version '1.0-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql - Postgres driver
+    implementation 'org.postgresql:postgresql:42.2.1'
+    // https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api - JPA
+    implementation 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
+    // https://mvnrepository.com/artifact/com.zaxxer/HikariCP - DB Connection Pooling
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core - Hibernate
+    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    compile project(':shared')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    providedCompile 'jakarta.platform:jakarta.jakartaee-api:8.0.0'
+}
+
+test {
+    useJUnitPlatform()
+}

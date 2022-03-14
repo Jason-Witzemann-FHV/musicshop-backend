@@ -1,2 +1,6 @@
 rootProject.name = 'musicshop-backend'
+include ':frontend'
+include ':backend'
+include ':shared'
+include ':customer'
 

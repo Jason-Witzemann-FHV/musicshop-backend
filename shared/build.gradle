@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+
+group 'at.fhv'
+version '1.0-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    providedCompile 'jakarta.platform:jakarta.jakartaee-api:8.0.0'
+    compile 'org.mongodb:mongodb-driver:3.12.10'
+}
+
+test {
+    useJUnitPlatform()
+}
