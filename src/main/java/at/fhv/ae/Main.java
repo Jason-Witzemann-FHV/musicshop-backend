@@ -3,16 +3,32 @@ package at.fhv.ae;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.work.*;
+import at.fhv.ae.domain.repositories.CustomerRepository;
+import at.fhv.ae.infrastructure.RemoteCustomerRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
-public class Main {
 
-    public static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) throws RemoteException {
+
+        /*
+        try {
+            CustomerRepository stub = (CustomerRepository)Naming.lookup("rmi://10.0.40.161/customer-repository");
+            var result = stub.find("6221173ce0db2b163e992b7f");
+            System.out.println(result);
+        } catch (NotBoundException | MalformedURLException e) {
+            e.printStackTrace();
+        }
+        */
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
         EntityManager em = emf.createEntityManager();
@@ -36,7 +52,6 @@ public class Main {
         em.persist(release);
         em.persist(recording);
         em.getTransaction().commit();
-
     }
 
     private static Recording getDemoRecording() {
