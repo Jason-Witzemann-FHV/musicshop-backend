@@ -2,14 +2,16 @@ package at.fhv.ae.backend.domain.model.work;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@ToString
 @Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Recording {
 
     @Id
@@ -34,8 +36,6 @@ public class Recording {
 
     @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Genre> genres;
-
-    protected Recording() { } // called by Hibernate
 
     public Recording(RecordingId recordingId, String title, int duration, int year, Work work, List<Artist> artists, List<Genre> genres) {
         this.recordingId = recordingId;

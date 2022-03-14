@@ -16,8 +16,4 @@ public class ReleaseId {
     protected ReleaseId() {
         this.id = null;
     }
-
-    public ReleaseId(UUID id) {
-        this.id = id;
-    }
 }

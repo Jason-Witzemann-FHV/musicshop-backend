@@ -3,15 +3,17 @@ package at.fhv.ae.backend.domain.model.release;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 
-@ToString
-@Entity(name="release")
+@Entity
 @Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Release {
 
     @Id
@@ -33,10 +35,6 @@ public class Release {
 
     @ManyToMany(cascade = {CascadeType.ALL})
     private List<Supplier> suppliers;
-
-    protected Release() {
-
-    }
 
     public Release(ReleaseId releaseId, int stock, String title, Medium medium, Label label, List<Supplier> suppliers) {
         this.releaseId = releaseId;

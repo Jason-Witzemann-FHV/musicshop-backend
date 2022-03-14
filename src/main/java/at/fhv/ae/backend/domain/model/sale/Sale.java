@@ -2,15 +2,17 @@ package at.fhv.ae.backend.domain.model.sale;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 
-@ToString
-@Entity(name="sale")
+@Entity
 @Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sale {
 
     @Id
@@ -31,10 +33,6 @@ public class Sale {
 
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Item> items;
-
-    protected Sale() {
-
-    }
 
     public Sale(SaleId saleId, String employeeId, String customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
         this.saleId = saleId;

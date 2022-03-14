@@ -16,8 +16,4 @@ public class SaleId {
     protected SaleId() {
         this.id = null;
     }
-
-    public SaleId(UUID id) {
-        this.id = id;
-    }
 }
