@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.domain.model.release;
 
 
+import at.fhv.ae.backend.domain.model.work.RecordingId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public class Release {
 
     private int stock;
 
+    private double price;
+
     private String title;
 
     private Medium medium;
@@ -36,13 +39,17 @@ public class Release {
     @ManyToMany(cascade = {CascadeType.ALL})
     private List<Supplier> suppliers;
 
-    public Release(ReleaseId releaseId, int stock, String title, Medium medium, Label label, List<Supplier> suppliers) {
+    @ElementCollection
+    private List<RecordingId> recordingIds;
+
+    public Release(ReleaseId releaseId, int stock, String title, Medium medium, Label label, List<Supplier> suppliers, List<RecordingId> recordingIds) {
         this.releaseId = releaseId;
         this.stock = stock;
         this.title = title;
         this.medium = medium;
         this.label = label;
         this.suppliers = suppliers;
+        this.recordingIds = recordingIds;
     }
 
     public List<Supplier> suppliers() {
