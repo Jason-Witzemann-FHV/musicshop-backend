@@ -1,28 +1,25 @@
 package at.fhv.ae.backend.domain.model.work;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+public enum Genre {
+    POP("Pop"),
+    ELECTRONIC("Elektronik"),
+    SCHLAGER("Schlager"),
+    EDM("EDM"),
+    METAL("Metal"),
+    ROCK("Rock"),
+    COUNTRY("Country"),
+    RAP("Rap"),
+    HIP_HOP("Hip Hop"),
+    RNB("RNB");
 
-@Entity
-@Getter
-@ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Genre {
+    private String friendlyName;
 
-    @Id
-    @GeneratedValue
-    @Getter(AccessLevel.NONE)
-    private Long genreIdInternal;
+    Genre(String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
 
-    private String name;
-
-    public Genre(String name) {
-        this.name = name;
+    public String friendlyName() {
+        return friendlyName;
     }
 }
