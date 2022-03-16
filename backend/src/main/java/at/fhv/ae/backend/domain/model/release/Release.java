@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.domain.model.release;
 
 
+import at.fhv.ae.backend.domain.model.work.RecordingId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
