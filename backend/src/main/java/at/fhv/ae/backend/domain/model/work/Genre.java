@@ -11,7 +11,8 @@ public enum Genre {
     COUNTRY("Country"),
     RAP("Rap"),
     HIP_HOP("Hip Hop"),
-    RNB("RNB");
+    RNB("RNB"),
+    ACOUSTIC("Acoustic");
 
     private String friendlyName;
 
