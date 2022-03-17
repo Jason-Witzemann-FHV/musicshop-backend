@@ -12,7 +12,7 @@ public class ArrayListBasketRepository implements BasketRepository {
 
     @Override
     public List<Release> itemsInBasket() {
-        return List.copyOf(releases);
+        return Collections.immutableList(releases);
     }
 
     @Override
