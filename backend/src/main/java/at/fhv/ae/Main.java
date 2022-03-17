@@ -56,7 +56,7 @@ public class Main {
 
     private static List<ReleaseDTO> retrieveDemoRelease(EntityManager em) {
         ReleaseQueryService rqs = new ReleaseQueryServiceImpl(new HibernateReleaseRepository(em));
-        return rqs.query("counting stars", "republic");
+        return rqs.query("some", "republic");
     }
 
     private static void insertDemoRelease(EntityManager em) {
