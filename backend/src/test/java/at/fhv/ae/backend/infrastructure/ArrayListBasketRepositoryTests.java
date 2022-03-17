@@ -5,6 +5,7 @@ import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +21,8 @@ class ArrayListBasketRepositoryTests {
 
     @BeforeEach
     void cleanBefore() {
-        // TODO: I have to trust this call, that the repo is empty. Even though the method itself is tested in this class. Is there a better way?
         basketRepository.clearBasket();
+        Assumptions.assumeTrue(basketRepository.itemsInBasket().isEmpty(), "Basket Repo failed to clear itself, therefore test was skipped.");
     }
 
     @Test
