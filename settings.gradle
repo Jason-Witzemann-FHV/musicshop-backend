@@ -3,4 +3,4 @@ include ':frontend'
 include ':backend'
 include ':shared'
 include ':customer'
-
+include ':javafxFrontend'
