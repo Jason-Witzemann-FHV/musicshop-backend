@@ -24,7 +24,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'at.fhv.ae.javafxfrontend'
-    mainClass = 'at.fhv.ae.javafxfrontend.HelloApplication'
+    mainClass = 'at.fhv.ae.javafxfrontend.Main'
 }
 
 javafx {
