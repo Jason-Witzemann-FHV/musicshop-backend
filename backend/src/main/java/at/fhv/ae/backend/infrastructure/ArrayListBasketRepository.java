@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ArrayListBasketRepository implements BasketRepository {
 
-    private static List<Release> releases = new ArrayList<>();
+    private static final List<Release> releases = new ArrayList<>();
 
     @Override
     public List<Release> itemsInBasket() {

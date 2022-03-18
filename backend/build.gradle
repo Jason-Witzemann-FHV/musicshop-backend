@@ -1,12 +1,15 @@
 plugins {
     id 'java'
-    id 'war'
+    id 'application'
 }
-
 
 group 'at.fhv'
 version '1.0-SNAPSHOT'
 sourceCompatibility = '11'
+
+application {
+    mainClass.set('at.fhv.ae.Main')
+}
 
 repositories {
     mavenCentral()
@@ -29,7 +32,6 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    providedCompile 'jakarta.platform:jakarta.jakartaee-api:8.0.0'
 }
 
 test {

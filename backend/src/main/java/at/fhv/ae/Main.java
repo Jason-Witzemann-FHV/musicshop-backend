@@ -1,50 +1,58 @@
 package at.fhv.ae;
 
+import at.fhv.ae.backend.application.ReleaseQueryService;
+import at.fhv.ae.backend.application.dto.ReleaseDTO;
+import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
+import at.fhv.ae.backend.domain.model.release.*;
+import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.work.*;
+import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
+import at.fhv.ae.backend.middleware.ReleaseSearchServiceImpl;
 import at.fhv.ae.shared.dto.customer.Customer;
 import at.fhv.ae.shared.repository.CustomerRepository;
+import at.fhv.ae.shared.rmi.ReleaseSearchService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.UUID;
 
 
 public class Main {
     public static void main(String[] args) {
+
+
+        try {
+            LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            Naming.rebind("rmi://localhost/release-search-service", new ReleaseSearchServiceImpl());
+
+            //ReleaseSearchService rss = (ReleaseSearchService)Naming.lookup("rmi://localhost/release-search-service");
+            //rss.query("Best Song Ever", "astley", "pop").forEach(System.out::println);
+
+        } catch (RemoteException | MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
+        //EntityManager em = emf.createEntityManager();
+
+       // insertDemoRelease(em);
+
+        //retrieveDemoRelease(em).forEach(System.out::println);
+
 /*
         try {
             System.out.println(retrieveExampleCustomer(connectToRemoteCustomerRepository()));
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             e.printStackTrace();
         }
-*/
-
-/*
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
-        EntityManager em = emf.createEntityManager();
-
-        List<Item> list = List.of(
-                new Item("4", 1, 6.99 ),
-                new Item("5", 1, 7.99 )
-        );
-
-        em.getTransaction().begin();
-        Supplier supplier = new Supplier("Gebrüder Weiß", "Musterstraße 1");
-        Label label = new Label("Hello", "World");
-        Release release = new Release(new ReleaseId(UUID.randomUUID()), 5, "Some title", Medium.CD, label, List.of(supplier));
-        Sale sale = new Sale(new SaleId(UUID.randomUUID()), "1", "1", PaymentType.CASH, SaleType.INPERSON, list);
-        Recording recording = getDemoRecording();
-
-        em.persist(sale);
-        em.persist(supplier);
-        em.persist(label);
-        em.persist(release);
-        em.persist(recording);
-        em.getTransaction().commit();
 */
 
     }
@@ -63,20 +71,4 @@ public class Main {
         return repo.find(id);
     }
 
-    private static Recording getDemoRecording() {
-        RecordingId recordingId = new RecordingId(UUID.randomUUID());
-        Work work = new Work("Counting Stars");
-        List<Artist> artists = List.of(new Artist("One Republic"));
-        List<Genre> genres = List.of(Genre.EDM, Genre.SCHLAGER);
-        return new Recording(
-                recordingId,
-                "Counting Stars, original",
-                241,
-                2013,
-                work,
-                artists,
-                genres
-        );
-
-    }
 }

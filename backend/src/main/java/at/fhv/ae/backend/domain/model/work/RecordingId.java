@@ -1,8 +1,6 @@
 package at.fhv.ae.backend.domain.model.work;
 
 
-import lombok.Getter;
-import lombok.ToString;
 import lombok.Value;
 
 import javax.persistence.Embeddable;
