@@ -4,6 +4,7 @@ import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ArrayListBasketRepository implements BasketRepository {
@@ -12,7 +13,7 @@ public class ArrayListBasketRepository implements BasketRepository {
 
     @Override
     public List<Release> itemsInBasket() {
-        return Collections.immutableList(releases);
+        return Collections.unmodifiableList(releases);
     }
 
     @Override
