@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="at.fhv.ae.javafxfrontend.Scenecontroller">
+   <top>
+      <VBox prefHeight="79.0" prefWidth="1200.0" style="-fx-background-color: #71ACE7;" BorderPane.alignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Soundklaut" wrappingWidth="180.5367088317871">
+               <VBox.margin>
+                  <Insets left="16.0" top="16.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Text>
+         </children>
+      </VBox>
+   </top>
+   <left>
+      <VBox prefHeight="671.0" prefWidth="223.0" style="-fx-background-color: #8CB9E7;" stylesheets="@../../../../css/navbar.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#switchToDashboard" prefHeight="33.0" prefWidth="194.0" text="Dashboard" />
+            <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#switchToMusicSearch" prefHeight="33.0" prefWidth="194.0" text="Music Search" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <top>
+            <VBox prefHeight="151.0" prefWidth="977.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Music Search">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Text>
+               </children></VBox>
+         </top>
+      </BorderPane>
+   </center>
+</BorderPane>
