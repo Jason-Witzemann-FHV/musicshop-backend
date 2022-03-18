@@ -28,11 +28,10 @@ public class HibernateReleaseRepository implements ReleaseRepository {
                 + "inner join Recording rec on (rec.id=rel_recordingId.id) "
                 + "inner join Recording_Artist rec_artist on rec.recordingIdInternal=rec_artist.Recording_recordingIdInternal "
                 + "inner join Artist artist on rec_artist.artists_artistIdInternal=artist.artistIdInternal "
-                + "inner join Recording_genre rec_genre on rec.recordingIdInternal=rec_genre.Recording_recordingIdInternal "
-                + "inner join Genre genre on rec_genre.genres_genreIdInternal = genre.genreIdInternal "
+                + "inner join Recording_genres rec_genre on rec.recordingIdInternal=rec_genre.Recording_recordingIdInternal "
                 + "where (lower(rel.title) like lower(('%'||?||'%'))) "
-                + " and (lower(artist.name) like lower(('%'||?||'%'))) "
-                + " and (lower(genre.name) like lower(('%'||?||'%')))", Release.class)
+                + "and (lower(artist.name) like lower(('%'||?||'%'))) "
+                + "and (lower(rec_genre.genres) like lower(('%'||?||'%'))) ", Release.class)
                 .setParameter(1, title)
                 .setParameter(2, artist)
                 .setParameter(3, genre)
