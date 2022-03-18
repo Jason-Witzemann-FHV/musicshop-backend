@@ -9,5 +9,5 @@ public interface ReleaseRepository {
 
     Release findById(ReleaseId id);
 
-    List<Release> query(String title, String artist);
+    List<Release> query(String title, String artist,String genre);
 }

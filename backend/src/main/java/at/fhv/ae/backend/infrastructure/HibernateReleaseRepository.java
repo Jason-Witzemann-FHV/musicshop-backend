@@ -21,16 +21,21 @@ public class HibernateReleaseRepository implements ReleaseRepository {
     }
 
     @Override
-    public List<Release> query(String title, String artist) {
-        return em.createNativeQuery("select rel.releaseIdInternal, rel.label_labelIdInternal, rel.medium, rel.price, rel.id, rel.stock, rel.title "
+    public List<Release> query(String title, String artist, String genre) {
+        return em.createNativeQuery("select rel.* "
                 + "from Release rel "
                 + "inner join Release_recordingIds rel_recordingId on rel.releaseIdInternal=rel_recordingId.Release_releaseIdInternal "
                 + "inner join Recording rec on (rec.id=rel_recordingId.id) "
                 + "inner join Recording_Artist rec_artist on rec.recordingIdInternal=rec_artist.Recording_recordingIdInternal "
                 + "inner join Artist artist on rec_artist.artists_artistIdInternal=artist.artistIdInternal "
-                + "where (lower(rel.title) like lower(('%'||?||'%'))) and (lower(artist.name) like lower(('%'||?||'%')))", Release.class)
+                + "inner join Recording_genre rec_genre on rec.recordingIdInternal=rec_genre.Recording_recordingIdInternal "
+                + "inner join Genre genre on rec_genre.genres_genreIdInternal = genre.genreIdInternal "
+                + "where (lower(rel.title) like lower(('%'||?||'%'))) "
+                + " and (lower(artist.name) like lower(('%'||?||'%'))) "
+                + " and (lower(genre.name) like lower(('%'||?||'%')))", Release.class)
                 .setParameter(1, title)
                 .setParameter(2, artist)
+                .setParameter(3, genre)
                 .getResultList();
 
         // sollte eigentlich funktioniera tuts aber ned :)

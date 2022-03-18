@@ -26,9 +26,9 @@ public class Main {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
         EntityManager em = emf.createEntityManager();
 
-        //insertDemoRelease(em);
+       // insertDemoRelease(em);
 
-        //retrieveDemoRelease(em).forEach(System.out::println);
+        retrieveDemoRelease(em).forEach(System.out::println);
 
 /*
         try {
@@ -56,7 +56,7 @@ public class Main {
 
     private static List<ReleaseDTO> retrieveDemoRelease(EntityManager em) {
         ReleaseQueryService rqs = new ReleaseQueryServiceImpl(new HibernateReleaseRepository(em));
-        return rqs.query("some", "republic");
+        return rqs.query("some", "republic","pop");
     }
 
     private static void insertDemoRelease(EntityManager em) {

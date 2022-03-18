@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ReleaseQueryService {
 
-    List<ReleaseDTO> query(String title, String artist);
+    List<ReleaseDTO> query(String title, String artist,String genre);
 }

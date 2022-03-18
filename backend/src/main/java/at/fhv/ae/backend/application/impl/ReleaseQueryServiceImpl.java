@@ -16,8 +16,8 @@ public class ReleaseQueryServiceImpl implements ReleaseQueryService {
     private final ReleaseRepository releaseRepository;
 
     @Override
-    public List<ReleaseDTO> query(String title, String artist) {
-        return this.releaseRepository.query(title, artist)
+    public List<ReleaseDTO> query(String title, String artist,String genre) {
+        return this.releaseRepository.query(title, artist,genre)
                 .stream()
                 .map(ReleaseDTO::fromDomain)
                 .collect(Collectors.toList());
