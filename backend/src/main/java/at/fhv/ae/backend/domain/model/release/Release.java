@@ -27,11 +27,11 @@ public class Release {
 
     private int stock;
 
-    private double price;
-
     private String title;
 
     private Medium medium;
+
+    private double price;
 
     @ManyToOne(cascade = {CascadeType.ALL})
     private Label label;
@@ -42,11 +42,12 @@ public class Release {
     @ElementCollection
     private List<RecordingId> recordingIds;
 
-    public Release(ReleaseId releaseId, int stock, String title, Medium medium, Label label, List<Supplier> suppliers, List<RecordingId> recordingIds) {
+    public Release(ReleaseId releaseId, int stock, String title, Medium medium, double price, Label label, List<Supplier> suppliers, List<RecordingId> recordingIds) {
         this.releaseId = releaseId;
         this.stock = stock;
         this.title = title;
         this.medium = medium;
+        this.price = price;
         this.label = label;
         this.suppliers = suppliers;
         this.recordingIds = recordingIds;

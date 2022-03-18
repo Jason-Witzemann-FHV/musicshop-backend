@@ -34,7 +34,7 @@ public class Recording {
     @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Artist> artists;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ElementCollection
     private List<Genre> genres;
 
     public Recording(RecordingId recordingId, String title, int duration, int year, Work work, List<Artist> artists, List<Genre> genres) {

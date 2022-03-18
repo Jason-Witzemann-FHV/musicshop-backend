@@ -87,7 +87,7 @@ public class Main {
         RecordingId recordingId = new RecordingId(UUID.randomUUID());
         Work work = new Work("Counting Stars");
         List<Artist> artists = List.of(new Artist("One Republic"));
-        List<Genre> genres = List.of(new Genre("Pop"), new Genre("Electro"));
+        List<Genre> genres = List.of(Genre.EDM, Genre.SCHLAGER);
         return new Recording(
                 recordingId,
                 "Counting Stars, original",
