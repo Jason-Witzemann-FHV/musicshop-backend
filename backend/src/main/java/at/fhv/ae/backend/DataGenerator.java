@@ -349,16 +349,16 @@ public class DataGenerator {
         var em = Persistence.createEntityManagerFactory("Test").createEntityManager();
         var transaction = em.getTransaction();
         transaction.begin();
-        em.createNativeQuery("DELETE FROM release_supplier").executeUpdate();
-        em.createNativeQuery("DELETE FROM release_recordingids").executeUpdate();
-        em.createNativeQuery("DELETE FROM recording_genres").executeUpdate();
-        em.createNativeQuery("DELETE FROM recording_artist").executeUpdate();
-        em.createNativeQuery("DELETE FROM artist").executeUpdate();
-        em.createNativeQuery("DELETE FROM recording").executeUpdate();
-        em.createNativeQuery("DELETE FROM release").executeUpdate();
-        em.createNativeQuery("DELETE FROM supplier").executeUpdate();
-        em.createNativeQuery("DELETE FROM work").executeUpdate();
-        em.createNativeQuery("DELETE FROM label").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS release_supplier").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS release_recordingids").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS recording_genres").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS recording_artist").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS artist").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS recording").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS release").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS supplier").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS work").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS label").executeUpdate();
         transaction.commit();
     }
 
