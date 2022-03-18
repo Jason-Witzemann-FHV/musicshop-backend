@@ -35,6 +35,7 @@ public class Recording {
     private List<Artist> artists;
 
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<Genre> genres;
 
     public Recording(RecordingId recordingId, String title, int duration, int year, Work work, List<Artist> artists, List<Genre> genres) {
