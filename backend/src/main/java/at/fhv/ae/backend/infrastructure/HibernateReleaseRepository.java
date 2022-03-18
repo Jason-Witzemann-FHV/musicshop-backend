@@ -37,7 +37,7 @@ public class HibernateReleaseRepository implements ReleaseRepository {
                 .setParameter(3, genre)
                 .getResultList();
 
-        // sollte eigentlich funktioniera tuts aber ned :)
+        // sollte eigentlich funktioniera tuts aber ned :) - feelsbadman
         /*return em.createQuery("select rel from Release rel "
                         + "join rel.recordingIds recId "
                         + "join Recording rec on rec.recordingId = recId.id "
