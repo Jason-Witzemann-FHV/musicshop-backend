@@ -22,7 +22,7 @@ public class HibernateReleaseRepository implements ReleaseRepository {
 
     @Override
     public List<Release> query(String title, String artist, String genre) {
-        return em.createNativeQuery("select rel.* "
+        return em.createNativeQuery("select distinct rel.* "
                 + "from Release rel "
                 + "inner join Release_recordingIds rel_recordingId on rel.releaseIdInternal=rel_recordingId.Release_releaseIdInternal "
                 + "inner join Recording rec on (rec.id=rel_recordingId.id) "
