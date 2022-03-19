@@ -1,0 +1,10 @@
+.vtab-pane {
+    -fx-tab-min-height: 100px;
+    -fx-tab-max-height: 100px;
+    -fx-side: LEFT; /* TODO this doesn't work */
+}
+
+.vtab-pane *.tab-label {
+    -fx-rotate: 90;
+}
+

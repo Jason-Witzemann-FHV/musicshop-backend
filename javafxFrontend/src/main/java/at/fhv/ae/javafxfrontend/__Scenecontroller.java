@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Scenecontroller {
+public class __Scenecontroller {
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -24,11 +24,11 @@ public class Scenecontroller {
 
     @FXML
     private void initialize() {
-//        employeeName.setText("I'm a Label.");
+        employeeName.setText("I'm a Label.");
     }
 
-       public void switchToDashboard(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
+    public void switchToDashboard(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("__dashboard.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root, screenSize.getWidth(), screenSize.getHeight() - 35);
 
@@ -37,7 +37,7 @@ public class Scenecontroller {
     }
 
     public void switchToMusicSearch(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("music_search.fxml")));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("__music_search.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root, screenSize.getWidth(), screenSize.getHeight() - 35);
         stage.setScene(scene);
