@@ -29,24 +29,12 @@ public class HibernateReleaseRepository implements ReleaseRepository {
                 + "inner join Recording_Artist rec_artist on rec.recordingIdInternal=rec_artist.Recording_recordingIdInternal "
                 + "inner join Artist artist on rec_artist.artists_artistIdInternal=artist.artistIdInternal "
                 + "inner join Recording_genres rec_genre on rec.recordingIdInternal=rec_genre.Recording_recordingIdInternal "
-                + "where (lower(rel.title) like lower(('%'||?||'%'))) "
-                + "and (lower(artist.name) like lower(('%'||?||'%'))) "
-                + "and (lower(rec_genre.genres) like lower(('%'||?||'%'))) ", Release.class)
-                .setParameter(1, title)
-                .setParameter(2, artist)
-                .setParameter(3, genre)
-                .getResultList();
-
-        // sollte eigentlich funktioniera tuts aber ned :) - feelsbadman
-        /*return em.createQuery("select rel from Release rel "
-                        + "join rel.recordingIds recId "
-                        + "join Recording rec on rec.recordingId = recId.id "
-                        + "join rec.artists a "
-                        + "where lower(rel.title) like lower(concat('%', :title, '%')) "
-                        + "and lower(a.name) like lower(concat('%', :artist, '%')) "
-                , Release.class)
+                + "where ((lower(rel.title) like lower(('%'||:title||'%'))) or (lower(rec.title)) like lower(('%'||:title||'%')))"
+                + "and (lower(artist.name) like lower(('%'||:artist||'%'))) "
+                + "and (lower(rec_genre.genres) like lower(('%'||:genre||'%'))) ", Release.class)
                 .setParameter("title", title)
                 .setParameter("artist", artist)
-                .getResultList();*/
+                .setParameter("artist", genre)
+                .getResultList();
     }
 }
