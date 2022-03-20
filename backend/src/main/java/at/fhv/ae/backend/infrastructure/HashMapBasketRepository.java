@@ -22,8 +22,23 @@ public class HashMapBasketRepository implements BasketRepository {
     }
 
     @Override
-    public void addItemToBasket(Release item) {
-        releases.add(item);
+    public void addItemToBasket(Release item, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity of item in Basket must be at least 1!");
+        }
+        releases.put(item, quantity);
+    }
+
+    @Override
+    public void changeQuantityOfItem(Release item, int newQuantity) {
+        if (newQuantity <= 0) {
+            throw new IllegalArgumentException("Quantity of item in Basket must be at least 1!");
+        }
+        if (!releases.containsKey(item)) {
+            throw new IllegalArgumentException("Cannot change quantity of item that is not already in the basket.");
+        }
+        releases.put(item, newQuantity);
+
     }
 
     @Override
