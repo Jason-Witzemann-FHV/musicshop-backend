@@ -3,22 +3,22 @@ package at.fhv.ae.backend.infrastructure;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ArrayListBasketRepository implements BasketRepository {
+public class HashMapBasketRepository implements BasketRepository {
 
-    private static final List<Release> releases = new ArrayList<>();
+    private static final Map<Release, Integer> releases = new HashMap<>();
 
     @Override
-    public List<Release> itemsInBasket() {
-        return Collections.unmodifiableList(releases);
+    public Map<Release, Integer> itemsInBasket() {
+        return Collections.unmodifiableMap(releases);
     }
 
     @Override
     public int amountOfItemsInBasket() {
-        return releases.size();
+        return releases.values().stream().mapToInt(Integer::valueOf).sum();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ArrayListBasketRepository implements BasketRepository {
 
     @Override
     public void removeItemFromBasket(Release item) {
-        if (!releases.contains(item)) {
+        if (!releases.containsKey(item)) {
             throw new IllegalArgumentException("Tried to remove item with ID " + item.releaseId() + " from Basket, even though that item is not in basket");
         }
         releases.remove(item);
