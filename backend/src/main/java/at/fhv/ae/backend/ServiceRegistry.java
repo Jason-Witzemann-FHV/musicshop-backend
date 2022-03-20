@@ -4,7 +4,7 @@ import at.fhv.ae.backend.application.ReleaseQueryService;
 import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
-import at.fhv.ae.backend.infrastructure.ArrayListBasketRepository;
+import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
 import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
 
 import javax.persistence.EntityManager;
@@ -36,7 +36,7 @@ public class ServiceRegistry {
 
     public static BasketRepository basketRepository() {
         if (basketRepository == null) {
-            basketRepository = new ArrayListBasketRepository();
+            basketRepository = new HashMapBasketRepository();
         }
         return basketRepository;
     }
