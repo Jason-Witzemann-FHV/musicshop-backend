@@ -96,7 +96,7 @@ class BasketServiceTests {
 
     @Test // testing #amountOfItemsInBasket
     void given_mock_when_amount_of_items_then_call_amount_of_items_method() {
-        basketRepository.amountOfItemsInBasket();
+        basketService.amountOfItemsInBasket();
         verify(basketRepository).amountOfItemsInBasket();
     }
 
