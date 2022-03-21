@@ -1,30 +1,17 @@
 package at.fhv.ae;
 
 import at.fhv.ae.backend.ServiceRegistry;
-import at.fhv.ae.backend.application.ReleaseQueryService;
-import at.fhv.ae.backend.application.dto.ReleaseDTO;
-import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
-import at.fhv.ae.backend.domain.model.release.*;
-import at.fhv.ae.backend.domain.model.sale.*;
-import at.fhv.ae.backend.domain.model.work.*;
-import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
 import at.fhv.ae.backend.middleware.ReleaseSearchServiceImpl;
 import at.fhv.ae.backend.middleware.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.dto.customer.Customer;
 import at.fhv.ae.shared.repository.CustomerRepository;
-import at.fhv.ae.shared.rmi.ReleaseSearchService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.List;
-import java.util.UUID;
 
 
 public class Main {
