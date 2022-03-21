@@ -12,7 +12,7 @@
 <?import com.sun.javafx.scene.control.DatePickerContent?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.fhv.ae.javafxfrontend.MusicShop"
+      fx:controller="at.fhv.ae.javafxfrontend.MusicShopController"
       stylesheets="/css/tabs.css"
       prefHeight="400.0" prefWidth="600.0" fillWidth="false">
 
@@ -48,16 +48,8 @@
                     </GridPane>
                 </Pane>
 
-                <VBox>
-                    <background>
-                        <Background>
-                            <fills>
-                                <BackgroundFill fill="white"/>
-                            </fills>
-                        </Background>
-                    </background>
-
-                    <GridPane id="search-form" style="-fx-border-width: 1; -fx-border-style: solid; -fx-padding: 10px">
+                <VBox style="-fx-background-color: white">
+                    <GridPane id="search-form" style="-fx-padding: 10px">
                         <columnConstraints>
                             <ColumnConstraints prefWidth="300"/>
                             <ColumnConstraints prefWidth="200"/>
@@ -74,7 +66,16 @@
                         <Button GridPane.columnIndex="3" GridPane.rowSpan="2" text="Find" onAction="#search"/>
                     </GridPane>
 
-                    <ListView fx:id="searchResultsView" style="-fx-border-width: 1; -fx-border-style: solid; -fx-padding: 10px"/>
+
+
+                    <TableView fx:id="searchResultsView" style="-fx-padding: 10px">
+                        <columns>
+                            <TableColumn userData="title" text="Title"/>
+                            <TableColumn userData="medium" text="Medium"/>
+                            <TableColumn userData="stock" text="Stock"/>
+                            <TableColumn userData="price" text="Price" fx:id="colPrice"/>
+                        </columns>
+                    </TableView>
                 </VBox>
             </StackPane>
         </Tab>

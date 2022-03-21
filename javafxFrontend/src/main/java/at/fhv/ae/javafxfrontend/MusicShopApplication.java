@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Objects;
 
-public class HelloApplication extends Application {
+public class MusicShopApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
