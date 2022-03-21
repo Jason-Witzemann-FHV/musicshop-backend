@@ -13,9 +13,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="topNavbar" stylesheets="@../../../../css/jere.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox prefHeight="82.0" prefWidth="851.0" style="-fx-background-color: #71ACE7;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="topNavbar" prefHeight="80.5" prefWidth="1920.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Soundklaut">
                <font>
@@ -27,18 +27,18 @@
             </Text>
          </children>
       </VBox>
-      <TabPane layoutY="81.0" prefHeight="486.0" prefWidth="851.0" side="LEFT" style="-fx-region-background: blue;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="-1.3999999999999773" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-0.20000000000004547" AnchorPane.topAnchor="81.0">
+      <TabPane fx:id="leftNavbar" layoutY="81.0" prefHeight="486.0" prefWidth="851.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="-1.3999999999999773" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-0.20000000000004547" AnchorPane.topAnchor="81.0">
         <tabs>
-          <Tab style="-fx-rotate: 90; -fx-pref-height: 100; -fx-pref-width: 100; -fx-backgroundcolor: none;" text="Dashboard" />
-          <Tab style="-fx-rotate: 90; -fx-pref-height: 100; -fx-pref-width: 100; -fx-backgroundcolor: none;" text="Music Search">
+          <Tab closable="false" text="Dashboard" />
+          <Tab text="Music Search">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="486.0" prefWidth="0.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="538.0" prefWidth="742.0" stylesheets="@../../../../css/navbar.css">
                      <children>
-                        <VBox layoutX="24.0" layoutY="24.0" prefHeight="74.0" prefWidth="829.0" style="-fx-border-color: #8CB9E7; -fx-border-radius: 10; -fx-background-radius: 10;" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0">
+                        <VBox fx:id="searchbar" layoutX="24.0" layoutY="24.0" prefHeight="74.0" prefWidth="829.0" style="-fx-border-radius: 10; -fx-background-radius: 10;" styleClass="searchbar" stylesheets="@../../../../css/jere.css" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0">
                            <children>
-                              <GridPane id="search-form" hgap="20.0" style="-fx-padding: 10px">
+                              <GridPane id="search-form" fx:id="searchElements" styleClass="searchElements" stylesheets="@../../../../css/jere.css">
                                  <columnConstraints>
-                                    <ColumnConstraints prefWidth="250.0" />
+                                    <ColumnConstraints fx:id="searc" prefWidth="250.0" />
                                     <ColumnConstraints prefWidth="250" />
                                     <ColumnConstraints prefWidth="100" />
                                     <ColumnConstraints prefWidth="50" />

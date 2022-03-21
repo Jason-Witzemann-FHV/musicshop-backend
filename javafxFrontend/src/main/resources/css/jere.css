@@ -1,0 +1,29 @@
+#topNavbar{
+    -fx-background-color:  #71ACE7;
+}
+
+.tab-header-background {
+    -fx-padding: 10px; -fx-background-color: #8CB9E7; }
+
+.tab{
+    -fx-pref-width: 160;
+    -fx-pref-height: 160;
+    -fx-rotate: 90;
+    -fx-font-size: 20;
+    -fx-font-family: Arial;
+    -fx-border-color: none;
+    -fx-background-color: none;
+    -fx-padding: 10 10 10 10;
+}
+
+.searchbar{
+    -fx-border-color:  #8CB9E7;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.searchElements{
+    -fx-padding: 10;
+    -fx-hgap: 50;
+}
