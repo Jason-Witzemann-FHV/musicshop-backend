@@ -25,31 +25,19 @@ public class HibernateReleaseRepository implements ReleaseRepository {
 
     @Override
     public List<Release> query(String title, String artist, String genre) {
-        return em.createNativeQuery("select rel.* "
+        return em.createNativeQuery("select distinct rel.* "
                 + "from Release rel "
                 + "inner join Release_recordingIds rel_recordingId on rel.releaseIdInternal=rel_recordingId.Release_releaseIdInternal "
                 + "inner join Recording rec on (rec.id=rel_recordingId.id) "
                 + "inner join Recording_Artist rec_artist on rec.recordingIdInternal=rec_artist.Recording_recordingIdInternal "
                 + "inner join Artist artist on rec_artist.artists_artistIdInternal=artist.artistIdInternal "
                 + "inner join Recording_genres rec_genre on rec.recordingIdInternal=rec_genre.Recording_recordingIdInternal "
-                + "where (lower(rel.title) like lower(('%'||?||'%'))) "
-                + "and (lower(artist.name) like lower(('%'||?||'%'))) "
-                + "and (lower(rec_genre.genres) like lower(('%'||?||'%'))) ", Release.class)
-                .setParameter(1, title)
-                .setParameter(2, artist)
-                .setParameter(3, genre)
-                .getResultList();
-
-        // sollte eigentlich funktioniera tuts aber ned :) - feelsbadman
-        /*return em.createQuery("select rel from Release rel "
-                        + "join rel.recordingIds recId "
-                        + "join Recording rec on rec.recordingId = recId.id "
-                        + "join rec.artists a "
-                        + "where lower(rel.title) like lower(concat('%', :title, '%')) "
-                        + "and lower(a.name) like lower(concat('%', :artist, '%')) "
-                , Release.class)
+                + "where ((lower(rel.title) like lower(('%'||:title||'%'))) or (lower(rec.title)) like lower(('%'||:title||'%')))"
+                + "and (lower(artist.name) like lower(('%'||:artist||'%'))) "
+                + "and (lower(rec_genre.genres) like lower(('%'||:genre||'%'))) ", Release.class)
                 .setParameter("title", title)
                 .setParameter("artist", artist)
-                .getResultList();*/
+                .setParameter("genre", genre)
+                .getResultList();
     }
 }
