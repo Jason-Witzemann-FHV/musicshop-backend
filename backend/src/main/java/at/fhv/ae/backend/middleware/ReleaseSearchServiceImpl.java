@@ -22,7 +22,7 @@ public class ReleaseSearchServiceImpl extends UnicastRemoteObject implements Rel
     public List<ReleaseSearchResultDTO> query(String title, String artist, String genre) {
         return releaseService.query(title, artist, genre)
                 .stream()
-                .map(rel -> new ReleaseSearchResultDTO(rel.title(), rel.medium(), rel.stock(), rel.price()))
+                .map(rel -> new ReleaseSearchResultDTO(rel.id(), rel.title(), rel.medium(), rel.stock(), rel.price()))
                 .collect(Collectors.toList());
     }
 }
