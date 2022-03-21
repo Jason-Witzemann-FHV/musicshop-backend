@@ -34,7 +34,7 @@ public class HibernateReleaseRepository implements ReleaseRepository {
                 + "and (lower(rec_genre.genres) like lower(('%'||:genre||'%'))) ", Release.class)
                 .setParameter("title", title)
                 .setParameter("artist", artist)
-                .setParameter("artist", genre)
+                .setParameter("genre", genre)
                 .getResultList();
     }
 }
