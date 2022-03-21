@@ -2,18 +2,16 @@ package at.fhv.ae.javafxfrontend;
 
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
-import com.sun.javafx.collections.ObservableListWrapper;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class MusicShopController {
 
@@ -40,6 +38,20 @@ public class MusicShopController {
 
     @FXML
     public void initialize() {
+        Runnable userActionOnSearchResults = () -> {
+            ReleaseSearchResultDTO selectedResult = searchResultsView.getSelectionModel().getSelectedItem();
+            if(selectedResult != null)
+                searchDetailsOf(selectedResult);
+        };
+
+        searchResultsView.setOnKeyReleased(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                userActionOnSearchResults.run();
+        });
+        searchResultsView.setOnMouseClicked(event -> {
+            if(event.getClickCount() >= 2)
+                userActionOnSearchResults.run();
+        });
 
         // bind each column to a DTO property named by the userData FXML attribute
         for(TableColumn<ReleaseSearchResultDTO, ?> col: searchResultsView.getColumns()) {
@@ -68,4 +80,9 @@ public class MusicShopController {
                          searchGenre.getText()));
     }
 
+    public void searchDetailsOf(ReleaseSearchResultDTO result) {
+        /* TODO: implement */
+        final String msg = "TODO: details about" + System.lineSeparator() + result;
+        new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK).showAndWait();
+    }
 }
