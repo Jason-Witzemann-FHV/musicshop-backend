@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class HibernateReleaseRepository implements ReleaseRepository {
@@ -14,10 +15,12 @@ public class HibernateReleaseRepository implements ReleaseRepository {
     private final EntityManager em;
 
     @Override
-    public Release findById(ReleaseId id) {
+    public Optional<Release> findById(ReleaseId id) {
         return em.createQuery("select r from Release r where r.releaseId = :releaseId", Release.class)
                 .setParameter("releaseId", id)
-                .getSingleResult();
+                .getResultList()
+                .stream()
+                .findFirst();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package at.fhv.ae.backend;
 
+import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.backend.application.ReleaseQueryService;
+import at.fhv.ae.backend.application.impl.BasketServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
@@ -25,6 +27,9 @@ public class ServiceRegistry {
     // application services
 
     private static ReleaseQueryService releaseQueryService;
+
+    private static BasketService basketService;
+
 
 
     public static EntityManager entityManager() {
@@ -54,6 +59,13 @@ public class ServiceRegistry {
             releaseQueryService = new ReleaseQueryServiceImpl(releaseRepository());
         }
         return releaseQueryService;
+    }
+
+    public static BasketService basketService() {
+        if(basketService == null) {
+            basketService = new BasketServiceImpl(basketRepository(), releaseRepository());
+        }
+        return basketService;
     }
 
 
