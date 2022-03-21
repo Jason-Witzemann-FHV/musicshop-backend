@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="82.0" prefWidth="851.0" style="-fx-background-color: #71ACE7;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Soundklaut">
+               <font>
+                  <Font size="45.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </Text>
+         </children>
+      </VBox>
+      <TabPane layoutY="81.0" prefHeight="486.0" prefWidth="851.0" side="LEFT" style="-fx-region-background: blue;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="-1.3999999999999773" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-0.20000000000004547" AnchorPane.topAnchor="81.0">
+        <tabs>
+          <Tab style="-fx-rotate: 90; -fx-pref-height: 100; -fx-pref-width: 100; -fx-backgroundcolor: none;" text="Dashboard" />
+          <Tab style="-fx-rotate: 90; -fx-pref-height: 100; -fx-pref-width: 100; -fx-backgroundcolor: none;" text="Music Search">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="486.0" prefWidth="0.0">
+                     <children>
+                        <VBox layoutX="24.0" layoutY="24.0" prefHeight="74.0" prefWidth="829.0" style="-fx-border-color: #8CB9E7; -fx-border-radius: 10; -fx-background-radius: 10;" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0">
+                           <children>
+                              <GridPane id="search-form" hgap="20.0" style="-fx-padding: 10px">
+                                 <columnConstraints>
+                                    <ColumnConstraints prefWidth="250.0" />
+                                    <ColumnConstraints prefWidth="250" />
+                                    <ColumnConstraints prefWidth="100" />
+                                    <ColumnConstraints prefWidth="50" />
+                                 </columnConstraints>
+                                 <children>
+                                    <Label text="Title" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                    <TextField fx:id="searchTitle" prefHeight="26.0" prefWidth="250.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                    <Label text="Artist" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                    <TextField fx:id="searchArtist" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label text="Genre" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                    <TextField fx:id="searchGenre" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    
+                                             </children>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
