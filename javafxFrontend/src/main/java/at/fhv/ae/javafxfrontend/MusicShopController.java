@@ -4,14 +4,16 @@ import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
+import javafx.util.Pair;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class MusicShopController {
 
@@ -27,9 +29,14 @@ public class MusicShopController {
     private TextField searchGenre;
 
     @FXML
+    private StackPane searchStackPane;
+
+    @FXML
     private TableView<ReleaseSearchResultDTO> searchResultsView;
     @FXML private TableColumn<ReleaseSearchResultDTO, Double> colPrice;
 
+    @FXML
+    private TableView<Pair<String, String>> detailView;
 
     public MusicShopController() throws NotBoundException, MalformedURLException, RemoteException {
 
@@ -53,11 +60,6 @@ public class MusicShopController {
                 userActionOnSearchResults.run();
         });
 
-        // bind each column to a DTO property named by the userData FXML attribute
-        for(TableColumn<ReleaseSearchResultDTO, ?> col: searchResultsView.getColumns()) {
-            col.setCellValueFactory(new PropertyValueFactory<>(col.getUserData().toString()));
-        }
-
         // format price column as currency
         colPrice.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -80,9 +82,24 @@ public class MusicShopController {
                          searchGenre.getText()));
     }
 
+    public void reset() {
+        searchTitle.clear();
+        searchArtist.clear();
+        searchGenre.clear();
+        searchResultsView.getItems().clear();
+    }
+
     public void searchDetailsOf(ReleaseSearchResultDTO result) {
-        /* TODO: implement */
-        final String msg = "TODO: details about" + System.lineSeparator() + result;
-        new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK).showAndWait();
+
+        detailView.getItems().setAll(List.of(
+                new Pair<>("Price", DecimalFormat.getCurrencyInstance().format(result.getPrice())),
+                new Pair<>("Medium", result.getMedium()),
+                new Pair<>("Stock", Integer.toString(result.getStock()))));
+
+        switchSearchView();
+    }
+
+    public void switchSearchView() {
+        searchStackPane.getChildren().add(1, searchStackPane.getChildren().remove(0));
     }
 }
