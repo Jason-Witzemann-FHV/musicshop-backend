@@ -6,4 +6,6 @@ import at.fhv.ae.backend.domain.model.sale.SaleId;
 public interface SaleRepository {
 
     Sale findById(SaleId id);
+
+    void addSale(Sale sale);
 }

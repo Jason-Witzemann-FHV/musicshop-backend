@@ -5,6 +5,7 @@ import at.fhv.ae.backend.application.ReleaseQueryService;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
+import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
@@ -72,7 +73,7 @@ public class ServiceRegistry {
 
     public static SellService sellService() {
         if(sellService == null) {
-            // TODO Create new impl instance when creating implementing application service
+            new SellServiceImpl(null, basketRepository()); // TODO ADD Implementation of Sale-Repo when it is getting implemented.
         }
         return sellService;
     }
