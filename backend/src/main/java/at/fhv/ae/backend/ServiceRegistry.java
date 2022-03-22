@@ -2,6 +2,7 @@ package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.backend.application.ReleaseQueryService;
+import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
@@ -30,6 +31,7 @@ public class ServiceRegistry {
 
     private static BasketService basketService;
 
+    private static SellService sellService;
 
 
     public static EntityManager entityManager() {
@@ -67,6 +69,14 @@ public class ServiceRegistry {
         }
         return basketService;
     }
+
+    public static SellService sellService() {
+        if(sellService == null) {
+            // TODO Create new impl instance when creating implementing application service
+        }
+        return sellService;
+    }
+
 
 
 }
