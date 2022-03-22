@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class SellServiceTests {
+class RemoteSellServiceTests {
 
     private RemoteSellService remoteSellService;
     private SellService sellService;
