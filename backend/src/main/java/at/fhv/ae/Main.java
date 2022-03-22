@@ -1,6 +1,8 @@
 package at.fhv.ae;
 
 import at.fhv.ae.backend.ServiceRegistry;
+
+import at.fhv.ae.backend.middleware.RemoteSellServiceImpl;
 import at.fhv.ae.backend.middleware.ReleaseSearchServiceImpl;
 import at.fhv.ae.backend.middleware.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.dto.customer.Customer;
@@ -21,6 +23,8 @@ public class Main {
         try {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             Naming.rebind("rmi://localhost/release-search-service", new ReleaseSearchServiceImpl());
+            Naming.rebind("rmi://localhost/sell-service", new RemoteSellServiceImpl(ServiceRegistry.sellService()));
+
             Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl(ServiceRegistry.basketService()));
 
             //ReleaseSearchService rss = (ReleaseSearchService)Naming.lookup("rmi://localhost/release-search-service");

@@ -4,6 +4,11 @@ import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.backend.application.ReleaseService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
+import at.fhv.ae.backend.application.ReleaseQueryService;
+import at.fhv.ae.backend.application.SellService;
+import at.fhv.ae.backend.application.impl.BasketServiceImpl;
+import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
+import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
@@ -34,6 +39,7 @@ public class ServiceRegistry {
 
     private static BasketService basketService;
 
+    private static SellService sellService;
 
 
     public static EntityManager entityManager() {
@@ -78,6 +84,14 @@ public class ServiceRegistry {
         }
         return basketService;
     }
+
+    public static SellService sellService() {
+        if(sellService == null) {
+            new SellServiceImpl(null, basketRepository()); // TODO ADD Implementation of Sale-Repo when it is getting implemented.
+        }
+        return sellService;
+    }
+
 
 
 }
