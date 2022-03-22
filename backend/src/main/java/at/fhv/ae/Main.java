@@ -1,7 +1,7 @@
 package at.fhv.ae;
 
 import at.fhv.ae.backend.ServiceRegistry;
-import at.fhv.ae.backend.application.impl.RemoteSellServiceImpl;
+import at.fhv.ae.backend.middleware.RemoteSellServiceImpl;
 import at.fhv.ae.backend.middleware.ReleaseSearchServiceImpl;
 import at.fhv.ae.backend.middleware.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.dto.customer.Customer;
