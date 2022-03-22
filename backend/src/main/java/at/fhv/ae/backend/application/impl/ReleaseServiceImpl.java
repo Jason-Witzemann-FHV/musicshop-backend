@@ -32,26 +32,15 @@ public class ReleaseServiceImpl implements ReleaseService {
     }
 
     @Override
-    public List<DetailedReleaseDTO> detailedInformation(ReleaseId releaseId)  {
+    public DetailedReleaseDTO detailedInformation(ReleaseId releaseId) throws IllegalArgumentException  {
         // Getting domain objects
-        Optional<Release> optional = releaseRepository.findById(releaseId);
-        if (optional.isEmpty()) {
-            return Collections.emptyList();
-        }
-        Release release = optional.get();
+        Release release = releaseRepository.findById(releaseId).orElseThrow(IllegalArgumentException::new);
         List<Recording> recordings = workRepository.findRecordings(release.recordingIds());
-        Set<Artist> artists = new HashSet<>();
-        for (Recording r: recordings) {
-            artists.addAll(r.artists());
-        }
-        Set<Genre> genres = new HashSet<>();
-        for (Recording r: recordings) {
-            genres.addAll(r.genres());
-        }
-        artists.forEach(Artist::name);
-        genres.forEach(Genre::friendlyName);
 
-        //TODO: Implement the fields, the coaches want
-        return Collections.emptyList();
+        // Unique Artists and Genres
+        Set<Artist> artists = recordings.stream().flatMap(recording -> recording.artists().stream()).collect(Collectors.toSet());
+        Set<Genre> genres = recordings.stream().flatMap(recording -> recording.genres().stream()).collect(Collectors.toSet());
+
+        return DetailedReleaseDTO.fromDomain(release, recordings, artists, genres);
     }
 }

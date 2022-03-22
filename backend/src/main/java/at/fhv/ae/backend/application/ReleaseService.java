@@ -10,5 +10,5 @@ public interface ReleaseService {
 
     List<ReleaseDTO> query(String title, String artist,String genre);
 
-    List<DetailedReleaseDTO> detailedInformation(ReleaseId releaseId);
+    DetailedReleaseDTO detailedInformation(ReleaseId releaseId) throws IllegalArgumentException;
 }
