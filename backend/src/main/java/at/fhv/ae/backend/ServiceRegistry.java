@@ -8,8 +8,10 @@ import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
+import at.fhv.ae.backend.domain.repository.SaleRepository;
 import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
 import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
+import at.fhv.ae.backend.infrastructure.HibernateSaleRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -25,6 +27,8 @@ public class ServiceRegistry {
     private static BasketRepository basketRepository;
 
     private static ReleaseRepository releaseRepository;
+
+    private static SaleRepository saleRepository;
 
     // application services
 
@@ -56,6 +60,13 @@ public class ServiceRegistry {
         return releaseRepository;
     }
 
+    public static SaleRepository saleRepository() {
+        if (saleRepository == null) {
+            saleRepository = new HibernateSaleRepository(entityManager());
+        }
+        return saleRepository;
+    }
+
 
     public static ReleaseQueryService releaseQueryService() {
         if(releaseQueryService == null) {
@@ -73,7 +84,7 @@ public class ServiceRegistry {
 
     public static SellService sellService() {
         if(sellService == null) {
-            new SellServiceImpl(null, basketRepository()); // TODO ADD Implementation of Sale-Repo when it is getting implemented.
+            new SellServiceImpl(saleRepository(), basketRepository(), entityManager());
         }
         return sellService;
     }

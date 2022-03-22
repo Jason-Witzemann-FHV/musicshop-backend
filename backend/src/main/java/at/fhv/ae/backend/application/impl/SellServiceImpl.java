@@ -7,6 +7,8 @@ import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 import lombok.AllArgsConstructor;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +19,7 @@ public class SellServiceImpl implements SellService {
 
     private final SaleRepository saleRepository;
     private final BasketRepository basketRepository;
+    private final EntityManager entityManager;
 
     @Override
     public boolean sellItemsInBasket() {
@@ -36,7 +39,10 @@ public class SellServiceImpl implements SellService {
                     saleItems
             );
 
+            EntityTransaction transaction = entityManager.getTransaction();
+            transaction.begin();
             saleRepository.addSale(sale);
+            transaction.commit();
             basketRepository.clearBasket();
 
         } catch (Exception e) { // only case of unsuccessful persist of sale is an unexpected exception

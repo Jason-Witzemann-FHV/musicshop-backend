@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.application;
 
+import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
@@ -25,7 +26,7 @@ class SellServiceTests {
     void setup() {
         basketRepository = mock(BasketRepository.class);
         sellRepository = mock(SaleRepository.class);
-        sellService = new SellServiceImpl(sellRepository, basketRepository);
+        sellService = new SellServiceImpl(sellRepository, basketRepository, ServiceRegistry.entityManager());
     }
 
     @Test
