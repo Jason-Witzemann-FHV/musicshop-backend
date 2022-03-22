@@ -7,7 +7,6 @@ import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
 import at.fhv.ae.backend.application.ReleaseQueryService;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
-import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
