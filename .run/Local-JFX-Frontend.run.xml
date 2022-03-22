@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Local-JFX-Frontend" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="at.fhv.ae.javafxfrontend.Main" />
+    <module name="musicshop-backend.javafxFrontend.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="at.fhv.ae.javafxfrontend.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

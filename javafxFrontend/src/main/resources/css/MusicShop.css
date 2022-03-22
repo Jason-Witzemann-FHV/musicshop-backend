@@ -1,0 +1,43 @@
+.stack-pane-opaque-items > * {
+    -fx-background-color: #F4F4F4;
+}
+
+.tab-header-background {
+    -fx-padding: 10px; -fx-background-color: #8CB9E7; }
+
+.tab{
+    -fx-pref-width: 160;
+    -fx-pref-height: 160;
+    -fx-rotate: 90;
+    -fx-font-size: 20;
+    -fx-font-family: Arial;
+    -fx-border-color: none;
+    -fx-background-color: none;
+    -fx-padding: 10 10 10 10;
+}
+
+.searchbar{
+    -fx-border-color:  #8CB9E7;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#searchResults{
+    -fx-border-color:  #8CB9E7;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.table-view {
+    -fx-border-color:  #8CB9E7;
+    -fx-border-width: 2;
+}
+
+.no-header .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
