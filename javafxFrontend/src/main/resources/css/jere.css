@@ -23,8 +23,27 @@
     -fx-background-radius: 10;
 }
 
-.searchElements{
+#searchResults{
+    -fx-border-color:  #8CB9E7;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
     -fx-padding: 10;
+}
+
+.searchElements{
+    -fx-padding: 2;
     -fx-hgap: 50;
 }
 
+.table-view {
+    -fx-border-color:  #8CB9E7;
+    -fx-border-width: 2;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #8CB9E7;
+}
+.table-view .table-cell{
+    -fx-font-size:12pt;
+}

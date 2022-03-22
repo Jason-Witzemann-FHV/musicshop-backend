@@ -66,11 +66,12 @@
                               </GridPane>
                            </children>
                         </VBox>
-                        <TableView fx:id="resultTable" layoutX="38.0" layoutY="169.0" prefHeight="200.0" prefWidth="1687.0" AnchorPane.bottomAnchor="631.8" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="30.799999999999955" AnchorPane.topAnchor="169.0">
+                        <TableView layoutX="33.0" layoutY="152.0" prefHeight="200.0" prefWidth="1690.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Title" />
-                            <TableColumn prefWidth="75.0" text="Medium" />
-                              <TableColumn prefWidth="75.0" text="Stock" />
+                            <TableColumn minWidth="-Infinity" prefWidth="500.0" text="Title" userData="title" />
+                            <TableColumn maxWidth="300.0" minWidth="-Infinity" prefWidth="300.0" text="Medium" userData="medium" />
+                              <TableColumn maxWidth="300.0" minWidth="-Infinity" prefWidth="300.0" text="Stock" userData="stock" />
+                              <TableColumn minWidth="-Infinity" prefWidth="300.0" text="Price" userData="price" />
                           </columns>
                         </TableView>
                      </children>
