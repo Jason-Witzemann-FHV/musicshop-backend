@@ -19,7 +19,7 @@ public class MusicShopApplication extends Application {
     public void start(Stage stage) throws IOException {
         //Parent root = FXMLLoader.load(getClass().getResource("__dashboard.fxml"));
 
-        URL fxmlUrl = this.getClass().getResource("jereTest.fxml");
+        URL fxmlUrl = this.getClass().getResource("MusicShop.fxml");
         Objects.requireNonNull(fxmlUrl);
         Parent root = FXMLLoader.load(fxmlUrl);
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();

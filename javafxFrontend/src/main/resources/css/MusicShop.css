@@ -41,9 +41,3 @@
     -fx-border-width: 2;
 }
 
-.table-view .column-header-background{
-    -fx-background-color: #8CB9E7;
-}
-.table-view .table-cell{
-    -fx-font-size:12pt;
-}

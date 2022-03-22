@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="topNavbar" stylesheets="@../../../../css/jere.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.ae.javafxfrontend.MusicShopController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="topNavbar" stylesheets="@../../../../css/MusicShop.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.ae.javafxfrontend.MusicShopController">
    <children>
       <VBox fx:id="topNavbar" prefHeight="80.5" prefWidth="1920.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -30,16 +30,16 @@
             </Text>
          </children>
       </VBox>
-      <TabPane fx:id="leftNavbar" layoutY="81.0" prefHeight="486.0" prefWidth="851.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="-1.3999999999999773" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-0.20000000000004547" AnchorPane.topAnchor="81.0">
+      <TabPane fx:id="leftNavbar" layoutY="80.0" prefHeight="486.0" prefWidth="851.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="-0.40000000000009095" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-0.20000000000004547" AnchorPane.topAnchor="80.0">
         <tabs>
           <Tab closable="false" text="Dashboard" />
           <Tab text="Music Search">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="538.0" prefWidth="742.0" stylesheets="@../../../../css/navbar.css">
                      <children>
-                        <VBox fx:id="searchbar" layoutX="24.0" layoutY="24.0" prefHeight="74.0" prefWidth="829.0" style="-fx-border-radius: 10; -fx-background-radius: 10;" styleClass="searchbar" stylesheets="@../../../../css/jere.css" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0">
+                        <VBox fx:id="searchbar" layoutX="24.0" layoutY="24.0" prefHeight="63.0" prefWidth="1708.0" style="-fx-border-radius: 10; -fx-background-radius: 10;" styleClass="searchbar" stylesheets="@../../../../css/MusicShop.css" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0">
                            <children>
-                              <GridPane id="search-form" fx:id="searchElements" prefHeight="34.0" prefWidth="500.0" styleClass="searchElements" stylesheets="@../../../../css/jere.css">
+                              <GridPane id="search-form" fx:id="searchElements" prefHeight="34.0" prefWidth="500.0" styleClass="searchElements" stylesheets="@../../../../css/MusicShop.css">
                                  <columnConstraints>
                                     <ColumnConstraints prefWidth="250.0" />
                                     <ColumnConstraints prefWidth="250.0" />
@@ -54,7 +54,7 @@
                                     <TextField fx:id="searchArtist" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Label text="Genre" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                                     <TextField fx:id="searchGenre" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                    <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="100.0" text="Search" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2" onAction="#search"/>
+                                    <Button mnemonicParsing="false" onAction="#search" prefHeight="38.0" prefWidth="100.0" text="Search" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                                     <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="102.0" text="Reset" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                                     
                                              </children>
@@ -66,12 +66,12 @@
                               </GridPane>
                            </children>
                         </VBox>
-                        <TableView layoutX="33.0" layoutY="152.0" prefHeight="200.0" prefWidth="1690.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" fx:id="searchResultsView">
+                        <TableView fx:id="searchResultsView" layoutX="33.0" layoutY="152.0" prefHeight="200.0" prefWidth="1690.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
                           <columns>
-                            <TableColumn minWidth="-Infinity" prefWidth="500.0" text="Title" userData="title" />
-                            <TableColumn maxWidth="300.0" minWidth="-Infinity" prefWidth="300.0" text="Medium" userData="medium" />
-                              <TableColumn maxWidth="300.0" minWidth="-Infinity" prefWidth="300.0" text="Stock" userData="stock" />
-                              <TableColumn minWidth="-Infinity" prefWidth="300.0" text="Price" userData="price" fx:id="colPrice" />
+                            <TableColumn minWidth="-Infinity" prefWidth="400.0" text="Title" userData="title" />
+                            <TableColumn maxWidth="368.800048828125" minWidth="-Infinity" prefWidth="300.0" text="Medium" userData="medium" />
+                              <TableColumn maxWidth="311.19989013671875" minWidth="-Infinity" prefWidth="300.0" text="Stock" userData="stock" />
+                              <TableColumn fx:id="colPrice" minWidth="-Infinity" prefWidth="300.0" text="Price" userData="price" />
                           </columns>
                         </TableView>
                      </children>
