@@ -2,7 +2,6 @@ package at.fhv.ae.backend.infrastructure;
 
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.work.*;
-import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
 import org.junit.jupiter.api.Test;
 
