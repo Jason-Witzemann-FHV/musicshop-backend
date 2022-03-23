@@ -71,4 +71,64 @@ class HibernateReleaseRepositoryTests {
 
         assertTrue(actual.isEmpty());
     }
+
+    @Test
+    void given_some_releases_when_searching_byTitle_then_return_correct(){
+        var releaseId = new ReleaseId(UUID.randomUUID());
+        List<Supplier> supplierList = List.of(new Supplier("Amazonas", "Somewhere 69"));
+        var recordingIds = List.of(new RecordingId(UUID.randomUUID()));
+
+        Recording recording = new Recording(recordingIds.get(0), "Test", 12, 2020, new Work("KeineScheisse"), List.of(new Artist("Juergen")), List.of(Genre.ACOUSTIC));
+
+        var release = new Release(
+                releaseId,
+                5,
+                "Suffering",
+                Medium.CD,
+                13.44,
+                new Label("CBA Music", "CBA"),
+                supplierList,
+                recordingIds
+        );
+
+        var release2 = new Release(
+                releaseId,
+                5,
+                "UFF",
+                Medium.CD,
+                13.44,
+                new Label("CBD Music", "CBD"),
+                supplierList,
+                recordingIds
+        );
+
+        var transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(release);
+        em.persist(release2);
+        em.persist(recording);
+        em.flush();
+
+
+        var actual = releaseRepository.query("UFF", "", "");
+        var actually = releaseRepository.query("UFF", "UERGEN", "Acoustic");
+
+
+        transaction.rollback();
+
+        assertTrue(actual.contains(release));
+        assertTrue(actual.contains(release2));
+        assertEquals(2, actual.size());
+
+        assertTrue(actually.contains(release));
+        assertTrue(actually.contains(release2));
+        assertEquals(2, actually.size());
+
+
+
+
+
+
+
+    }
 }
