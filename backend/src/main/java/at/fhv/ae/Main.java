@@ -22,7 +22,7 @@ public class Main {
 
         try {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-            Naming.rebind("rmi://localhost/release-search-service", new ReleaseSearchServiceImpl());
+            Naming.rebind("rmi://localhost/release-search-service", new ReleaseSearchServiceImpl(ServiceRegistry.releaseService()));
             Naming.rebind("rmi://localhost/sell-service", new RemoteSellServiceImpl(ServiceRegistry.sellService()));
 
             Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl(ServiceRegistry.basketService()));
