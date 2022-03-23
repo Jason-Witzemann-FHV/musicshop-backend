@@ -13,6 +13,7 @@ import at.fhv.ae.backend.domain.repository.WorkRepository;
 import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
 import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
 import at.fhv.ae.backend.infrastructure.HibernateSaleRepository;
+import at.fhv.ae.backend.infrastructure.HibernateWorkRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
