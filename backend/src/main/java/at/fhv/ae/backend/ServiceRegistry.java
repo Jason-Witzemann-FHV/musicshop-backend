@@ -1,15 +1,17 @@
 package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.application.BasketService;
-import at.fhv.ae.backend.application.ReleaseQueryService;
-import at.fhv.ae.backend.application.SellService;
+import at.fhv.ae.backend.application.ReleaseService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
-import at.fhv.ae.backend.application.impl.ReleaseQueryServiceImpl;
+import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
+import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
+import at.fhv.ae.backend.domain.repository.WorkRepository;
 import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
 import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
+import at.fhv.ae.backend.infrastructure.HibernateWorkRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -26,9 +28,11 @@ public class ServiceRegistry {
 
     private static ReleaseRepository releaseRepository;
 
+    private static WorkRepository workRepository;
+
     // application services
 
-    private static ReleaseQueryService releaseQueryService;
+    private static ReleaseService releaseService;
 
     private static BasketService basketService;
 
@@ -56,12 +60,19 @@ public class ServiceRegistry {
         return releaseRepository;
     }
 
-
-    public static ReleaseQueryService releaseQueryService() {
-        if(releaseQueryService == null) {
-            releaseQueryService = new ReleaseQueryServiceImpl(releaseRepository());
+    public static WorkRepository workRepository() {
+        if(workRepository == null) {
+            workRepository = new HibernateWorkRepository(entityManager());
         }
-        return releaseQueryService;
+        return workRepository;
+    }
+
+
+    public static ReleaseService releaseService() {
+        if(releaseService == null) {
+            releaseService = new ReleaseServiceImpl(releaseRepository(), workRepository());
+        }
+        return releaseService;
     }
 
     public static BasketService basketService() {
