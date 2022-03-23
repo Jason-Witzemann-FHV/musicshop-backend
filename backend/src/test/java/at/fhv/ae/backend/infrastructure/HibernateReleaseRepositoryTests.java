@@ -1,0 +1,74 @@
+package at.fhv.ae.backend.infrastructure;
+
+import at.fhv.ae.backend.ServiceRegistry;
+import at.fhv.ae.backend.domain.model.release.*;
+import at.fhv.ae.backend.domain.model.work.*;
+import at.fhv.ae.backend.domain.repository.ReleaseRepository;
+import org.junit.jupiter.api.Test;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class HibernateReleaseRepositoryTests {
+
+    private final ReleaseRepository releaseRepository = ServiceRegistry.releaseRepository();
+
+    private final EntityManager em = ServiceRegistry.entityManager();
+
+    @Test
+    void given_many_releases_when_get_one_then_get_correct_release() {
+        var releaseId = new ReleaseId(UUID.randomUUID());
+        List<Supplier> supplierList = List.of(new Supplier("Amazon", "Somewhere 12"));
+        var recordingIds = List.of(new RecordingId(UUID.randomUUID()));
+        var release = new Release(
+                releaseId,
+                5,
+                "Suffering from Success",
+                Medium.CD,
+                15.44,
+                new Label("ABC Music", "ABC"),
+                supplierList,
+                recordingIds
+        );
+
+        var transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(release);
+        em.flush();
+        var actual = releaseRepository.findById(releaseId);
+        transaction.rollback();
+
+        assertTrue(actual.isPresent());
+        assertEquals(release, actual.get());
+    }
+
+
+    @Test
+    void given_many_releases_when_get_wrong_then_get_empty_optional() {
+        var releaseId = new ReleaseId(UUID.randomUUID());
+        List<Supplier> supplierList = List.of(new Supplier("Amazon", "Somewhere 12"));
+        var recordingIds = List.of(new RecordingId(UUID.randomUUID()));
+        var release = new Release(
+                releaseId,
+                5,
+                "Suffering from Success",
+                Medium.CD,
+                15.44,
+                new Label("ABC Music", "ABC"),
+                supplierList,
+                recordingIds
+        );
+
+        var transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(release);
+        em.flush();
+        var actual = releaseRepository.findById(new ReleaseId(UUID.randomUUID()));
+        transaction.rollback();
+
+        assertTrue(actual.isEmpty());
+    }
+}
