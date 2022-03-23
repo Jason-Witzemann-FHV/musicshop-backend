@@ -8,9 +8,11 @@ import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
+import at.fhv.ae.backend.domain.repository.SaleRepository;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
 import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
 import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
+import at.fhv.ae.backend.infrastructure.HibernateSaleRepository;
 import at.fhv.ae.backend.infrastructure.HibernateWorkRepository;
 
 import javax.persistence.EntityManager;
@@ -28,7 +30,10 @@ public class ServiceRegistry {
 
     private static ReleaseRepository releaseRepository;
 
+    private static SaleRepository saleRepository;
+
     private static WorkRepository workRepository;
+
 
     // application services
 
@@ -60,6 +65,13 @@ public class ServiceRegistry {
         return releaseRepository;
     }
 
+    public static SaleRepository saleRepository() {
+        if (saleRepository == null) {
+            saleRepository = new HibernateSaleRepository(entityManager());
+        }
+        return saleRepository;
+    }
+
     public static WorkRepository workRepository() {
         if(workRepository == null) {
             workRepository = new HibernateWorkRepository(entityManager());
@@ -84,7 +96,7 @@ public class ServiceRegistry {
 
     public static SellService sellService() {
         if(sellService == null) {
-            new SellServiceImpl(null, basketRepository()); // TODO ADD Implementation of Sale-Repo when it is getting implemented.
+            new SellServiceImpl(saleRepository(), basketRepository(), entityManager());
         }
         return sellService;
     }

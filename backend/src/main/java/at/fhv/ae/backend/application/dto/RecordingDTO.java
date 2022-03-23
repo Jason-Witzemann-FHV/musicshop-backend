@@ -22,7 +22,7 @@ public class RecordingDTO {
                 recording.title(),
                 recording.artists().stream().map(Artist::name).collect(Collectors.toCollection(ArrayList::new)),
                 recording.genres().stream().map(Genre::friendlyName).collect(Collectors.toCollection(ArrayList::new)),
-                recording.year(),
+                recording.recordingYear(),
                 recording.duration()
         );
     }
