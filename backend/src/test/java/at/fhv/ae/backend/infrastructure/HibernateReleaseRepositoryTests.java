@@ -124,11 +124,5 @@ class HibernateReleaseRepositoryTests {
         assertTrue(actually.contains(release2));
         assertEquals(2, actually.size());
 
-
-
-
-
-
-
     }
 }
