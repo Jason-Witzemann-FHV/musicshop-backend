@@ -32,7 +32,7 @@ class ReleaseServiceTest {
     void given_one_releaseId_when_asking_for_detailed_info_then_return_dto() {
         // Arrange
         // Ids
-        var releaseId = new ReleaseId(UUID.randomUUID());
+        var releaseId = UUID.randomUUID();
         var recordingId1 = new RecordingId(UUID.randomUUID());
         var recordingId2 = new RecordingId(UUID.randomUUID());
         var recordingId3 = new RecordingId(UUID.randomUUID());
@@ -67,7 +67,7 @@ class ReleaseServiceTest {
 
         // Optional release
         var release = Optional.of(new Release(
-                releaseId,
+                new ReleaseId(releaseId),
                 5,
                 "Suffering from Success",
                 Medium.CD,
@@ -78,14 +78,14 @@ class ReleaseServiceTest {
         ));
 
         // Mock Returns
-        when(releaseRepository.findById(releaseId)).thenReturn(release);
+        when(releaseRepository.findById(new ReleaseId(releaseId))).thenReturn(release);
         when(workRepository.findRecordings(release.get().recordingIds())).thenReturn(List.of(r1, r2, r3));
 
         // Act
         releaseService.detailedInformation(releaseId);
 
         // Assert
-        verify(releaseRepository).findById(releaseId);
+        verify(releaseRepository).findById(new ReleaseId(releaseId));
         verify(workRepository).findRecordings(recordingIds);
     }
 }
