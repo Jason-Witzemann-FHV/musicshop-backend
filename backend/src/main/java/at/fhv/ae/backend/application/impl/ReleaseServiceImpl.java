@@ -31,9 +31,9 @@ public class ReleaseServiceImpl implements ReleaseService {
     }
 
     @Override
-    public DetailedReleaseDTO detailedInformation(ReleaseId releaseId) throws IllegalArgumentException  {
+    public DetailedReleaseDTO detailedInformation(UUID releaseId) throws IllegalArgumentException  {
         // Getting domain objects
-        Release release = releaseRepository.findById(releaseId).orElseThrow(IllegalArgumentException::new);
+        Release release = releaseRepository.findById(new ReleaseId(releaseId)).orElseThrow(IllegalArgumentException::new);
         List<Recording> recordings = workRepository.findRecordings(release.recordingIds());
 
         return DetailedReleaseDTO.fromDomain(
