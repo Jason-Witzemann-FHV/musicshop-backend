@@ -27,24 +27,24 @@ class RemoteReleaseServiceTest {
     }
 
     @Test
-    void given_nothing_when_searched_for_release_then_call_application_service_and_finds_nothing() throws RemoteException, IllegalArgumentException {
-        UUID testId = UUID.randomUUID();;
+    void given_nothing_when_searched_for_release_then_call_application_service_and_finds_nothing() throws IllegalArgumentException {
+        UUID testId = UUID.randomUUID();
         // Nullpointer, because Application layer throws error, but Application layer is mocked, therefore it returned null and caused NullPointerException
         Assertions.assertThrows(NullPointerException.class, () -> remoteReleaseService.getDetails(testId));
     }
 
 
     @Test
-    void a() throws RemoteException, IllegalArgumentException {
+    void given_nothing_when_getting_result_then_confirm_call_on_application_layer() throws RemoteException, IllegalArgumentException {
         // Arrange
-        UUID testId = UUID.randomUUID();;
-        ArrayList<String> artists = new ArrayList<String>();
+        UUID testId = UUID.randomUUID();
+        ArrayList<String> artists = new ArrayList<>();
         artists.add("Hello");
 
-        ArrayList<String> genres = new ArrayList<String>();
+        ArrayList<String> genres = new ArrayList<>();
         genres.add("World");
 
-        ArrayList<RecordingDTO> recordings = new ArrayList<RecordingDTO>();
+        ArrayList<RecordingDTO> recordings = new ArrayList<>();
         recordings.add(new RecordingDTO(
                 "Some title",
                 artists,
