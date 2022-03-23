@@ -17,20 +17,16 @@ public class DetailedReleaseDTO {
     String title;
     double price;
     int stock;
-    List<String> artists;
-    List<String> recordings;
-    List<String> genres;
     String medium;
+    ArrayList<RecordingDTO> recordings;
 
-    public static DetailedReleaseDTO fromDomain(Release release, List<Recording> recordings, Set<Artist> artists, Set<Genre> genres) {
+    public static DetailedReleaseDTO fromDomain(Release release, ArrayList<RecordingDTO> recordings) {
         return new DetailedReleaseDTO(
                 release.title(),
                 release.price(),
                 release.stock(),
-                artists.stream().map(Artist::name).collect(Collectors.toList()),
-                recordings.stream().map(Recording::title).collect(Collectors.toList()),
-                genres.stream().map(Genre::friendlyName).collect(Collectors.toList()),
-                release.medium().friendlyName()
+                release.medium().friendlyName(),
+                recordings
         );
     }
 }
