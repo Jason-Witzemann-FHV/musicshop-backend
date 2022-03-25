@@ -23,4 +23,9 @@ public class ReleaseId implements Serializable {
     public ReleaseId(UUID id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }
