@@ -125,4 +125,40 @@ class HibernateReleaseRepositoryTests {
         assertEquals(2, actually.size());
 
     }
+
+    @Test
+    void given_a_release_when_searching_for_a_release_that_does_not_exist_then_return_nothing(){
+        var releaseId = new ReleaseId(UUID.randomUUID());
+        List<Supplier> supplierList = List.of(new Supplier("Gorty", "Somewhere 69"));
+        var recordingIds = List.of(new RecordingId(UUID.randomUUID()));
+
+        Recording recording = new Recording(recordingIds.get(0), "Rec", 12, 2020, new Work("KeineScheisse"), List.of(new Artist("Juergen")), List.of(Genre.ACOUSTIC));
+
+        var release = new Release(
+                releaseId,
+                5,
+                "187 Gang",
+                Medium.CD,
+                13.44,
+                new Label("Koks", "CBD"),
+                supplierList,
+                recordingIds
+        );
+
+        var transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(release);
+        em.persist(recording);
+        em.flush();
+
+        var actual = releaseRepository.query("781", "", "");
+
+        transaction.rollback();
+
+        assertFalse(actual.contains(release));
+        assertEquals(0, actual.size());
+
+
+
+    }
 }
