@@ -39,12 +39,17 @@ public class RemoteBasketServiceImpl extends UnicastRemoteObject implements Remo
     public List<BasketItemRemoteDTO> itemsInBasket() {
         return basketService.itemsInBasket()
                 .stream()
-                .map(dto -> new BasketItemRemoteDTO(dto.releaseId(), dto.title(), dto.quantity(), dto.medium(), dto.price()))
+                .map(dto -> new BasketItemRemoteDTO(dto.releaseId(), dto.title(), dto.quantity(), dto.stock(), dto.medium(), dto.price()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public int amountOfItemsInBasket() {
         return basketService.amountOfItemsInBasket();
+    }
+
+    @Override
+    public void clearBasket() {
+        basketService.clearBasket();
     }
 }

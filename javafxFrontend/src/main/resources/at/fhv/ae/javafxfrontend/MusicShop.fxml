@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 
+<?import javafx.scene.layout.HBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="500" prefWidth="800"
             stylesheets="/css/MusicShop.css"
@@ -97,18 +98,38 @@
                             <TableColumn text="Stock">
                                 <cellValueFactory><PropertyValueFactory property="stock"/></cellValueFactory>
                             </TableColumn>
-                            <TableColumn text="Price" fx:id="colPrice">
+                            <TableColumn text="Price" fx:id="searchColPrice">
                                 <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
                             </TableColumn>
-                            <TableColumn text="addToBasket" fx:id="basket">
-                            </TableColumn>
+                            <TableColumn text="addToBasket" fx:id="searchColAddToBasket"/>
                         </columns>
                     </TableView>
                 </AnchorPane>
-
-
             </StackPane>
-
+        </Tab>
+        <Tab text="Basket">
+            <AnchorPane style="-fx-padding: 25px;">
+                <TableView fx:id="basketView"
+                           AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0"
+                           AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="200">
+                    <columns>
+                        <TableColumn text="Title">
+                            <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Medium">
+                            <cellValueFactory><PropertyValueFactory property="medium"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Price" fx:id="basketColPrice">
+                            <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="basketColQuantity" text="Quantity"/>
+                    </columns>
+                </TableView>
+                <HBox alignment="BOTTOM_RIGHT" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
+                    <Button text="Clear Basket" onAction="#clearBasket"/>
+                    <Button text="Sell Items" onAction="#sell"/>
+                </HBox>
+            </AnchorPane>
         </Tab>
     </TabPane>
 </AnchorPane>

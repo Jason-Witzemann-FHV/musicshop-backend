@@ -18,5 +18,7 @@ public interface BasketService {
 
     int amountOfItemsInBasket();
 
+    void clearBasket();
+
 
 }
