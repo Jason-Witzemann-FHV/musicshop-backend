@@ -145,8 +145,8 @@ public class MusicShopController {
         basketService.addItemToBasket(UUID.fromString(id),1);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Recording added");
-            alert.setContentText("Recording added");
+            alert.setTitle("Release added");
+            alert.setContentText("Release added");
             alert.showAndWait();
     }
 
