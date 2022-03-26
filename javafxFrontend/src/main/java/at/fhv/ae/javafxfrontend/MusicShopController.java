@@ -1,22 +1,18 @@
 package at.fhv.ae.javafxfrontend;
 
+import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import javafx.util.Pair;
 
 import java.net.MalformedURLException;
@@ -44,23 +40,24 @@ public class MusicShopController {
     private TextField searchGenre;
 
     @FXML
-    private StackPane searchStackPane;
+    private StackPane searchStackPane; // contains result table and detailed result view to switch between
 
     @FXML
     private TableView<ReleaseSearchResultDTO> searchResultsView;
     @FXML
-    private TableColumn<ReleaseSearchResultDTO, Double> colPrice;
-
+    private TableColumn<ReleaseSearchResultDTO, Double> searchColPrice;
     @FXML
-    private TableColumn<ReleaseSearchResultDTO, String> basket;
+    private TableColumn<ReleaseSearchResultDTO, String> searchColAddToBasket;
 
     @FXML
     private TableView<Pair<String, String>> detailView;
 
     @FXML
-    private TableView<ReleaseSearchResultDTO> basketTable;
+    private TableView<BasketItemRemoteDTO> basketView;
     @FXML
-    TableColumn<ReleaseSearchResultDTO, BoundedInteger> colQuantity;
+    private TableColumn<BasketItemRemoteDTO, QuantityColumnInfo> basketColQuantity;
+    @FXML
+    private TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
 
     public MusicShopController() throws NotBoundException, MalformedURLException, RemoteException {
 
@@ -68,12 +65,28 @@ public class MusicShopController {
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
     }
 
+    private <S, T> Callback<TableColumn<S,T>, TableCell<S,T>> currencyCellFactory() {
+        return column -> new TableCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if(item == null || empty)
+                    setText(null);
+                else
+                    setText(DecimalFormat.getCurrencyInstance(Locale.GERMANY).format(item));
+            }
+        };
+    }
+
     @FXML
-    public void initialize() {
+    public void initialize() throws RemoteException {
+
+        // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
             ReleaseSearchResultDTO selectedResult = searchResultsView.getSelectionModel().getSelectedItem();
             if(selectedResult != null)
-                searchDetailsOf(selectedResult);
+                showDetailsOf(selectedResult);
         };
 
         searchResultsView.setOnKeyReleased(event -> {
@@ -85,55 +98,57 @@ public class MusicShopController {
                 userActionOnSearchResults.run();
         });
 
-        // format price column as currency
-        colPrice.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
 
-                if(item == null || empty)
-                    setText(null);
-                else
-                    setText(DecimalFormat.getCurrencyInstance(Locale.GERMANY).format(item));
-            }
-        });
+        // format price columns as currency
+        searchColPrice.setCellFactory(currencyCellFactory());
+        basketColPrice.setCellFactory(currencyCellFactory());
 
-        basket.setCellFactory(column -> {
+        // search result table - add to basket button column
+        searchColAddToBasket.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getId()));
+
+        searchColAddToBasket.setCellFactory(column -> {
             var cell = new TableCell<ReleaseSearchResultDTO, String>();
             var button = new Button("add");
 
-            EventHandler<ActionEvent> handler = e -> {
+            button.setOnAction(e -> {
                 try {
                     addToBasket(cell.getItem());
                 } catch (RemoteException remoteException) {
                     throw new RuntimeException(remoteException);
                 }
-            };
+            });
 
-            button.setOnAction(handler);
             cell.setGraphic(button);
             return cell;
         });
 
-        colQuantity.setCellValueFactory(data -> new SimpleObjectProperty<>(
-                new BoundedInteger(() -> 1, () -> data.getValue().getStock(), 1)
+        // basket table - quantity column
+        basketColQuantity.setCellValueFactory(data -> new SimpleObjectProperty<>(
+                new QuantityColumnInfo(data.getValue().getReleaseId(), () -> 1, () -> data.getValue().getStock(), data.getValue().getQuantity())
         ));
 
-        colQuantity.setCellFactory(column -> new TableCell<>() {
+        basketColQuantity.setCellFactory(column -> new TableCell<>() {
             @Override
-            public void updateItem(BoundedInteger item, boolean empty) {
+            public void updateItem(QuantityColumnInfo item, boolean empty) {
+                super.updateItem(item, empty);
+
                 if(item == null || empty)
                     return;
+
                 var spinner = new Spinner<Integer>(item.min(), item.max(), item.value());
+                spinner.valueProperty().addListener((observable, oldVal, newVal) -> {
+                    item.setValue(newVal);
+                    try {
+                        basketService.changeQuantityOfItem(item.productId(), newVal);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
                 this.setGraphic(spinner);
-                spinner.valueProperty().addListener((observable, oldVal, newVal) -> item.setValue(newVal));
             }
         });
 
-
-        // basketTable.getItems().add(new ReleaseSearchResultDTO("Never gonna give you up", "MC", 3, 4.40));
-
-        basket.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getId()));
+        basketView.getItems().setAll(basketService.itemsInBasket());
     }
 
     public void search() throws RemoteException {
@@ -151,7 +166,7 @@ public class MusicShopController {
         searchResultsView.getItems().clear();
     }
 
-    public void searchDetailsOf(ReleaseSearchResultDTO result) {
+    public void showDetailsOf(ReleaseSearchResultDTO result) {
 
         detailView.getItems().setAll(List.of(
                 new Pair<>("Price", DecimalFormat.getCurrencyInstance().format(result.getPrice())),
@@ -167,6 +182,7 @@ public class MusicShopController {
 
     public void addToBasket(String id) throws RemoteException {
         basketService.addItemToBasket(UUID.fromString(id),1);
+        basketView.getItems().setAll(basketService.itemsInBasket());
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Release added");
@@ -177,6 +193,4 @@ public class MusicShopController {
     public void addToBasket(ActionEvent event) throws RemoteException {
         addToBasket(searchResultsView.getSelectionModel().getSelectedItem().getId());
     }
-
-
 }
