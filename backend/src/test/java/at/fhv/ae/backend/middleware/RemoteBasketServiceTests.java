@@ -56,19 +56,19 @@ class RemoteBasketServiceTests {
     void given_basket_with_content_when_get_all_items_then_application_method_called_and_list_of_dto() throws RemoteException {
 
         var items = List.of(
-                new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 1", 2, "Vinyl", 32.33),
-                new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 2", 4, "CD", 4.30),
-                new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 2", 2, "Music cassette", 8.22)
+                new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 1", 2, 5,"Vinyl", 32.33),
+                new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 2", 4, 6, "CD", 4.30),
+                new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 2", 2, 10,"Music cassette", 8.22)
         );
         when(basketService.itemsInBasket()).thenReturn(items);
         var remoteItems = remoteBasketService.itemsInBasket();
         assertEquals(items.size(), remoteItems.size());
         for (int i = 0; i < items.size(); i++) {
-            assertEquals(items.get(i).releaseId(), remoteItems.get(i).releaseId());
-            assertEquals(items.get(i).title(), remoteItems.get(i).title());
-            assertEquals(items.get(i).quantity(), remoteItems.get(i).quantity());
-            assertEquals(items.get(i).medium(), remoteItems.get(i).medium());
-            assertEquals(items.get(i).price(), remoteItems.get(i).price());
+            assertEquals(items.get(i).releaseId(), remoteItems.get(i).getReleaseId());
+            assertEquals(items.get(i).title(), remoteItems.get(i).getTitle());
+            assertEquals(items.get(i).quantity(), remoteItems.get(i).getQuantity());
+            assertEquals(items.get(i).medium(), remoteItems.get(i).getMedium());
+            assertEquals(items.get(i).price(), remoteItems.get(i).getPrice());
         }
 
         verify(basketService).itemsInBasket();
