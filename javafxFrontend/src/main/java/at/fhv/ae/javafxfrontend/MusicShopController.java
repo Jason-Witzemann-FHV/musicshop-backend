@@ -79,13 +79,19 @@ public class MusicShopController {
             }
         });
 
-        colQuantity.setCellFactory(column -> {
-            var cell = new TableCell<ReleaseSearchResultDTO, Integer>();
-            cell.setItem(1);
+        colQuantity.setCellValueFactory(data -> new SimpleObjectProperty<>(
+                new BoundedInteger(() -> 1, () -> data.getValue().getStock(), 1)
+        ));
 
-
-
-            return cell;
+        colQuantity.setCellFactory(column -> new TableCell<>() {
+            @Override
+            public void updateItem(BoundedInteger item, boolean empty) {
+                if(item == null || empty)
+                    return;
+                var spinner = new Spinner<Integer>(item.min(), item.max(), item.value());
+                this.setGraphic(spinner);
+                spinner.valueProperty().addListener((observable, oldVal, newVal) -> item.setValue(newVal));
+            }
         });
 
 
