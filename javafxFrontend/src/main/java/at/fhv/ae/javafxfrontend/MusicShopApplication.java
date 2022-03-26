@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MusicShopApplication extends Application {
@@ -16,6 +17,7 @@ public class MusicShopApplication extends Application {
 
         URL fxmlUrl = this.getClass().getResource("MusicShop.fxml");
         Objects.requireNonNull(fxmlUrl);
+        Locale.setDefault(new Locale("en"));
         Parent root = FXMLLoader.load(fxmlUrl);
         Scene scene = new Scene(root);
         stage.setTitle("SoundKraut");
