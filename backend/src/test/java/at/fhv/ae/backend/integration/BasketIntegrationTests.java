@@ -82,7 +82,7 @@ class BasketIntegrationTests {
         }
 
         // load data here. Must be a Map since the right order is not guaranteed.
-        var remoteDTOs = remoteBasketService.itemsInBasket().stream().collect(Collectors.toMap(BasketItemRemoteDTO::releaseId, Function.identity()));
+        var remoteDTOs = remoteBasketService.itemsInBasket().stream().collect(Collectors.toMap(BasketItemRemoteDTO::getReleaseId, Function.identity()));
 
         //validate
         assertEquals(releases.size(), remoteDTOs.size());
@@ -90,10 +90,10 @@ class BasketIntegrationTests {
             var release = entry.getKey();
             assertTrue(remoteDTOs.containsKey(release.releaseId().id()));
             var remote = remoteDTOs.get(release.releaseId().id());
-            assertEquals(release.title(), remote.title());
-            assertEquals(entry.getValue(), remote.quantity());
-            assertEquals(release.medium().friendlyName(), remote.medium());
-            assertEquals(release.price(), remote.price());
+            assertEquals(release.title(), remote.getTitle());
+            assertEquals(entry.getValue(), remote.getQuantity());
+            assertEquals(release.medium().friendlyName(), remote.getMedium());
+            assertEquals(release.price(), remote.getPrice());
         }
     }
 
@@ -187,7 +187,7 @@ class BasketIntegrationTests {
         }
 
         remoteBasketService.removeItemFromBasket(release2.releaseId().id()); // remove second DTO
-        var remoteDTOs = remoteBasketService.itemsInBasket().stream().collect(Collectors.toMap(BasketItemRemoteDTO::releaseId, Function.identity())); // returned list has no sort order, therefore use map
+        var remoteDTOs = remoteBasketService.itemsInBasket().stream().collect(Collectors.toMap(BasketItemRemoteDTO::getReleaseId, Function.identity())); // returned list has no sort order, therefore use map
 
         var expectedReleases = List.of(Map.entry(release1, 1), Map.entry(release3, 3));
         //validate
@@ -196,10 +196,10 @@ class BasketIntegrationTests {
             var release = entry.getKey();
             assertTrue(remoteDTOs.containsKey(release.releaseId().id()));
             var remote = remoteDTOs.get(release.releaseId().id());
-            assertEquals(release.title(), remote.title());
-            assertEquals(entry.getValue(), remote.quantity());
-            assertEquals(release.medium().friendlyName(), remote.medium());
-            assertEquals(release.price(), remote.price());
+            assertEquals(release.title(), remote.getTitle());
+            assertEquals(entry.getValue(), remote.getQuantity());
+            assertEquals(release.medium().friendlyName(), remote.getMedium());
+            assertEquals(release.price(), remote.getPrice());
         }
     }
 

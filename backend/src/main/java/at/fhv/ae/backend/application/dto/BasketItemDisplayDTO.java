@@ -10,10 +10,11 @@ public class BasketItemDisplayDTO {
     UUID releaseId;
     String title;
     int quantity;
+    int stock;
     String medium;
     double price;
 
     public static BasketItemDisplayDTO fromDomain(Release release, int quantity) {
-        return new BasketItemDisplayDTO(release.releaseId().id(), release.title(), quantity, release.medium().friendlyName(), release.price());
+        return new BasketItemDisplayDTO(release.releaseId().id(), release.title(), quantity, release.stock(), release.medium().friendlyName(), release.price());
     }
 }
