@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 
+<?import javafx.scene.layout.HBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="500" prefWidth="800"
             stylesheets="/css/MusicShop.css"
@@ -104,14 +105,13 @@
                         </columns>
                     </TableView>
                 </AnchorPane>
-
             </StackPane>
-
-
         </Tab>
         <Tab text="Basket">
-            <StackPane style="-fx-padding: 25px;">
-                <TableView fx:id="basketView">
+            <AnchorPane style="-fx-padding: 25px;">
+                <TableView fx:id="basketView"
+                           AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0"
+                           AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="200">
                     <columns>
                         <TableColumn text="Title">
                             <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>

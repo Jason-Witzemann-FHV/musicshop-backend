@@ -184,9 +184,14 @@ public class MusicShopController {
         searchStackPane.getChildren().add(1, searchStackPane.getChildren().remove(0));
     }
 
+
+    private void fetchBasket() throws RemoteException {
+        basketView.getItems().setAll(basketService.itemsInBasket());
+    }
+
     public void addToBasket(String id) throws RemoteException {
         basketService.addItemToBasket(UUID.fromString(id),1);
-        basketView.getItems().setAll(basketService.itemsInBasket());
+        fetchBasket();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Release added");
