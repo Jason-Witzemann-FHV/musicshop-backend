@@ -47,4 +47,9 @@ public class RemoteBasketServiceImpl extends UnicastRemoteObject implements Remo
     public int amountOfItemsInBasket() {
         return basketService.amountOfItemsInBasket();
     }
+
+    @Override
+    public void clearBasket() {
+        basketService.clearBasket();
+    }
 }

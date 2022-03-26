@@ -53,4 +53,9 @@ public class BasketServiceImpl implements BasketService {
     public int amountOfItemsInBasket() {
         return basketRepository.amountOfItemsInBasket();
     }
+
+    @Override
+    public void clearBasket() {
+        basketRepository.clearBasket();
+    }
 }

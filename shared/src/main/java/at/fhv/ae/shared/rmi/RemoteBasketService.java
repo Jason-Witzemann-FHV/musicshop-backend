@@ -19,5 +19,5 @@ public interface RemoteBasketService extends Remote {
 
     int amountOfItemsInBasket() throws RemoteException;
 
-
+    void clearBasket() throws RemoteException;
 }
