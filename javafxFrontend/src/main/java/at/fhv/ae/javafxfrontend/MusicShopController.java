@@ -3,6 +3,8 @@ package at.fhv.ae.javafxfrontend;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -34,15 +36,16 @@ public class MusicShopController {
 
     @FXML
     private TableView<ReleaseSearchResultDTO> searchResultsView;
-    @FXML private TableColumn<ReleaseSearchResultDTO, Double> colPrice;
-
-    @FXML private TableColumn<ReleaseSearchResultDTO, Integer> colQuantity;
+    @FXML
+    private TableColumn<ReleaseSearchResultDTO, Double> colPrice;
 
     @FXML
     private TableView<Pair<String, String>> detailView;
 
     @FXML
     private TableView<ReleaseSearchResultDTO> basketTable;
+    @FXML
+    TableColumn<ReleaseSearchResultDTO, BoundedInteger> colQuantity;
 
     public MusicShopController() throws NotBoundException, MalformedURLException, RemoteException {
 
@@ -95,7 +98,7 @@ public class MusicShopController {
         });
 
 
-        basketTable.getItems().add(new ReleaseSearchResultDTO("Never gonna give you up", "MC", 3, 4.40));
+        // basketTable.getItems().add(new ReleaseSearchResultDTO("Never gonna give you up", "MC", 3, 4.40));
     }
 
     public void search() throws RemoteException {
