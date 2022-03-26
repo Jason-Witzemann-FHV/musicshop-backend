@@ -125,7 +125,11 @@
                         <TableColumn fx:id="basketColQuantity" text="Quantity"/>
                     </columns>
                 </TableView>
-            </StackPane>
+                <HBox alignment="BOTTOM_RIGHT" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
+                    <Button text="Clear Basket" onAction="#clearBasket"/>
+                    <Button text="Sell Items" onAction="#sell"/>
+                </HBox>
+            </AnchorPane>
         </Tab>
     </TabPane>
 </AnchorPane>

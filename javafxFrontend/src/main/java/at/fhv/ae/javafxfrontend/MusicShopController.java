@@ -3,6 +3,7 @@ package at.fhv.ae.javafxfrontend;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
+import at.fhv.ae.shared.rmi.RemoteSellService;
 import javafx.beans.property.SimpleObjectProperty;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -29,6 +30,8 @@ public class MusicShopController {
     private final ReleaseSearchService searchService;
 
     private final RemoteBasketService basketService;
+
+    private final RemoteSellService sellService;
 
     @FXML
     private TextField searchTitle;
@@ -63,6 +66,7 @@ public class MusicShopController {
 
         searchService = (ReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
+        sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
     }
 
     private <S, T> Callback<TableColumn<S,T>, TableCell<S,T>> currencyCellFactory() {
@@ -192,5 +196,22 @@ public class MusicShopController {
 
     public void addToBasket(ActionEvent event) throws RemoteException {
         addToBasket(searchResultsView.getSelectionModel().getSelectedItem().getId());
+    }
+
+    public void clearBasket() throws RemoteException {
+        basketService.clearBasket();
+        fetchBasket();
+    }
+
+    public void sell() throws RemoteException {
+
+        boolean success = sellService.sellItemsInBasket();
+
+        Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+        alert.setTitle(success ? "Items sold" : "Error confirming Sale");
+        alert.setContentText(alert.getTitle());
+        alert.showAndWait();
+
+        fetchBasket();
     }
 }
