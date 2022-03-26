@@ -44,9 +44,10 @@
                                 <cellValueFactory><PropertyValueFactory property="value"/></cellValueFactory>
                             </TableColumn>
                         </columns>
-                    </TableView>
 
+                    </TableView>
                     <Button AnchorPane.rightAnchor="0" text="Back" onAction="#switchSearchView"/>
+                    <Button AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" text="add to basket" onAction="#addToBasket" />
                 </AnchorPane>
 
                 <AnchorPane>
@@ -98,6 +99,8 @@
                             </TableColumn>
                             <TableColumn text="Price" fx:id="colPrice">
                                 <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="addToBasket" fx:id="basket">
                             </TableColumn>
                         </columns>
                     </TableView>

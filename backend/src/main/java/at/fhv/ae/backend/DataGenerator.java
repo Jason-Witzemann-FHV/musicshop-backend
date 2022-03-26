@@ -272,7 +272,7 @@ public class DataGenerator {
                         new RecordingId(UUID.randomUUID()),
                         recording.title() + " - Acoustic",
                         recording.duration(),
-                        recording.year(),
+                        recording.recordingYear(),
                         recording.work(),
                         recording.artists(),
                         List.of(Genre.ACOUSTIC)
@@ -289,7 +289,7 @@ public class DataGenerator {
                         new RecordingId(UUID.randomUUID()),
                         recording.title() + " - Live",
                         recording.duration(),
-                        recording.year(),
+                        recording.recordingYear(),
                         recording.work(),
                         recording.artists(),
                         recording.genres()
@@ -308,7 +308,7 @@ public class DataGenerator {
                             new RecordingId(UUID.randomUUID()),
                             recording.title() + " - " + artist.name() + " Mix",
                             recording.duration(),
-                            recording.year() + random.nextInt(5),
+                            recording.recordingYear() + random.nextInt(5),
                             recording.work(),
                             List.of(artist),
                             recording.genres() // might wanna get a random genre
@@ -328,7 +328,7 @@ public class DataGenerator {
                         new RecordingId(UUID.randomUUID()),
                         recording.title() + " - Dev Cover",
                         recording.duration(),
-                        recording.year(),
+                        recording.recordingYear(),
                         recording.work(),
                         List.of(devArtist),
                         recording.genres()

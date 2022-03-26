@@ -26,7 +26,7 @@ public class Recording {
 
     private int duration; // in seconds
 
-    private int year;
+    private int recordingYear;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Work work;
@@ -42,7 +42,7 @@ public class Recording {
         this.recordingId = recordingId;
         this.title = title;
         this.duration = duration;
-        this.year = year;
+        this.recordingYear = year;
         this.work = work;
         this.artists = artists;
         this.genres = genres;

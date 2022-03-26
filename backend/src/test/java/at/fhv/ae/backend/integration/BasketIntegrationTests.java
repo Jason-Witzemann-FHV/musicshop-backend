@@ -38,6 +38,7 @@ class BasketIntegrationTests {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl(ServiceRegistry.basketService()));
             remoteBasketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
+            ServiceRegistry.basketRepository().clearBasket(); // basket might have data in it from other tests
         } catch (Exception e) {
             Assumptions.assumeTrue(false, "Setup of Integration-Test failed, skipping Test!");
         }
