@@ -9,8 +9,6 @@ import at.fhv.ae.shared.rmi.RemoteSellService;
 import javafx.beans.property.SimpleObjectProperty;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -30,57 +28,44 @@ import java.util.UUID;
 public class MusicShopController {
 
     private final ReleaseSearchService searchService;
-
     private final RemoteBasketService basketService;
-
     private final RemoteSellService sellService;
 
-    @FXML
-    private TextField searchTitle;
+    // search fields
+    @FXML TextField searchTitle;
+    @FXML TextField searchArtist;
+    @FXML TextField searchGenre;
 
-    @FXML
-    private TextField searchArtist;
+    // container for search table & details
+    @FXML StackPane searchStackPane;
 
-    @FXML
-    private TextField searchGenre;
+    // search table
+    @FXML TableView<ReleaseSearchResultDTO> searchResultsView;
+    @FXML TableColumn<ReleaseSearchResultDTO, Double> searchColPrice;
+    @FXML TableColumn<ReleaseSearchResultDTO, String> searchColAddToBasket;
 
-    @FXML
-    private StackPane searchStackPane; // contains result table and detailed result view to switch between
+    // search details
+    @FXML Label detailTitle;
+    @FXML TableView<Pair<String, String>> detailView;
+    @FXML TableView<RecordingRemoteDTO> detailRecordings;
+    @FXML TableColumn<RecordingRemoteDTO, String> detailRecordingsColArtists;
+    @FXML TableColumn<RecordingRemoteDTO, String> detailRecordingsColGenres;
 
-    @FXML
-    private TableView<ReleaseSearchResultDTO> searchResultsView;
-    @FXML
-    private TableColumn<ReleaseSearchResultDTO, Double> searchColPrice;
-    @FXML
-    private TableColumn<ReleaseSearchResultDTO, String> searchColAddToBasket;
-
-    @FXML
-    private Label detailTitle;
-
-    @FXML
-    private TableView<Pair<String, String>> detailView;
-
-    @FXML
-    private TableView<RecordingRemoteDTO> detailRecordings;
-
-    @FXML
-    private TableColumn<RecordingRemoteDTO, String> detailArtists;
-
-    @FXML
-    private TableColumn<RecordingRemoteDTO, String> detailGenres;
-
-    @FXML
-    private TableView<BasketItemRemoteDTO> basketView;
-    @FXML
-    private TableColumn<BasketItemRemoteDTO, QuantityColumnInfo> basketColQuantity;
-    @FXML
-    private TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
+    // basket
+    @FXML TableView<BasketItemRemoteDTO> basketView;
+    @FXML TableColumn<BasketItemRemoteDTO, QuantityColumnInfo> basketColQuantity;
+    @FXML TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
+    @FXML TableColumn<BasketItemRemoteDTO, UUID> basketColRemove;
 
     public MusicShopController() throws NotBoundException, MalformedURLException, RemoteException {
 
         searchService = (ReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
         sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
+    }
+
+    private <T> String formatCurrency(T amount) {
+        return DecimalFormat.getCurrencyInstance(Locale.GERMANY).format(amount);
     }
 
     private <S, T> Callback<TableColumn<S,T>, TableCell<S,T>> currencyCellFactory() {
@@ -92,7 +77,7 @@ public class MusicShopController {
                 if(item == null || empty)
                     setText(null);
                 else
-                    setText(DecimalFormat.getCurrencyInstance(Locale.GERMANY).format(item));
+                    setText(formatCurrency(item));
             }
         };
     }
@@ -121,33 +106,41 @@ public class MusicShopController {
                 userActionOnSearchResults.run();
         });
 
-
         // format price columns as currency
         searchColPrice.setCellFactory(currencyCellFactory());
         basketColPrice.setCellFactory(currencyCellFactory());
 
-        detailArtists.setCellValueFactory(data -> new ReadOnlyStringWrapper(String.join(", ", data.getValue().getArtists())));
-
-        detailGenres.setCellValueFactory(data -> new ReadOnlyStringWrapper(String.join(", ", data.getValue().getGenres())));
-
         // search result table - add to basket button column
-        searchColAddToBasket.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getId()));
+        searchColAddToBasket.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
 
-        searchColAddToBasket.setCellFactory(column -> {
-            var cell = new TableCell<ReleaseSearchResultDTO, String>();
-            var button = new Button("Add");
-
-            button.setOnAction(e -> {
-                try {
-                    addToBasket(cell.getItem());
-                } catch (RemoteException remoteException) {
-                    throw new RuntimeException(remoteException);
+                if(item == null || empty) {
+                    this.setGraphic(null);
+                    return;
                 }
-            });
 
-            cell.setGraphic(button);
-            return cell;
+                var button = new Button("Add");
+                button.setOnAction(e -> {
+                    try {
+                        addToBasket(this.getItem());
+                    } catch (RemoteException remoteException) {
+                        throw new RuntimeException(remoteException);
+                    }
+                });
+
+                this.setGraphic(button);
+            }
         });
+
+        // search detail table
+        detailRecordingsColArtists.setCellValueFactory(
+                data -> new ReadOnlyStringWrapper(String.join(", ", data.getValue().getArtists()))
+        );
+        detailRecordingsColGenres.setCellValueFactory(
+                data -> new ReadOnlyStringWrapper(String.join(", ", data.getValue().getGenres()))
+        );
 
         // basket table - quantity column
         basketColQuantity.setCellValueFactory(data -> new SimpleObjectProperty<>(
@@ -159,8 +152,10 @@ public class MusicShopController {
             public void updateItem(QuantityColumnInfo item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if(item == null || empty)
+                if(item == null || empty) {
+                    this.setGraphic(null);
                     return;
+                }
 
                 var spinner = new Spinner<Integer>(item.min(), item.max(), item.value());
                 spinner.valueProperty().addListener((observable, oldVal, newVal) -> {
@@ -175,7 +170,32 @@ public class MusicShopController {
             }
         });
 
-        basketView.getItems().setAll(basketService.itemsInBasket());
+        // basket table - remove button
+        basketColRemove.setCellFactory(column -> new TableCell<>() {
+            @Override
+            public void updateItem(UUID item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if(item == null || empty) {
+                    this.setGraphic(null);
+                    return;
+                }
+
+                var button = new Button("Remove");
+                button.setOnAction(e -> {
+                    try {
+                        basketService.removeItemFromBasket(this.getItem());
+                        fetchBasket();
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+                this.setGraphic(button);
+            }
+        });
+
+        // initialize basket
+        fetchBasket();
     }
 
     public void search() throws RemoteException {
@@ -214,7 +234,6 @@ public class MusicShopController {
         searchStackPane.getChildren().add(1, searchStackPane.getChildren().remove(0));
     }
 
-
     private void fetchBasket() throws RemoteException {
         basketView.getItems().setAll(basketService.itemsInBasket());
     }
@@ -229,7 +248,7 @@ public class MusicShopController {
             alert.showAndWait();
     }
 
-    public void addToBasket(ActionEvent event) throws RemoteException {
+    public void addToBasket() throws RemoteException {
         addToBasket(searchResultsView.getSelectionModel().getSelectedItem().getId());
     }
 
