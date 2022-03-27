@@ -9,10 +9,14 @@ import at.fhv.ae.backend.domain.repository.WorkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.constraints.AssertFalse;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class ReleaseServiceTest {
@@ -87,5 +91,71 @@ class ReleaseServiceTest {
         // Assert
         verify(releaseRepository).findById(new ReleaseId(releaseId));
         verify(workRepository).findRecordings(recordingIds);
+    }
+
+    @Test
+    void given_one_release_when_searched_then_return_it() {
+        // Arrange
+        // Ids
+        var releaseId = UUID.randomUUID();
+        var recordingId1 = new RecordingId(UUID.randomUUID());
+        var recordingId2 = new RecordingId(UUID.randomUUID());
+        var recordingId3 = new RecordingId(UUID.randomUUID());
+        List<Supplier> supplierList = List.of(new Supplier("Amazon", "Somewhere 12"));
+        var recordingIds = List.of(recordingId1, recordingId2, recordingId3);
+
+        // Optional release
+        var release = new Release(
+                new ReleaseId(releaseId),
+                5,
+                "Suffering from Success",
+                Medium.CD,
+                15.44,
+                new Label("ABC Music", "ABC"),
+                supplierList,
+                recordingIds
+        );
+
+        // Mock return
+        when(releaseRepository.query("suffering", "DJ Khaled", "Rock")).thenReturn(List.of(release));
+
+        //Act
+        var result = releaseService.query("suffering", "DJ Khaled", "Rock");
+
+        verify(releaseRepository).query("suffering", "DJ Khaled", "Rock");
+        assertFalse(result.isEmpty());
+    }
+
+    @Test
+    void given_one_release_when_searched_with_wrong_parameters_then_return_none() {
+        // Arrange
+        // Ids
+        var releaseId = UUID.randomUUID();
+        var recordingId1 = new RecordingId(UUID.randomUUID());
+        var recordingId2 = new RecordingId(UUID.randomUUID());
+        var recordingId3 = new RecordingId(UUID.randomUUID());
+        List<Supplier> supplierList = List.of(new Supplier("Amazon", "Somewhere 12"));
+        var recordingIds = List.of(recordingId1, recordingId2, recordingId3);
+
+        // Optional release
+        var release = new Release(
+                new ReleaseId(releaseId),
+                5,
+                "Suffering from Success",
+                Medium.CD,
+                15.44,
+                new Label("ABC Music", "ABC"),
+                supplierList,
+                recordingIds
+        );
+
+        // Mock return
+        when(releaseRepository.query("not", "matching", "in any way")).thenReturn(Collections.emptyList());
+
+        //Act
+        var result = releaseService.query("not", "matching", "in any way");
+
+        verify(releaseRepository).query("not", "matching", "in any way");
+        assertTrue(result.isEmpty());
     }
 }
