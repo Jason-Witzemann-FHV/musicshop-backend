@@ -220,7 +220,7 @@ public class MusicShopController {
         detailTitle.setText(details.getTitle());
 
         detailView.getItems().setAll(List.of(
-                new Pair<>("Price", DecimalFormat.getCurrencyInstance(Locale.GERMANY).format(details.getPrice())),
+                new Pair<>("Price", formatCurrency(details.getPrice())),
                 new Pair<>("Medium", details.getMedium()),
                 new Pair<>("Stock", Integer.toString(details.getStock()))));
 
