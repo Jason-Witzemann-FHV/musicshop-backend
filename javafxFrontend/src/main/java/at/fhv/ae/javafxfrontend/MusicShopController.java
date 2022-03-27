@@ -1,6 +1,8 @@
 package at.fhv.ae.javafxfrontend;
 
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
+import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
+import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
 import at.fhv.ae.shared.rmi.RemoteSellService;
@@ -53,7 +55,19 @@ public class MusicShopController {
     private TableColumn<ReleaseSearchResultDTO, String> searchColAddToBasket;
 
     @FXML
+    private Label detailTitle;
+
+    @FXML
     private TableView<Pair<String, String>> detailView;
+
+    @FXML
+    private TableView<RecordingRemoteDTO> detailRecordings;
+
+    @FXML
+    private TableColumn<RecordingRemoteDTO, String> detailArtists;
+
+    @FXML
+    private TableColumn<RecordingRemoteDTO, String> detailGenres;
 
     @FXML
     private TableView<BasketItemRemoteDTO> basketView;
@@ -89,8 +103,13 @@ public class MusicShopController {
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
             ReleaseSearchResultDTO selectedResult = searchResultsView.getSelectionModel().getSelectedItem();
-            if(selectedResult != null)
-                showDetailsOf(selectedResult);
+            if(selectedResult != null) {
+                try {
+                    showDetailsOf(selectedResult);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         };
 
         searchResultsView.setOnKeyReleased(event -> {
@@ -107,12 +126,16 @@ public class MusicShopController {
         searchColPrice.setCellFactory(currencyCellFactory());
         basketColPrice.setCellFactory(currencyCellFactory());
 
+        detailArtists.setCellValueFactory(data -> new ReadOnlyStringWrapper(String.join(", ", data.getValue().getArtists())));
+
+        detailGenres.setCellValueFactory(data -> new ReadOnlyStringWrapper(String.join(", ", data.getValue().getGenres())));
+
         // search result table - add to basket button column
         searchColAddToBasket.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getId()));
 
         searchColAddToBasket.setCellFactory(column -> {
             var cell = new TableCell<ReleaseSearchResultDTO, String>();
-            var button = new Button("add");
+            var button = new Button("Add");
 
             button.setOnAction(e -> {
                 try {
@@ -170,14 +193,21 @@ public class MusicShopController {
         searchResultsView.getItems().clear();
     }
 
-    public void showDetailsOf(ReleaseSearchResultDTO result) {
+    public void showDetailsOf(ReleaseSearchResultDTO result) throws RemoteException {
+
+        DetailedReleaseRemoteDTO details = searchService.getDetails(UUID.fromString(result.getId()));
+
+        detailTitle.setText(details.getTitle());
 
         detailView.getItems().setAll(List.of(
-                new Pair<>("Price", DecimalFormat.getCurrencyInstance().format(result.getPrice())),
-                new Pair<>("Medium", result.getMedium()),
-                new Pair<>("Stock", Integer.toString(result.getStock()))));
+                new Pair<>("Price", DecimalFormat.getCurrencyInstance(Locale.GERMANY).format(details.getPrice())),
+                new Pair<>("Medium", details.getMedium()),
+                new Pair<>("Stock", Integer.toString(details.getStock()))));
+
+        detailRecordings.getItems().setAll(details.getRecordings());
 
         switchSearchView();
+
     }
 
     public void switchSearchView() {
