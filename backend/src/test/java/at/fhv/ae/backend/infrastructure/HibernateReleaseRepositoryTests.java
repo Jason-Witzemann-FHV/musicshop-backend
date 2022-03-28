@@ -140,7 +140,7 @@ class HibernateReleaseRepositoryTests {
                 "187 Gang",
                 Medium.CD,
                 13.44,
-                new Label("Koks", "CBD"),
+                new Label("Musik Gang", "CBD"),
                 supplierList,
                 recordingIds
         );
