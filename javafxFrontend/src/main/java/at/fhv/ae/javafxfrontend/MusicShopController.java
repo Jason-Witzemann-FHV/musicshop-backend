@@ -5,6 +5,7 @@ import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
+import at.fhv.ae.shared.rmi.RemoteGenreInfoService;
 import at.fhv.ae.shared.rmi.RemoteSellService;
 import javafx.beans.property.SimpleObjectProperty;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
@@ -30,11 +31,12 @@ public class MusicShopController {
     private final ReleaseSearchService searchService;
     private final RemoteBasketService basketService;
     private final RemoteSellService sellService;
+    private final RemoteGenreInfoService genreInfoService;
 
     // search fields
     @FXML TextField searchTitle;
     @FXML TextField searchArtist;
-    @FXML TextField searchGenre;
+    @FXML ComboBox<String> searchGenre;
 
     // container for search table & details
     @FXML StackPane searchStackPane;
@@ -62,6 +64,7 @@ public class MusicShopController {
         searchService = (ReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
         sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
+        genreInfoService = (RemoteGenreInfoService) Naming.lookup("rmi://localhost/genre-info-service");
     }
 
     private <T> String formatCurrency(T amount) {
@@ -84,6 +87,9 @@ public class MusicShopController {
 
     @FXML
     public void initialize() throws RemoteException {
+
+        // populate combo box selection
+        searchGenre.getItems().setAll(genreInfoService.knownGenres());
 
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
@@ -203,13 +209,13 @@ public class MusicShopController {
                  searchService.query(
                          searchTitle.getText(),
                          searchArtist.getText(),
-                         searchGenre.getText()));
+                         searchGenre.getValue()));
     }
 
     public void reset() {
         searchTitle.clear();
         searchArtist.clear();
-        searchGenre.clear();
+        searchGenre.setValue("");
         searchResultsView.getItems().clear();
     }
 

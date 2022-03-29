@@ -18,6 +18,7 @@
 
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane
             stylesheets="/css/MusicShop.css"
             xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
@@ -119,8 +120,8 @@
                             <TextField fx:id="searchArtist" GridPane.columnIndex="1"
                                        GridPane.rowIndex="1"/>
                             <Label text="Genre" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                            <TextField fx:id="searchGenre" GridPane.columnIndex="2"
-                                       GridPane.rowIndex="1"/>
+                            <ComboBox fx:id="searchGenre" editable="true"
+                                      GridPane.columnIndex="2" GridPane.rowIndex="1"/>
                             <Button GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.rowSpan="2"
                                     GridPane.fillWidth="true" GridPane.fillHeight="true"
                                     maxWidth="Infinity" maxHeight="Infinity"
