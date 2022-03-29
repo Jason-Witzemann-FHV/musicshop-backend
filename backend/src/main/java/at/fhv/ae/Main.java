@@ -2,6 +2,7 @@ package at.fhv.ae;
 
 import at.fhv.ae.backend.ServiceRegistry;
 
+import at.fhv.ae.backend.middleware.RemoteGenreInfoServiceImpl;
 import at.fhv.ae.backend.middleware.RemoteSellServiceImpl;
 import at.fhv.ae.backend.middleware.ReleaseSearchServiceImpl;
 import at.fhv.ae.backend.middleware.RemoteBasketServiceImpl;
@@ -24,8 +25,8 @@ public class Main {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             Naming.rebind("rmi://localhost/release-search-service", new ReleaseSearchServiceImpl(ServiceRegistry.releaseService()));
             Naming.rebind("rmi://localhost/sell-service", new RemoteSellServiceImpl(ServiceRegistry.sellService()));
-
             Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl(ServiceRegistry.basketService()));
+            Naming.rebind("rmi://localhost/genre-info-service", new RemoteGenreInfoServiceImpl(ServiceRegistry.genreInfoService()));
 
             //ReleaseSearchService rss = (ReleaseSearchService)Naming.lookup("rmi://localhost/release-search-service");
             //rss.query("Best Song Ever", "astley", "pop").forEach(System.out::println);

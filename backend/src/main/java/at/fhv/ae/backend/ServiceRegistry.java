@@ -1,8 +1,10 @@
 package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.application.BasketService;
+import at.fhv.ae.backend.application.GenreInfoService;
 import at.fhv.ae.backend.application.ReleaseService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
+import at.fhv.ae.backend.application.impl.GenreInfoServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
@@ -19,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 public class ServiceRegistry {
+
 
     private ServiceRegistry() { } // hide public constructor
 
@@ -42,6 +45,8 @@ public class ServiceRegistry {
     private static BasketService basketService;
 
     private static SellService sellService;
+
+    private static GenreInfoService genreInfoService;
 
 
     public static EntityManager entityManager() {
@@ -102,5 +107,10 @@ public class ServiceRegistry {
     }
 
 
-
+    public static GenreInfoService genreInfoService() {
+        if(genreInfoService == null) {
+            genreInfoService = new GenreInfoServiceImpl();
+        }
+        return genreInfoService;
+    }
 }
