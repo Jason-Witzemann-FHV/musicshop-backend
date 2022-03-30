@@ -1,8 +1,8 @@
 package at.fhv.ae.backend.middleware.common.impl;
 
-import at.fhv.ae.backend.domain.model.permissions.Employee;
-import at.fhv.ae.backend.domain.model.permissions.EmployeeId;
-import at.fhv.ae.backend.domain.repository.PermissionRepository;
+import at.fhv.ae.backend.domain.model.user.User;
+import at.fhv.ae.backend.domain.model.user.UserId;
+import at.fhv.ae.backend.domain.repository.UserRepository;
 import at.fhv.ae.backend.middleware.common.AuthorizationService;
 import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.backend.middleware.common.SessionFactory;
@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public class SessionFactoryImpl implements SessionFactory {
     private final AuthorizationService authorizationService;
-    private final PermissionRepository permissionRepository;
+    private final UserRepository permissionRepository;
 
 
-    public SessionFactoryImpl(AuthorizationService authorizationService, PermissionRepository permissionRepository) {
+    public SessionFactoryImpl(AuthorizationService authorizationService, UserRepository permissionRepository) {
         this.authorizationService = authorizationService;
         this.permissionRepository = permissionRepository;
     }
@@ -24,16 +24,16 @@ public class SessionFactoryImpl implements SessionFactory {
             return Optional.empty();
         }
 
-        Optional<Employee> user = permissionRepository.employeeById(new EmployeeId(username));
+        Optional<User> optUser = permissionRepository.userById(new UserId(username));
 
-        if (user.isEmpty()){
+        if (optUser.isEmpty()){
             System.out.println("Found User in AuthService, but not in Repository!");
             return Optional.empty();
         }
 
-        Employee employee = user.get();
+        User user = optUser.get();
 
-        return Optional.of(new SessionImpl(employee));
+        return Optional.of(new SessionImpl(user));
     }
 
 }

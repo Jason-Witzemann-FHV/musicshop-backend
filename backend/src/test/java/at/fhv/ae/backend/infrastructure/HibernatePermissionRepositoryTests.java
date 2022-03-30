@@ -1,53 +1,54 @@
 package at.fhv.ae.backend.infrastructure;
 
 import at.fhv.ae.backend.ServiceRegistry;
-import at.fhv.ae.backend.domain.model.permissions.Employee;
-import at.fhv.ae.backend.domain.model.permissions.EmployeeId;
-import at.fhv.ae.backend.domain.model.permissions.Permission;
-import at.fhv.ae.backend.domain.model.permissions.Role;
-import at.fhv.ae.backend.domain.repository.PermissionRepository;
+import at.fhv.ae.backend.domain.model.user.Permission;
+import at.fhv.ae.backend.domain.model.user.Role;
+import at.fhv.ae.backend.domain.model.user.User;
+import at.fhv.ae.backend.domain.model.user.UserId;
+import at.fhv.ae.backend.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HibernatePermissionRepositoryTests {
 
     private final EntityManager em = ServiceRegistry.entityManager();
 
-    private final PermissionRepository permissionRepository = ServiceRegistry.permissionRepository();
+    private final UserRepository userRepository = ServiceRegistry.permissionRepository();
 
 
     @Test
     void given_id_when_search_for_existing_empl_then_return_it() {
-        var roleOperator = new Role("operator", Set.of(new Permission("publish_webfeed"), new Permission("order_releases")));
-        var roleEmployee = new Role("employee", Set.of(new Permission("search_releases"), new Permission("sell_releases")));
+        var roleOperator = new Role("operator", Set.of(Permission.ORDER_RELEASES, Permission.PUBLISH_WEBFEED));
+        var roleEmployee = new Role("employee", Set.of(Permission.SEARCH_RELEASES, Permission.SELL_RELEASES));
         var roles = Set.of(roleEmployee, roleOperator);
-        var employee = new Employee(new EmployeeId("Jason"), roles);
+        var user = new User(new UserId("Jason"), roles);
 
         var transaction = em.getTransaction();
         transaction.begin();
-        em.persist(employee);
+        em.persist(user);
         em.flush();
 
-        var actual = permissionRepository.employeeById(employee.employeeId());
+        var actual = userRepository.userById(user.userId());
         transaction.rollback();
 
         assertTrue(actual.isPresent());
-        assertEquals(employee, actual.get());
+        assertEquals(user, actual.get());
     }
 
 
     @Test
     void given_id_when_search_for_not_existing_empl_then_return_it() {
-        var id = new EmployeeId("Jason");
+        var id = new UserId("Jason");
         var transaction = em.getTransaction();
         transaction.begin();
         em.flush();
 
-        var actual = permissionRepository.employeeById(id);
+        var actual = userRepository.userById(id);
         transaction.rollback();
 
         assertTrue(actual.isEmpty());

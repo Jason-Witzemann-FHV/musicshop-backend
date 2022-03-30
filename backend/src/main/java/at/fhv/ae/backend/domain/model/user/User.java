@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.domain.model.permissions;
+package at.fhv.ae.backend.domain.model.user;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,21 +14,22 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Employee {
+@Table(name = "Userdata")
+public class User {
 
     @Id
     @GeneratedValue
     @Getter(AccessLevel.NONE)
-    private long employeeIdInternal;
+    private Long userIdInternal;
 
     @Embedded
-    private EmployeeId employeeId;
+    private UserId userId;
 
     @ManyToMany(cascade = {CascadeType.PERSIST})
     private Set<Role> roles;
 
-    public Employee(EmployeeId employeeId, Set<Role> roles) {
-        this.employeeId = employeeId;
+    public User(UserId userId, Set<Role> roles) {
+        this.userId = userId;
         this.roles = roles;
     }
 
@@ -37,11 +38,11 @@ public class Employee {
     }
 
     public boolean hasPermission(Permission permissionToCheck) {
-        return permissions().stream().anyMatch(p -> p.equals(permissionToCheck));
+        return permissions().stream().anyMatch(permissionToCheck::equals);
     }
 
     public String name() {
-        return employeeId.name();
+        return userId.name();
     }
 
     public Set<Role> roles() {

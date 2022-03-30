@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.domain.model.permissions;
+package at.fhv.ae.backend.domain.model.user;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +22,8 @@ public class Role {
 
     private String roleName;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
     private Set<Permission> permissions;
 
     public Role(String roleName, Set<Permission> permissions) {
