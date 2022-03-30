@@ -30,7 +30,7 @@ public class ServiceRegistry {
 
     private static WorkRepository workRepository;
 
-    private static UserRepository permissionRepository;
+    private static UserRepository userRepository;
 
 
     // application services
@@ -79,11 +79,11 @@ public class ServiceRegistry {
         return workRepository;
     }
 
-    public static UserRepository permissionRepository() {
-        if(permissionRepository == null) {
-            permissionRepository = new HibernateUserRepository(entityManager());
+    public static UserRepository userRepository() {
+        if(userRepository == null) {
+            userRepository = new HibernateUserRepository(entityManager());
         }
-        return permissionRepository;
+        return userRepository;
     }
 
 

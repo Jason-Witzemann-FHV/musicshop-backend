@@ -10,12 +10,12 @@ import java.util.Optional;
 
 public class SessionFactoryImpl implements SessionFactory {
     private final AuthorizationService authorizationService;
-    private final UserRepository permissionRepository;
+    private final UserRepository userRepository;
 
 
-    public SessionFactoryImpl(AuthorizationService authorizationService, UserRepository permissionRepository) {
+    public SessionFactoryImpl(AuthorizationService authorizationService, UserRepository userRepository) {
         this.authorizationService = authorizationService;
-        this.permissionRepository = permissionRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SessionFactoryImpl implements SessionFactory {
             return Optional.empty();
         }
 
-        Optional<User> optUser = permissionRepository.userById(new UserId(username));
+        Optional<User> optUser = userRepository.userById(new UserId(username));
 
         if (optUser.isEmpty()){
             System.out.println("Found User in AuthService, but not in Repository!");

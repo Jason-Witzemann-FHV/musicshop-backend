@@ -14,11 +14,11 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class HibernatePermissionRepositoryTests {
+class HibernateUserRepositoryTests {
 
     private final EntityManager em = ServiceRegistry.entityManager();
 
-    private final UserRepository userRepository = ServiceRegistry.permissionRepository();
+    private final UserRepository userRepository = ServiceRegistry.userRepository();
 
 
     @Test
