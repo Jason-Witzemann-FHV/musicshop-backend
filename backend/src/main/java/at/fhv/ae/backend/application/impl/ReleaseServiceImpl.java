@@ -1,11 +1,12 @@
 package at.fhv.ae.backend.application.impl;
 
-import at.fhv.ae.backend.application.ReleaseService;
+import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
 import at.fhv.ae.backend.application.dto.RecordingDTO;
 import at.fhv.ae.backend.application.dto.ReleaseDTO;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
+import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.backend.domain.model.work.Recording;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
-public class ReleaseServiceImpl implements ReleaseService {
+public class ReleaseServiceImpl implements ReleaseSearchService {
 
     private final ReleaseRepository releaseRepository;
 
@@ -24,7 +25,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Override
     public List<ReleaseDTO> query(String title, String artist,String genre) {
-        return this.releaseRepository.query(title, artist,genre)
+        return this.releaseRepository.query(title, artist, genre)
                 .stream()
                 .map(ReleaseDTO::fromDomain)
                 .collect(Collectors.toList());
@@ -41,5 +42,10 @@ public class ReleaseServiceImpl implements ReleaseService {
                 recordings.stream()
                         .map(RecordingDTO::fromDomain)
                         .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public List<Genre> knownGenres() {
+        return List.of(Genre.values());
     }
 }

@@ -8,9 +8,11 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
-public interface ReleaseSearchService extends Remote {
+public interface RemoteReleaseSearchService extends Remote {
 
     List<ReleaseSearchResultDTO> query(String title, String artist, String genre) throws RemoteException;
 
     DetailedReleaseRemoteDTO getDetails(UUID releaseId) throws RemoteException;
+
+    List<String> knownGenres() throws RemoteException;
 }

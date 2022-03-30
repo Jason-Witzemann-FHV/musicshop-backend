@@ -1,21 +1,14 @@
 package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.application.BasketService;
-import at.fhv.ae.backend.application.GenreInfoService;
-import at.fhv.ae.backend.application.ReleaseService;
+import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
-import at.fhv.ae.backend.application.impl.GenreInfoServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
-import at.fhv.ae.backend.domain.repository.BasketRepository;
-import at.fhv.ae.backend.domain.repository.ReleaseRepository;
-import at.fhv.ae.backend.domain.repository.SaleRepository;
-import at.fhv.ae.backend.domain.repository.WorkRepository;
-import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
-import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
-import at.fhv.ae.backend.infrastructure.HibernateSaleRepository;
-import at.fhv.ae.backend.infrastructure.HibernateWorkRepository;
+import at.fhv.ae.backend.domain.repository.*;
+import at.fhv.ae.backend.infrastructure.*;
+import at.fhv.ae.backend.middleware.common.AuthorizationService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -37,16 +30,18 @@ public class ServiceRegistry {
 
     private static WorkRepository workRepository;
 
+    private static UserRepository userRepository;
+
 
     // application services
 
-    private static ReleaseService releaseService;
+    private static ReleaseSearchService releaseService;
 
     private static BasketService basketService;
 
     private static SellService sellService;
 
-    private static GenreInfoService genreInfoService;
+    private static AuthorizationService authorizationService;
 
 
     public static EntityManager entityManager() {
@@ -84,8 +79,15 @@ public class ServiceRegistry {
         return workRepository;
     }
 
+    public static UserRepository userRepository() {
+        if(userRepository == null) {
+            userRepository = new HibernateUserRepository(entityManager());
+        }
+        return userRepository;
+    }
 
-    public static ReleaseService releaseService() {
+
+    public static ReleaseSearchService releaseService() {
         if(releaseService == null) {
             releaseService = new ReleaseServiceImpl(releaseRepository(), workRepository());
         }
@@ -106,11 +108,11 @@ public class ServiceRegistry {
         return sellService;
     }
 
-
-    public static GenreInfoService genreInfoService() {
-        if(genreInfoService == null) {
-            genreInfoService = new GenreInfoServiceImpl();
+    public static AuthorizationService authorizationService() {
+        if(authorizationService == null) {
+            authorizationService = new LdapAuthorizationService();
         }
-        return genreInfoService;
+        return authorizationService;
     }
+
 }

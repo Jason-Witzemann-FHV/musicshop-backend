@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.middleware;
+package at.fhv.ae.backend.middleware.rmi.services;
 
 import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
