@@ -8,14 +8,8 @@ import at.fhv.ae.backend.application.impl.GenreInfoServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
-import at.fhv.ae.backend.domain.repository.BasketRepository;
-import at.fhv.ae.backend.domain.repository.ReleaseRepository;
-import at.fhv.ae.backend.domain.repository.SaleRepository;
-import at.fhv.ae.backend.domain.repository.WorkRepository;
-import at.fhv.ae.backend.infrastructure.HashMapBasketRepository;
-import at.fhv.ae.backend.infrastructure.HibernateReleaseRepository;
-import at.fhv.ae.backend.infrastructure.HibernateSaleRepository;
-import at.fhv.ae.backend.infrastructure.HibernateWorkRepository;
+import at.fhv.ae.backend.domain.repository.*;
+import at.fhv.ae.backend.infrastructure.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -36,6 +30,8 @@ public class ServiceRegistry {
     private static SaleRepository saleRepository;
 
     private static WorkRepository workRepository;
+
+    private static PermissionRepository permissionRepository;
 
 
     // application services
@@ -82,6 +78,13 @@ public class ServiceRegistry {
             workRepository = new HibernateWorkRepository(entityManager());
         }
         return workRepository;
+    }
+
+    public static PermissionRepository permissionRepository() {
+        if(permissionRepository == null) {
+            permissionRepository = new HibernatePermissionRepository(entityManager());
+        }
+        return permissionRepository;
     }
 
 

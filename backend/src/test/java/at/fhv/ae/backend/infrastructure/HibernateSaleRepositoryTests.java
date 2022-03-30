@@ -22,13 +22,6 @@ class HibernateSaleRepositoryTests {
     void given_sale_when_added_then_find_by_id_returns_sale() {
 
 
-        var tx = em.getTransaction();
-        tx.begin();
-        em.createNativeQuery("DROP TABLE IF EXISTS sale_item");
-        em.createNativeQuery("DROP TABLE IF EXISTS sale");
-        em.createNativeQuery("DROP TABLE IF EXISTS item");
-        tx.commit();
-
         var saleItems = List.of(
                 new Item(new ReleaseId(UUID.randomUUID()), 2, 9.99),
                 new Item(new ReleaseId(UUID.randomUUID()), 3, 19.99),

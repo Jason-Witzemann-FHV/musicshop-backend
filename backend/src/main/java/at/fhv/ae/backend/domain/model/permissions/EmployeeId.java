@@ -14,7 +14,7 @@ public class EmployeeId {
         this.name = null;
     }
 
-    EmployeeId(String name) {
+    public EmployeeId(String name) {
         this.name = name;
     }
 
