@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "Userdata")
+@Table(name = "`User`")
 public class User {
 
     @Id
