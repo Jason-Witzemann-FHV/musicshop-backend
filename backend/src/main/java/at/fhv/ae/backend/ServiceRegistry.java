@@ -10,6 +10,7 @@ import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.*;
 import at.fhv.ae.backend.infrastructure.*;
+import at.fhv.ae.backend.middleware.common.AuthorizationService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -43,6 +44,8 @@ public class ServiceRegistry {
     private static SellService sellService;
 
     private static GenreInfoService genreInfoService;
+
+    private static AuthorizationService authorizationService;
 
 
     public static EntityManager entityManager() {
@@ -116,4 +119,12 @@ public class ServiceRegistry {
         }
         return genreInfoService;
     }
+
+    public static AuthorizationService authorizationService() {
+        if(authorizationService == null) {
+            authorizationService = new LdapAuthorizationService();
+        }
+        return authorizationService;
+    }
+
 }

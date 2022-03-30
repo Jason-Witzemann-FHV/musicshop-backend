@@ -3,6 +3,7 @@ package at.fhv.ae.backend.middleware;
 
 import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.backend.application.dto.BasketItemDisplayDTO;
+import at.fhv.ae.backend.middleware.rmi.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

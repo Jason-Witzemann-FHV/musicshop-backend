@@ -3,6 +3,7 @@ package at.fhv.ae.backend.middleware;
 import at.fhv.ae.backend.application.ReleaseService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
 import at.fhv.ae.backend.application.dto.RecordingDTO;
+import at.fhv.ae.backend.middleware.rmi.ReleaseSearchServiceImpl;
 import at.fhv.ae.shared.rmi.ReleaseSearchService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

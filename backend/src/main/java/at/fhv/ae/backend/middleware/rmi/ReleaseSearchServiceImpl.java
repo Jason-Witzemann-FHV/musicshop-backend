@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.middleware;
+package at.fhv.ae.backend.middleware.rmi;
 
 import at.fhv.ae.backend.application.ReleaseService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class ReleaseSearchServiceImpl extends UnicastRemoteObject implements ReleaseSearchService {
 
-    private  transient ReleaseService releaseService;
+    private transient ReleaseService releaseService;
 
     public ReleaseSearchServiceImpl(ReleaseService releaseService) throws RemoteException {
         super();

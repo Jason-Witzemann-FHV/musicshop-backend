@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.middleware;
+package at.fhv.ae.backend.middleware.rmi;
 
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.shared.rmi.RemoteSellService;
