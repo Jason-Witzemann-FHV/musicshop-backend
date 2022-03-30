@@ -2,10 +2,9 @@ package at.fhv.ae;
 
 import at.fhv.ae.backend.ServiceRegistry;
 
-import at.fhv.ae.backend.middleware.rmi.RemoteGenreInfoServiceImpl;
-import at.fhv.ae.backend.middleware.rmi.RemoteSellServiceImpl;
-import at.fhv.ae.backend.middleware.rmi.ReleaseSearchServiceImpl;
-import at.fhv.ae.backend.middleware.rmi.RemoteBasketServiceImpl;
+import at.fhv.ae.backend.middleware.rmi.services.RemoteSellServiceImpl;
+import at.fhv.ae.backend.middleware.rmi.services.RemoteReleaseSearchServiceImpl;
+import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.dto.customer.Customer;
 import at.fhv.ae.shared.repository.CustomerRepository;
 
@@ -23,10 +22,9 @@ public class Main {
 
         try {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-            Naming.rebind("rmi://localhost/release-search-service", new ReleaseSearchServiceImpl(ServiceRegistry.releaseService()));
+            Naming.rebind("rmi://localhost/release-search-service", new RemoteReleaseSearchServiceImpl(ServiceRegistry.releaseService()));
             Naming.rebind("rmi://localhost/sell-service", new RemoteSellServiceImpl(ServiceRegistry.sellService()));
             Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl(ServiceRegistry.basketService()));
-            Naming.rebind("rmi://localhost/genre-info-service", new RemoteGenreInfoServiceImpl(ServiceRegistry.genreInfoService()));
 
             //ReleaseSearchService rss = (ReleaseSearchService)Naming.lookup("rmi://localhost/release-search-service");
             //rss.query("Best Song Ever", "astley", "pop").forEach(System.out::println);

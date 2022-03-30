@@ -4,8 +4,7 @@ import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
-import at.fhv.ae.shared.rmi.ReleaseSearchService;
-import at.fhv.ae.shared.rmi.RemoteGenreInfoService;
+import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
 import at.fhv.ae.shared.rmi.RemoteSellService;
 import javafx.beans.property.SimpleObjectProperty;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
@@ -28,10 +27,9 @@ import java.util.UUID;
 
 public class MusicShopController {
 
-    private final ReleaseSearchService searchService;
+    private final RemoteReleaseSearchService releaseSearchService;
     private final RemoteBasketService basketService;
     private final RemoteSellService sellService;
-    private final RemoteGenreInfoService genreInfoService;
 
     // search fields
     @FXML TextField searchTitle;
@@ -61,10 +59,9 @@ public class MusicShopController {
 
     public MusicShopController() throws NotBoundException, MalformedURLException, RemoteException {
 
-        searchService = (ReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
+        releaseSearchService = (RemoteReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
         sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
-        genreInfoService = (RemoteGenreInfoService) Naming.lookup("rmi://localhost/genre-info-service");
     }
 
     private <T> String formatCurrency(T amount) {
@@ -89,7 +86,7 @@ public class MusicShopController {
     public void initialize() throws RemoteException {
 
         // populate combo box selection
-        searchGenre.getItems().setAll(genreInfoService.knownGenres());
+        searchGenre.getItems().setAll(releaseSearchService.knownGenres());
 
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
@@ -206,7 +203,7 @@ public class MusicShopController {
 
     public void search() throws RemoteException {
          searchResultsView.getItems().setAll(
-                 searchService.query(
+                 releaseSearchService.query(
                          searchTitle.getText(),
                          searchArtist.getText(),
                          searchGenre.getValue()));
@@ -221,7 +218,7 @@ public class MusicShopController {
 
     public void showDetailsOf(ReleaseSearchResultDTO result) throws RemoteException {
 
-        DetailedReleaseRemoteDTO details = searchService.getDetails(UUID.fromString(result.getId()));
+        DetailedReleaseRemoteDTO details = releaseSearchService.getDetails(UUID.fromString(result.getId()));
 
         detailTitle.setText(details.getTitle());
 

@@ -1,11 +1,12 @@
-package at.fhv.ae.backend.middleware.rmi;
+package at.fhv.ae.backend.middleware.rmi.services;
 
-import at.fhv.ae.backend.application.ReleaseService;
+import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
+import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
-import at.fhv.ae.shared.rmi.ReleaseSearchService;
+import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,18 +15,18 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ReleaseSearchServiceImpl extends UnicastRemoteObject implements ReleaseSearchService {
+public class RemoteReleaseSearchServiceImpl extends UnicastRemoteObject implements RemoteReleaseSearchService {
 
-    private transient ReleaseService releaseService;
+    private final transient ReleaseSearchService releaseSearchService;
 
-    public ReleaseSearchServiceImpl(ReleaseService releaseService) throws RemoteException {
+    public RemoteReleaseSearchServiceImpl(ReleaseSearchService releaseSearchService) throws RemoteException {
         super();
-        this.releaseService = releaseService;
+        this.releaseSearchService = releaseSearchService;
     }
 
     @Override
     public List<ReleaseSearchResultDTO> query(String title, String artist, String genre) {
-        return releaseService.query(title, artist, genre)
+        return releaseSearchService.query(title, artist, genre)
                 .stream()
                 .map(rel -> new ReleaseSearchResultDTO(rel.id(), rel.title(), rel.medium(), rel.stock(), rel.price()))
                 .collect(Collectors.toList());
@@ -33,7 +34,7 @@ public class ReleaseSearchServiceImpl extends UnicastRemoteObject implements Rel
 
     @Override
     public DetailedReleaseRemoteDTO getDetails(UUID releaseId) throws RemoteException {
-        DetailedReleaseDTO result = releaseService.detailedInformation(releaseId);
+        DetailedReleaseDTO result = releaseSearchService.detailedInformation(releaseId);
         return new DetailedReleaseRemoteDTO(
                 result.title(),
                 result.price(),
@@ -46,5 +47,13 @@ public class ReleaseSearchServiceImpl extends UnicastRemoteObject implements Rel
                         r.year(),
                         r.duration()
                 )).collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    @Override
+    public List<String> knownGenres() throws RemoteException {
+        return releaseSearchService.knownGenres()
+                .stream()
+                .map(Genre::friendlyName)
+                .collect(Collectors.toList());
     }
 }

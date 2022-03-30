@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.middleware.rmi;
+package at.fhv.ae.backend.middleware.rmi.facade;
 
 import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.shared.rmi.RemoteSession;

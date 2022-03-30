@@ -1,10 +1,10 @@
 package at.fhv.ae.backend.middleware;
 
-import at.fhv.ae.backend.application.ReleaseService;
+import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
 import at.fhv.ae.backend.application.dto.RecordingDTO;
-import at.fhv.ae.backend.middleware.rmi.ReleaseSearchServiceImpl;
-import at.fhv.ae.shared.rmi.ReleaseSearchService;
+import at.fhv.ae.backend.middleware.rmi.services.RemoteReleaseSearchServiceImpl;
+import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,14 +17,14 @@ import static org.mockito.Mockito.*;
 
 class RemoteReleaseServiceTest {
 
-    private ReleaseService releaseService;
-    private ReleaseSearchService remoteReleaseService;
+    private ReleaseSearchService releaseService;
+    private RemoteReleaseSearchService remoteReleaseService;
 
 
     @BeforeEach
     void setupMocksAndTestClass() throws RemoteException {
-        releaseService = mock(ReleaseService.class);
-        remoteReleaseService = new ReleaseSearchServiceImpl(releaseService);
+        releaseService = mock(ReleaseSearchService.class);
+        remoteReleaseService = new RemoteReleaseSearchServiceImpl(releaseService);
     }
 
     @Test

@@ -1,10 +1,8 @@
 package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.application.BasketService;
-import at.fhv.ae.backend.application.GenreInfoService;
-import at.fhv.ae.backend.application.ReleaseService;
+import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
-import at.fhv.ae.backend.application.impl.GenreInfoServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
@@ -37,13 +35,11 @@ public class ServiceRegistry {
 
     // application services
 
-    private static ReleaseService releaseService;
+    private static ReleaseSearchService releaseService;
 
     private static BasketService basketService;
 
     private static SellService sellService;
-
-    private static GenreInfoService genreInfoService;
 
     private static AuthorizationService authorizationService;
 
@@ -91,7 +87,7 @@ public class ServiceRegistry {
     }
 
 
-    public static ReleaseService releaseService() {
+    public static ReleaseSearchService releaseService() {
         if(releaseService == null) {
             releaseService = new ReleaseServiceImpl(releaseRepository(), workRepository());
         }
@@ -110,14 +106,6 @@ public class ServiceRegistry {
             sellService = new SellServiceImpl(saleRepository(), basketRepository(), entityManager());
         }
         return sellService;
-    }
-
-
-    public static GenreInfoService genreInfoService() {
-        if(genreInfoService == null) {
-            genreInfoService = new GenreInfoServiceImpl();
-        }
-        return genreInfoService;
     }
 
     public static AuthorizationService authorizationService() {

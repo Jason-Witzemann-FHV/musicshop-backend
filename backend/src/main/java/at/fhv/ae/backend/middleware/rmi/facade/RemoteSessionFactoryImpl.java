@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.middleware.rmi;
+package at.fhv.ae.backend.middleware.rmi.facade;
 
 import at.fhv.ae.backend.middleware.common.SessionFactory;
 import at.fhv.ae.shared.rmi.RemoteSession;
@@ -20,9 +20,12 @@ public class RemoteSessionFactoryImpl extends UnicastRemoteObject implements Rem
     public Optional<RemoteSession> logIn(String username, String password) throws RemoteException {
         var session = sessionFactory.logIn(username, password);
 
-        if (session.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(new RemoteSessionImpl(session.get()));
+        return session.map(s -> {
+            try {
+                return new RemoteSessionImpl(s);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

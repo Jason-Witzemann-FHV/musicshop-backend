@@ -3,7 +3,7 @@ package at.fhv.ae.backend.integration;
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
-import at.fhv.ae.backend.middleware.rmi.RemoteBasketServiceImpl;
+import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
 import org.junit.jupiter.api.*;

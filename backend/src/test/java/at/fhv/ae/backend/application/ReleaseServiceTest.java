@@ -9,7 +9,6 @@ import at.fhv.ae.backend.domain.repository.WorkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.constraints.AssertFalse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 class ReleaseServiceTest {
 
-    private ReleaseService releaseService;
+    private ReleaseSearchService releaseService;
     private ReleaseRepository releaseRepository;
     private WorkRepository workRepository;
 
