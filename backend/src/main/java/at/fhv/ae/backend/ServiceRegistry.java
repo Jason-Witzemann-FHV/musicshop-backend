@@ -12,6 +12,7 @@ import at.fhv.ae.backend.middleware.common.AuthorizationService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import java.util.function.Function;
 
 public class ServiceRegistry {
 
@@ -110,7 +111,8 @@ public class ServiceRegistry {
 
     public static AuthorizationService authorizationService() {
         if(authorizationService == null) {
-            authorizationService = new LdapAuthorizationService();
+            // TODO add name mapping function after setting up LDAP
+            authorizationService = new LdapAuthorizationService(Function.identity());
         }
         return authorizationService;
     }
