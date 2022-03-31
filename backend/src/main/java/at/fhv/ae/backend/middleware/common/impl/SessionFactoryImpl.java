@@ -3,24 +3,24 @@ package at.fhv.ae.backend.middleware.common.impl;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
-import at.fhv.ae.backend.middleware.common.AuthorizationService;
+import at.fhv.ae.backend.middleware.common.CredentialsService;
 import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.backend.middleware.common.SessionFactory;
 import java.util.Optional;
 
 public class SessionFactoryImpl implements SessionFactory {
-    private final AuthorizationService authorizationService;
+    private final CredentialsService credentialsService;
     private final UserRepository userRepository;
 
 
-    public SessionFactoryImpl(AuthorizationService authorizationService, UserRepository userRepository) {
-        this.authorizationService = authorizationService;
+    public SessionFactoryImpl(CredentialsService credentialsService, UserRepository userRepository) {
+        this.credentialsService = credentialsService;
         this.userRepository = userRepository;
     }
 
     @Override
     public Optional<Session> logIn(String username, String password) {
-        if (!authorizationService.authorize(username, password)) {
+        if (!credentialsService.authorize(username, password)) {
             return Optional.empty();
         }
 

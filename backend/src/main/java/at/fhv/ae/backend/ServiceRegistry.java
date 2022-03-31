@@ -8,10 +8,11 @@ import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.*;
 import at.fhv.ae.backend.infrastructure.*;
-import at.fhv.ae.backend.middleware.common.AuthorizationService;
+import at.fhv.ae.backend.middleware.common.CredentialsService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import java.util.function.Function;
 
 public class ServiceRegistry {
 
@@ -41,7 +42,7 @@ public class ServiceRegistry {
 
     private static SellService sellService;
 
-    private static AuthorizationService authorizationService;
+    private static CredentialsService credentialsService;
 
 
     public static EntityManager entityManager() {
@@ -108,11 +109,12 @@ public class ServiceRegistry {
         return sellService;
     }
 
-    public static AuthorizationService authorizationService() {
-        if(authorizationService == null) {
-            authorizationService = new LdapAuthorizationService();
+    public static CredentialsService authorizationService() {
+        if(credentialsService == null) {
+            // TODO add name mapping function after setting up LDAP
+            credentialsService = new LdapCredentialsService(Function.identity());
         }
-        return authorizationService;
+        return credentialsService;
     }
 
 }
