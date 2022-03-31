@@ -1,13 +1,12 @@
 package at.fhv.ae.javafxfrontend;
 
+import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
-import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
-import at.fhv.ae.shared.rmi.RemoteSellService;
+import at.fhv.ae.shared.rmi.*;
 import javafx.beans.property.SimpleObjectProperty;
-import at.fhv.ae.shared.rmi.RemoteBasketService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -62,6 +61,16 @@ public class MusicShopController {
         releaseSearchService = (RemoteReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
         sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
+
+        var sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://localhost/music-shop");
+
+        // test login
+        try {
+            var session = sessionFactory.logIn("jhe6245", "pwd");
+            System.out.println(session);
+        } catch (AuthorizationException e) {
+            e.printStackTrace();
+        }
     }
 
     private <T> String formatCurrency(T amount) {

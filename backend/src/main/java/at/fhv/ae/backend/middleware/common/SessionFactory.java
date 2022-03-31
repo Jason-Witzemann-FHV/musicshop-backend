@@ -1,9 +1,8 @@
 package at.fhv.ae.backend.middleware.common;
 
-import java.util.Optional;
+import at.fhv.ae.shared.AuthorizationException;
 
 public interface SessionFactory {
 
-    Optional<Session> logIn(String username, String password);
-
+    Session logIn(String username, String password) throws AuthorizationException;
 }

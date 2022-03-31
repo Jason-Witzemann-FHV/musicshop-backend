@@ -38,7 +38,8 @@ public class LdapCredentialsService implements CredentialsService {
                 new InitialContext(env).close(); // authenticated bind
                 return true;
             }
-            catch(NamingException ignored) {
+            catch(NamingException x) {
+                x.printStackTrace();
             }
         }
 
