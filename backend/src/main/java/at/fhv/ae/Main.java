@@ -26,8 +26,8 @@ public class Main {
 
         final String ldap = "ldap://10.0.40.161:389";
         final Function<String, Set<String>> usernameToDistinguishedNames = username -> Set.of(
-                "cn=" + username + ",ou=employees,dc=ad,dc=teamA,dc=net",
-                "cn=" + username + ",ou=customer,dc=ad,dc=teamA,dc=net"
+                "cn=" + username + ",ou=employees,dc=ad,dc=teama,dc=net",
+                "cn=" + username + ",ou=customer,dc=ad,dc=teama,dc=net"
         );
 
         try {
@@ -37,7 +37,7 @@ public class Main {
             Naming.rebind("rmi://localhost/sell-service", new RemoteSellServiceImpl(ServiceRegistry.sellService()));
             Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl(ServiceRegistry.basketService()));
 
-            Naming.rebind("rmi://localhost/musicshop", new RemoteSessionFactoryImpl(
+            Naming.rebind("rmi://localhost/music-shop", new RemoteSessionFactoryImpl(
                     new SessionFactoryImpl(
                             new LdapCredentialsService(ldap, usernameToDistinguishedNames),
                             ServiceRegistry.userRepository()
