@@ -1,6 +1,6 @@
 package at.fhv.ae.backend.infrastructure;
 
-import at.fhv.ae.backend.middleware.common.AuthorizationService;
+import at.fhv.ae.backend.middleware.common.CredentialsService;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -8,11 +8,11 @@ import javax.naming.NamingException;
 import java.util.Properties;
 import java.util.function.Function;
 
-public class LdapAuthorizationService implements AuthorizationService {
+public class LdapCredentialsService implements CredentialsService {
 
     private final Function<String, String> usernameToDistinguishedName;
 
-    public LdapAuthorizationService(Function<String, String> usernameToDistinguishedName) {
+    public LdapCredentialsService(Function<String, String> usernameToDistinguishedName) {
         this.usernameToDistinguishedName = usernameToDistinguishedName;
     }
 
