@@ -5,15 +5,18 @@ import at.fhv.ae.backend.middleware.common.CredentialsService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.Properties;
+import java.util.Hashtable;
+import java.util.Set;
 import java.util.function.Function;
 
 public class LdapCredentialsService implements CredentialsService {
 
-    private final Function<String, String> usernameToDistinguishedName;
+    private final String ldapUrl;
+    private final Function<String, Set<String>> usernameToDistinguishedNames;
 
-    public LdapCredentialsService(Function<String, String> usernameToDistinguishedName) {
-        this.usernameToDistinguishedName = usernameToDistinguishedName;
+    public LdapCredentialsService(String ldapUrl, Function<String, Set<String>> usernameToDistinguishedNames) {
+        this.ldapUrl = ldapUrl;
+        this.usernameToDistinguishedNames = usernameToDistinguishedNames;
     }
 
     @Override
@@ -22,17 +25,23 @@ public class LdapCredentialsService implements CredentialsService {
         if(password.equals("PssWrd"))
             return true;
 
-        Properties env = new Properties();
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, usernameToDistinguishedName.apply(username));
-        env.put(Context.SECURITY_CREDENTIALS, password);
-        try {
-            Context ctx = new InitialContext(env); // authenticated bind
-            ctx.close();
-            return true;
+        for(String dn: usernameToDistinguishedNames.apply(username)) {
+
+            Hashtable<String, String> env = new Hashtable<>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            env.put(Context.PROVIDER_URL, ldapUrl);
+            env.put(Context.SECURITY_AUTHENTICATION, "simple");
+            env.put(Context.SECURITY_PRINCIPAL, dn);
+            env.put(Context.SECURITY_CREDENTIALS, password);
+
+            try {
+                new InitialContext(env).close(); // authenticated bind
+                return true;
+            }
+            catch(NamingException ignored) {
+            }
         }
-        catch(NamingException ex) {
-            return false;
-        }
+
+        return false;
     }
 }

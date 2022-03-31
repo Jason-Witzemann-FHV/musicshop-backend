@@ -2,6 +2,9 @@ package at.fhv.ae;
 
 import at.fhv.ae.backend.ServiceRegistry;
 
+import at.fhv.ae.backend.infrastructure.LdapCredentialsService;
+import at.fhv.ae.backend.middleware.common.impl.SessionFactoryImpl;
+import at.fhv.ae.backend.middleware.rmi.facade.RemoteSessionFactoryImpl;
 import at.fhv.ae.backend.middleware.rmi.services.RemoteSellServiceImpl;
 import at.fhv.ae.backend.middleware.rmi.services.RemoteReleaseSearchServiceImpl;
 import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
@@ -14,31 +17,36 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Set;
+import java.util.function.Function;
 
 
 public class Main {
     public static void main(String[] args) {
 
+        final String ldap = "ldap://10.0.40.161:389";
+        final Function<String, Set<String>> usernameToDistinguishedNames = username -> Set.of(
+                "cn=" + username + ",ou=employees,dc=ad,dc=teamA,dc=net",
+                "cn=" + username + ",ou=customer,dc=ad,dc=teamA,dc=net"
+        );
 
         try {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+
             Naming.rebind("rmi://localhost/release-search-service", new RemoteReleaseSearchServiceImpl(ServiceRegistry.releaseService()));
             Naming.rebind("rmi://localhost/sell-service", new RemoteSellServiceImpl(ServiceRegistry.sellService()));
             Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl(ServiceRegistry.basketService()));
 
-            //ReleaseSearchService rss = (ReleaseSearchService)Naming.lookup("rmi://localhost/release-search-service");
-            //rss.query("Best Song Ever", "astley", "pop").forEach(System.out::println);
+            Naming.rebind("rmi://localhost/musicshop", new RemoteSessionFactoryImpl(
+                    new SessionFactoryImpl(
+                            new LdapCredentialsService(ldap, usernameToDistinguishedNames),
+                            ServiceRegistry.userRepository()
+                    )
+            ));
 
         } catch (RemoteException | MalformedURLException e) {
             e.printStackTrace();
         }
-
-        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("Test");
-        //EntityManager em = emf.createEntityManager();
-
-       // insertDemoRelease(em);
-
-        //retrieveDemoRelease(em).forEach(System.out::println);
 
 /*
         try {
