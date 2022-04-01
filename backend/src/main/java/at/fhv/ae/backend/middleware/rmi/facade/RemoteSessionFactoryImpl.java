@@ -1,12 +1,13 @@
 package at.fhv.ae.backend.middleware.rmi.facade;
 
+import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.backend.middleware.common.SessionFactory;
+import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.rmi.RemoteSession;
 import at.fhv.ae.shared.rmi.RemoteSessionFactory;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Optional;
 
 public class RemoteSessionFactoryImpl extends UnicastRemoteObject implements RemoteSessionFactory {
     private final SessionFactory sessionFactory;
@@ -17,15 +18,10 @@ public class RemoteSessionFactoryImpl extends UnicastRemoteObject implements Rem
     }
 
     @Override
-    public Optional<RemoteSession> logIn(String username, String password) throws RemoteException {
-        var session = sessionFactory.logIn(username, password);
+    public RemoteSession logIn(String username, String password) throws RemoteException, AuthorizationException {
 
-        return session.map(s -> {
-            try {
-                return new RemoteSessionImpl(s);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        Session session = sessionFactory.logIn(username, password);
+
+        return new RemoteSessionImpl(session);
     }
 }

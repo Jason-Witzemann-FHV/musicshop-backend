@@ -108,13 +108,4 @@ public class ServiceRegistry {
         }
         return sellService;
     }
-
-    public static CredentialsService authorizationService() {
-        if(credentialsService == null) {
-            // TODO add name mapping function after setting up LDAP
-            credentialsService = new LdapCredentialsService(Function.identity());
-        }
-        return credentialsService;
-    }
-
 }

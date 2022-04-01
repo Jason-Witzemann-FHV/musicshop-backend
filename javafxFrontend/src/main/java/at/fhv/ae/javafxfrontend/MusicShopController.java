@@ -1,14 +1,15 @@
 package at.fhv.ae.javafxfrontend;
 
+import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
+import at.fhv.ae.shared.rmi.*;
 import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
 import at.fhv.ae.shared.rmi.RemoteSellService;
 import at.fhv.ae.shared.rmi.RemoteSession;
 import javafx.beans.property.SimpleObjectProperty;
-import at.fhv.ae.shared.rmi.RemoteBasketService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -31,7 +32,6 @@ public class MusicShopController {
     private final RemoteReleaseSearchService releaseSearchService;
     private final RemoteBasketService basketService;
     private final RemoteSellService sellService;
-    private RemoteSession session;
 
     // search fields
     @FXML TextField searchTitle;
@@ -64,10 +64,6 @@ public class MusicShopController {
         releaseSearchService = (RemoteReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
         sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
-    }
-
-    public void setSession(RemoteSession session){
-        this.session = session;
     }
 
     private <T> String formatCurrency(T amount) {

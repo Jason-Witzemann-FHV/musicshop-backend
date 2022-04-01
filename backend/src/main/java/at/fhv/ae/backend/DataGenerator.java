@@ -1,11 +1,16 @@
 package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.domain.model.release.*;
+import at.fhv.ae.backend.domain.model.user.Permission;
+import at.fhv.ae.backend.domain.model.user.Role;
+import at.fhv.ae.backend.domain.model.user.User;
+import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.*;
 
 import javax.persistence.Persistence;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DataGenerator {
 
@@ -15,15 +20,31 @@ public class DataGenerator {
     private static List<Release> releases = new ArrayList<>();
     private static List<Label> labels = new ArrayList<>();
     private static List<Supplier> suppliers = new ArrayList<>();
+    private static List<User> users;
     private static Random random = new Random();
 
     public static void main(String[] args) {
         deleteOldData();
         generateWorkAggregateData();
         generateReleaseAggregateData();
+        prepareUsers();
         persistGeneratedData();
     }
 
+    private static void prepareUsers() {
+
+        var adminRoles = Set.of(new Role("admin", Set.of(Permission.values())));
+
+        var admins = Stream.of(
+                "ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test")
+                .map(id -> new User(new UserId(id), adminRoles));
+
+        var customerRoles = Set.of(new Role("customer", Set.of(Permission.SEARCH_RELEASES)));
+
+        var customers = Stream.of(new User(new UserId("max"), customerRoles));
+
+        users = Stream.concat(admins, customers).collect(Collectors.toList());
+    }
 
     private static void generateWorkAggregateData() {
         song("Never gonna give you up", "Rick Astley", Genre.POP);
@@ -359,6 +380,8 @@ public class DataGenerator {
         em.createNativeQuery("DROP TABLE IF EXISTS supplier").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS work").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS label").executeUpdate();
+
+        em.createNativeQuery("DROP TABLE IF EXISTS \"user\" CASCADE").executeUpdate();
         transaction.commit();
     }
 
@@ -372,6 +395,7 @@ public class DataGenerator {
         works.forEach(em::persist);
         recordings.forEach(em::persist);
         releases.forEach(em::persist);
+        users.forEach(em::persist);
         transaction.commit();
     }
 }

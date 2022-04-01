@@ -5,14 +5,16 @@ import at.fhv.ae.backend.middleware.common.CredentialsService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.Properties;
+import java.util.Hashtable;
 import java.util.function.Function;
 
 public class LdapCredentialsService implements CredentialsService {
 
+    private final String ldapUrl;
     private final Function<String, String> usernameToDistinguishedName;
 
-    public LdapCredentialsService(Function<String, String> usernameToDistinguishedName) {
+    public LdapCredentialsService(String ldapUrl, Function<String, String> usernameToDistinguishedName) {
+        this.ldapUrl = ldapUrl;
         this.usernameToDistinguishedName = usernameToDistinguishedName;
     }
 
@@ -22,16 +24,21 @@ public class LdapCredentialsService implements CredentialsService {
         if(password.equals("PssWrd"))
             return true;
 
-        Properties env = new Properties();
+        String dn = usernameToDistinguishedName.apply(username);
+
+        Hashtable<String, String> env = new Hashtable<>();
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(Context.PROVIDER_URL, ldapUrl);
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, usernameToDistinguishedName.apply(username));
+        env.put(Context.SECURITY_PRINCIPAL, dn);
         env.put(Context.SECURITY_CREDENTIALS, password);
+
         try {
-            Context ctx = new InitialContext(env); // authenticated bind
-            ctx.close();
+            new InitialContext(env).close(); // authenticated bind
             return true;
         }
-        catch(NamingException ex) {
+        catch(NamingException x) {
+            x.printStackTrace();
             return false;
         }
     }
