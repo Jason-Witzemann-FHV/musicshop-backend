@@ -6,6 +6,8 @@ import at.fhv.ae.backend.domain.repository.UserRepository;
 import at.fhv.ae.backend.middleware.common.CredentialsService;
 import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.backend.middleware.common.SessionFactory;
+import at.fhv.ae.shared.AuthorizationException;
+
 import java.util.Optional;
 
 public class SessionFactoryImpl implements SessionFactory {
@@ -19,21 +21,20 @@ public class SessionFactoryImpl implements SessionFactory {
     }
 
     @Override
-    public Optional<Session> logIn(String username, String password) {
+    public Session logIn(String username, String password) throws AuthorizationException {
         if (!credentialsService.authorize(username, password)) {
-            return Optional.empty();
+            throw new AuthorizationException("Bad Credentials");
         }
 
         Optional<User> optUser = userRepository.userById(new UserId(username));
 
-        if (optUser.isEmpty()){
-            System.out.println("Found User in AuthService, but not in Repository!");
-            return Optional.empty();
+        if (optUser.isEmpty()) {
+            throw new AuthorizationException("Not found in User/Role/Permission DB");
         }
 
         User user = optUser.get();
 
-        return Optional.of(new SessionImpl(user));
+        return new SessionImpl(user);
     }
 
 }
