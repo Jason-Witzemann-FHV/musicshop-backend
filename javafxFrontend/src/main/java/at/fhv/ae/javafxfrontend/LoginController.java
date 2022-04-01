@@ -13,22 +13,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
-import java.awt.event.InputEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Locale;
-import java.util.Objects;
 import java.util.Optional;
 
 public class LoginController {
 
-    private final RemoteSessionFactory sessionFactory = null;
+    private final RemoteSessionFactory sessionFactory;
 
     @FXML
     TextField userName;
@@ -39,38 +33,33 @@ public class LoginController {
     Button loginButton;
 
     public LoginController() throws NotBoundException, MalformedURLException, RemoteException {
-        //sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://localhost/music-shop");
+        sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://localhost/music-shop");
     }
 
     public void login(MouseEvent mouseEvent) throws IOException {
         System.out.println(userName.getText());
-       // Optional<RemoteSession> session = sessionFactory.logIn(userName.getText(),password.getText());
+        Optional<RemoteSession> session = sessionFactory.logIn(userName.getText(),password.getText());
 
-       if(true){
+       if(session.isPresent()){
            final Node source = (Node) mouseEvent.getSource();
            final Stage currentStage = (Stage) source.getScene().getWindow();
-            currentStage.close();
 
            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MusicShop.fxml"));
            Parent root = (Parent)fxmlLoader.load();
            MusicShopController controller = fxmlLoader.<MusicShopController>getController();
-           //controller.setSession(session.get());
+           controller.setSession(session.get());
            Scene scene = new Scene(root);
            Stage stage = new Stage();
            stage.setScene(scene);
            stage.setTitle("Soundkraut");
            stage.show();
-
-
-
-
+           currentStage.close();
        } else {
-
            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+           alert.getDialogPane().setPrefWidth(200);
            alert.setTitle("Could not log in");
            alert.setContentText(alert.getTitle());
            alert.show();
        }
     }
-
 }

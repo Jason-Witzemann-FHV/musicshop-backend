@@ -22,6 +22,7 @@ public class MusicShopApplication extends Application {
         Scene scene = new Scene(root);
         stage.setTitle("Login");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 }
