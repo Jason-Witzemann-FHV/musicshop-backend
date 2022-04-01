@@ -25,10 +25,8 @@ public class Main {
     public static void main(String[] args) {
 
         final String ldap = "ldap://10.0.40.161:389";
-        final Function<String, Set<String>> usernameToDistinguishedNames = username -> Set.of(
-                "cn=" + username + ",ou=employees,dc=ad,dc=teama,dc=net",
-                "cn=" + username + ",ou=customer,dc=ad,dc=teama,dc=net"
-        );
+        final Function<String, String> usernameToDistinguishedName = username ->
+                "cn=" + username + ",ou=employees,dc=ad,dc=teama,dc=net";
 
         try {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
@@ -39,7 +37,7 @@ public class Main {
 
             Naming.rebind("rmi://localhost/music-shop", new RemoteSessionFactoryImpl(
                     new SessionFactoryImpl(
-                            new LdapCredentialsService(ldap, usernameToDistinguishedNames),
+                            new LdapCredentialsService(ldap, usernameToDistinguishedName),
                             ServiceRegistry.userRepository()
                     )
             ));

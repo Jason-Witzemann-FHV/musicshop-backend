@@ -61,16 +61,6 @@ public class MusicShopController {
         releaseSearchService = (RemoteReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
         sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
-
-        var sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://localhost/music-shop");
-
-        // test login
-        try {
-            var session = sessionFactory.logIn("jhe6245", "pwd");
-            System.out.println(session);
-        } catch (AuthorizationException e) {
-            e.printStackTrace();
-        }
     }
 
     private <T> String formatCurrency(T amount) {
