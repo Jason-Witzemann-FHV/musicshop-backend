@@ -1,6 +1,5 @@
 package at.fhv.ae.javafxfrontend;
 
-import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
@@ -26,6 +25,7 @@ import java.util.UUID;
 
 public class MusicShopController {
 
+    private RemoteSession session;
     private final RemoteReleaseSearchService releaseSearchService;
     private final RemoteBasketService basketService;
     private final RemoteSellService sellService;
@@ -61,6 +61,10 @@ public class MusicShopController {
         releaseSearchService = (RemoteReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
         basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
         sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
+    }
+
+    public void setSession(RemoteSession session) {
+        this.session = session;
     }
 
     private <T> String formatCurrency(T amount) {

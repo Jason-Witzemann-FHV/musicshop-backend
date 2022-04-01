@@ -27,3 +27,7 @@
     -fx-pref-height: 0;
     -fx-min-height: 0;
 }
+
+.loginForm{
+    -fx-padding: 0 0 10 0;
+}
