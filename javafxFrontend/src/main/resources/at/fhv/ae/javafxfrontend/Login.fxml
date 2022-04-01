@@ -12,12 +12,14 @@
           AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
         <VBox styleClass="loginForm">
             <Label text="Username"/>
-            <TextField fx:id="userName"></TextField>
+            <!--//TODO remove tf-test-->
+            <TextField fx:id="userName" text="tf-test"/>
         </VBox>
         <VBox styleClass="loginForm">
             <Label text="Password"/>
-            <PasswordField fx:id="password"></PasswordField>
+            <!--TODO remove PssWrd-->
+            <PasswordField fx:id="password" text="PssWrd"/>
         </VBox>
-        <Button fx:id="loginButton" onMouseClicked="#login" text="Login"></Button>
+        <Button fx:id="loginButton" onAction="#login" text="Login"/>
     </VBox>
 </AnchorPane>

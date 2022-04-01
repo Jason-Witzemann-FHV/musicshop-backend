@@ -1,8 +1,9 @@
 package at.fhv.ae.javafxfrontend;
 
-import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
+import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.rmi.RemoteSession;
 import at.fhv.ae.shared.rmi.RemoteSessionFactory;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,7 +19,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.Optional;
 
 public class LoginController {
 
@@ -36,30 +36,31 @@ public class LoginController {
         sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://localhost/music-shop");
     }
 
-    public void login(MouseEvent mouseEvent) throws IOException {
-        System.out.println(userName.getText());
-        Optional<RemoteSession> session = sessionFactory.logIn(userName.getText(),password.getText());
+    public void login(ActionEvent event) throws IOException {
+        try {
+            RemoteSession session = sessionFactory.logIn(userName.getText(),password.getText());
 
-       if(session.isPresent()){
-           final Node source = (Node) mouseEvent.getSource();
-           final Stage currentStage = (Stage) source.getScene().getWindow();
+            final Node source = (Node) event.getSource();
+            final Stage currentStage = (Stage) source.getScene().getWindow();
 
-           FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MusicShop.fxml"));
-           Parent root = (Parent)fxmlLoader.load();
-           MusicShopController controller = fxmlLoader.<MusicShopController>getController();
-           controller.setSession(session.get());
-           Scene scene = new Scene(root);
-           Stage stage = new Stage();
-           stage.setScene(scene);
-           stage.setTitle("Soundkraut");
-           stage.show();
-           currentStage.close();
-       } else {
-           Alert alert = new Alert(Alert.AlertType.INFORMATION);
-           alert.getDialogPane().setPrefWidth(200);
-           alert.setTitle("Could not log in");
-           alert.setContentText(alert.getTitle());
-           alert.show();
-       }
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MusicShop.fxml"));
+            Parent root = (Parent)fxmlLoader.load();
+            MusicShopController controller = fxmlLoader.<MusicShopController>getController();
+            controller.setSession(session);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Soundkraut");
+            stage.show();
+            currentStage.close();
+
+        } catch (AuthorizationException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.getDialogPane().setPrefWidth(200);
+            alert.setTitle("Could not log in");
+            alert.setContentText(alert.getTitle());
+            alert.show();
+            e.printStackTrace();
+        }
     }
 }
