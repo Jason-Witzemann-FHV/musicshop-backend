@@ -1,0 +1,19 @@
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+<AnchorPane
+        stylesheets="/css/MusicShop.css" fx:controller="at.fhv.ae.javafxfrontend.LoginController"
+        xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" prefHeight="250" prefWidth="350" >
+
+    <VBox styleClass="padding"
+          AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+        <Label text="Username" />
+        <TextField fx:id="userName"></TextField>
+        <Label text="Password" styleClass="loginForm" />
+        <PasswordField fx:id="password"></PasswordField>
+        <Button fx:id="loginButton" onMouseClicked="#login" text="Login"></Button>
+    </VBox>
+</AnchorPane>

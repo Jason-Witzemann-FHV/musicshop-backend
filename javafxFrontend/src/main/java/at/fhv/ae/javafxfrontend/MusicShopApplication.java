@@ -15,12 +15,12 @@ public class MusicShopApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        URL fxmlUrl = this.getClass().getResource("MusicShop.fxml");
+        URL fxmlUrl = this.getClass().getResource("Login.fxml");
         Objects.requireNonNull(fxmlUrl);
         Locale.setDefault(new Locale("en"));
         Parent root = FXMLLoader.load(fxmlUrl);
         Scene scene = new Scene(root);
-        stage.setTitle("SoundKraut");
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }
