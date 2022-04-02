@@ -1,5 +1,6 @@
 package at.fhv.ae.javafxfrontend;
 
+import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
@@ -26,10 +27,9 @@ import java.util.UUID;
 public class MusicShopController {
 
     private RemoteSession session;
-    private final RemoteReleaseSearchService releaseSearchService;
-    private final RemoteBasketService basketService;
-    private final RemoteSellService sellService;
-
+    private RemoteReleaseSearchService releaseSearchService;
+    private RemoteBasketService basketService;
+    private RemoteSellService sellService;
     // search fields
     @FXML TextField searchTitle;
     @FXML TextField searchArtist;
@@ -56,15 +56,23 @@ public class MusicShopController {
     @FXML TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
     @FXML TableColumn<BasketItemRemoteDTO, UUID> basketColRemove;
 
-    public MusicShopController() throws NotBoundException, MalformedURLException, RemoteException {
-
-        releaseSearchService = (RemoteReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
-        basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
-        sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
-    }
-
-    public void setSession(RemoteSession session) {
+    public void setSession(RemoteSession session) throws RemoteException {
         this.session = session;
+
+        try {
+            sellService = session.remoteSellService();
+        } catch (AuthorizationException ignored) {
+        }
+
+        try {
+            basketService = session.remoteBasketService();
+        } catch (AuthorizationException ignored) {
+        }
+
+        try {
+            releaseSearchService = session.remoteReleaseService();
+        } catch (AuthorizationException ignored) {
+        }
     }
 
     private <T> String formatCurrency(T amount) {
