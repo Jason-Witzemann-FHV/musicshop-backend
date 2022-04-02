@@ -15,9 +15,6 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -30,6 +27,7 @@ public class MusicShopController {
     private RemoteReleaseSearchService releaseSearchService;
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
+
     // search fields
     @FXML TextField searchTitle;
     @FXML TextField searchArtist;
@@ -60,17 +58,25 @@ public class MusicShopController {
         this.session = session;
 
         try {
-            sellService = session.remoteSellService();
+            releaseSearchService = session.remoteReleaseService();
+
+            // populate combo box selection
+            searchGenre.getItems().setAll(releaseSearchService.knownGenres());
+
         } catch (AuthorizationException ignored) {
         }
 
         try {
             basketService = session.remoteBasketService();
+
+            fetchBasket();
+
         } catch (AuthorizationException ignored) {
         }
 
         try {
-            releaseSearchService = session.remoteReleaseService();
+            sellService = session.remoteSellService();
+
         } catch (AuthorizationException ignored) {
         }
     }
@@ -94,10 +100,7 @@ public class MusicShopController {
     }
 
     @FXML
-    public void initialize() throws RemoteException {
-
-        // populate combo box selection
-        searchGenre.getItems().setAll(releaseSearchService.knownGenres());
+    public void initialize()  {
 
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
@@ -207,9 +210,6 @@ public class MusicShopController {
                 this.setGraphic(button);
             }
         });
-
-        // initialize basket
-        fetchBasket();
     }
 
     public void search() throws RemoteException {
