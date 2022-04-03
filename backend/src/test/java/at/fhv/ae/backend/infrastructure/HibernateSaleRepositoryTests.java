@@ -3,10 +3,13 @@ package at.fhv.ae.backend.infrastructure;
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.sale.*;
+import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +24,6 @@ class HibernateSaleRepositoryTests {
     @Test
     void given_sale_when_added_then_find_by_id_returns_sale() {
 
-
         var saleItems = List.of(
                 new Item(new ReleaseId(UUID.randomUUID()), 2, 9.99),
                 new Item(new ReleaseId(UUID.randomUUID()), 3, 19.99),
@@ -29,8 +31,8 @@ class HibernateSaleRepositoryTests {
         );
 
         var sale = Sale.create(new SaleId(UUID.randomUUID()),
-                "anonymous Employee",
-                "anonymous Customer",
+                new UserId("nsu3146"),
+                null,
                 PaymentType.CASH, // First sprint only supports cash sale
                 SaleType.IN_PERSON,
                 saleItems

@@ -45,6 +45,7 @@ public class ServiceRegistry {
     private static CredentialsService credentialsService;
 
 
+
     public static EntityManager entityManager() {
         if(entityManager == null) {
             entityManager = Persistence.createEntityManagerFactory("Test").createEntityManager();
@@ -97,14 +98,14 @@ public class ServiceRegistry {
 
     public static BasketService basketService() {
         if(basketService == null) {
-            basketService = new BasketServiceImpl(basketRepository(), releaseRepository());
+            basketService = new BasketServiceImpl(basketRepository(), releaseRepository(), userRepository());
         }
         return basketService;
     }
 
     public static SellService sellService() {
         if(sellService == null) {
-            sellService = new SellServiceImpl(saleRepository(), basketRepository(), entityManager());
+            sellService = new SellServiceImpl(saleRepository(), basketRepository(), userRepository() ,entityManager());
         }
         return sellService;
     }

@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.domain.model.sale;
 
+import at.fhv.ae.backend.domain.model.user.UserId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,9 @@ public class Sale {
     @Embedded
     private SaleId saleId;
 
-    private String employeeId;
+    private UserId employeeId;
 
-    private String customerId;
+    private UserId customerId;
 
     private PaymentType paymentType;
 
@@ -36,7 +37,7 @@ public class Sale {
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Item> items;
 
-    private Sale(SaleId saleId, String employeeId, String customerId, PaymentType paymentType, SaleType saleType, double totalPrice, List<Item> items) {
+    private Sale(SaleId saleId, UserId employeeId, UserId customerId, PaymentType paymentType, SaleType saleType, double totalPrice, List<Item> items) {
         this.saleId = saleId;
         this.employeeId = employeeId;
         this.customerId = customerId;
@@ -50,7 +51,7 @@ public class Sale {
         return Collections.unmodifiableList(this.items);
     }
 
-    public static Sale create(SaleId saleId, String employeeId, String customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
+    public static Sale create(SaleId saleId, UserId employeeId, UserId customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
        return new Sale(
                 saleId,
                 employeeId,
