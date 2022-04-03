@@ -24,8 +24,12 @@ public class Sale {
     @Embedded
     private SaleId saleId;
 
+    @Embedded
+    @AttributeOverrides({ @AttributeOverride(name = "name", column = @Column(name = "employee_id")) })
     private UserId employeeId;
 
+    @Embedded
+    @AttributeOverrides({ @AttributeOverride(name = "name", column = @Column(name = "customer_id")) })
     private UserId customerId;
 
     private PaymentType paymentType;
