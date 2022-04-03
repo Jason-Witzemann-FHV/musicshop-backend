@@ -60,8 +60,10 @@ public class MusicShopController {
         try {
             releaseSearchService = session.remoteReleaseService();
 
-            // populate combo box selection
-            searchGenre.getItems().setAll(releaseSearchService.knownGenres());
+            // populate combo box selection, add an empty element to remove selection from drop-down
+            var genres = releaseSearchService.knownGenres();
+            genres.add(0, "");
+            searchGenre.getItems().setAll(genres);
 
         } catch (AuthorizationException ignored) {
         }
