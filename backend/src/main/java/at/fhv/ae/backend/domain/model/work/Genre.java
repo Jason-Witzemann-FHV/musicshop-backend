@@ -1,6 +1,8 @@
 package at.fhv.ae.backend.domain.model.work;
 
 
+import java.util.Arrays;
+
 public enum Genre {
     POP("Pop"),
     ELECTRONIC("Elektronik"),
@@ -22,5 +24,9 @@ public enum Genre {
 
     public String friendlyName() {
         return friendlyName;
+    }
+
+    public static Genre byFriendlyName(String friendlyName) {
+        return Arrays.stream(values()).filter(g -> g.friendlyName.equalsIgnoreCase(friendlyName)).findFirst().orElse(null);
     }
 }

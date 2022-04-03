@@ -25,7 +25,7 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
 
     @Override
     public List<ReleaseDTO> query(String title, String artist,String genre) {
-        return this.releaseRepository.query(title, artist, genre)
+        return this.releaseRepository.query(title, artist, Genre.byFriendlyName(genre))
                 .stream()
                 .map(ReleaseDTO::fromDomain)
                 .collect(Collectors.toList());

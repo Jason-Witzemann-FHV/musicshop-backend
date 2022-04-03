@@ -116,12 +116,12 @@ class ReleaseServiceTest {
         );
 
         // Mock return
-        when(releaseRepository.query("suffering", "DJ Khaled", "Rock")).thenReturn(List.of(release));
+        when(releaseRepository.query("suffering", "DJ Khaled", Genre.ROCK)).thenReturn(List.of(release));
 
         //Act
         var result = releaseService.query("suffering", "DJ Khaled", "Rock");
 
-        verify(releaseRepository).query("suffering", "DJ Khaled", "Rock");
+        verify(releaseRepository).query("suffering", "DJ Khaled", Genre.ROCK);
         assertFalse(result.isEmpty());
     }
 
@@ -149,12 +149,12 @@ class ReleaseServiceTest {
         );
 
         // Mock return
-        when(releaseRepository.query("not", "matching", "in any way")).thenReturn(Collections.emptyList());
+        when(releaseRepository.query("not", "matching", null)).thenReturn(Collections.emptyList());
 
         //Act
         var result = releaseService.query("not", "matching", "in any way");
 
-        verify(releaseRepository).query("not", "matching", "in any way");
+        verify(releaseRepository).query("not", "matching", null);
         assertTrue(result.isEmpty());
     }
 }

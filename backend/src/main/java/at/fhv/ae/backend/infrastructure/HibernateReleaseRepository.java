@@ -2,6 +2,7 @@ package at.fhv.ae.backend.infrastructure;
 
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
+import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import lombok.AllArgsConstructor;
 
@@ -24,7 +25,7 @@ public class HibernateReleaseRepository implements ReleaseRepository {
     }
 
     @Override
-    public List<Release> query(String title, String artist, String genre) {
+    public List<Release> query(String title, String artist, Genre genre) {
         return em.createNativeQuery("select distinct rel.* "
                 + "from Release rel "
                 + "inner join Release_recordingIds rel_recordingId on rel.releaseIdInternal=rel_recordingId.Release_releaseIdInternal "
@@ -37,7 +38,7 @@ public class HibernateReleaseRepository implements ReleaseRepository {
                 + "and (lower(rec_genre.genres) like lower(('%'||:genre||'%'))) ", Release.class)
                 .setParameter("title", title)
                 .setParameter("artist", artist)
-                .setParameter("genre", genre)
+                .setParameter("genre", Optional.ofNullable(genre).map(Genre::toString).orElse(""))
                 .getResultList();
     }
 }
