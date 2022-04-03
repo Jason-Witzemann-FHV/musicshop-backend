@@ -26,19 +26,30 @@ public class HibernateReleaseRepository implements ReleaseRepository {
 
     @Override
     public List<Release> query(String title, String artist, Genre genre) {
-        return em.createNativeQuery("select distinct rel.* "
-                + "from Release rel "
-                + "inner join Release_recordingIds rel_recordingId on rel.releaseIdInternal=rel_recordingId.Release_releaseIdInternal "
-                + "inner join Recording rec on (rec.id=rel_recordingId.id) "
-                + "inner join Recording_Artist rec_artist on rec.recordingIdInternal=rec_artist.Recording_recordingIdInternal "
-                + "inner join Artist artist on rec_artist.artists_artistIdInternal=artist.artistIdInternal "
-                + "inner join Recording_genres rec_genre on rec.recordingIdInternal=rec_genre.Recording_recordingIdInternal "
-                + "where ((lower(rel.title) like lower(('%'||:title||'%'))) or (lower(rec.title)) like lower(('%'||:title||'%')))"
-                + "and (lower(artist.name) like lower(('%'||:artist||'%'))) "
-                + "and (lower(rec_genre.genres) like lower(('%'||:genre||'%'))) ", Release.class)
-                .setParameter("title", title)
-                .setParameter("artist", artist)
-                .setParameter("genre", Optional.ofNullable(genre).map(Genre::toString).orElse(""))
-                .getResultList();
+
+        var string = new StringBuilder();
+        string.append("select distinct rel.* ");
+        string.append("from Release rel ");
+        string.append("inner join Release_recordingIds rel_recordingId on rel.releaseIdInternal=rel_recordingId.Release_releaseIdInternal ");
+        string.append("inner join Recording rec on (rec.id=rel_recordingId.id) ");
+        string.append("inner join Recording_Artist rec_artist on rec.recordingIdInternal=rec_artist.Recording_recordingIdInternal ");
+        string.append("inner join Artist artist on rec_artist.artists_artistIdInternal=artist.artistIdInternal ");
+        string.append("inner join Recording_genres rec_genre on rec.recordingIdInternal=rec_genre.Recording_recordingIdInternal ");
+        string.append("where ((lower(rel.title) like lower(('%'||:title||'%'))) or (lower(rec.title)) like lower(('%'||:title||'%'))) ");
+        string.append("and (lower(artist.name) like lower(('%'||:artist||'%'))) ");
+
+        if (genre != null) {
+            string.append("and rec_genre.genres = :genre");
+        }
+
+        var query = em.createNativeQuery(string.toString(), Release.class);
+        query.setParameter("title", title);
+        query.setParameter("artist", artist);
+
+        if (genre != null) {
+            query.setParameter("genre", genre.toString());
+        }
+
+        return query.getResultList();
     }
 }
