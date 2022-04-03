@@ -1,5 +1,6 @@
 package at.fhv.ae.javafxfrontend;
 
+import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
@@ -14,9 +15,6 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -26,9 +24,9 @@ import java.util.UUID;
 public class MusicShopController {
 
     private RemoteSession session;
-    private final RemoteReleaseSearchService releaseSearchService;
-    private final RemoteBasketService basketService;
-    private final RemoteSellService sellService;
+    private RemoteReleaseSearchService releaseSearchService;
+    private RemoteBasketService basketService;
+    private RemoteSellService sellService;
 
     // search fields
     @FXML TextField searchTitle;
@@ -56,15 +54,31 @@ public class MusicShopController {
     @FXML TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
     @FXML TableColumn<BasketItemRemoteDTO, UUID> basketColRemove;
 
-    public MusicShopController() throws NotBoundException, MalformedURLException, RemoteException {
-
-        releaseSearchService = (RemoteReleaseSearchService) Naming.lookup("rmi://localhost/release-search-service");
-        basketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
-        sellService = (RemoteSellService) Naming.lookup("rmi://localhost/sell-service");
-    }
-
-    public void setSession(RemoteSession session) {
+    public void setSession(RemoteSession session) throws RemoteException {
         this.session = session;
+
+        try {
+            releaseSearchService = session.remoteReleaseService();
+
+            // populate combo box selection
+            searchGenre.getItems().setAll(releaseSearchService.knownGenres());
+
+        } catch (AuthorizationException ignored) {
+        }
+
+        try {
+            basketService = session.remoteBasketService();
+
+            fetchBasket();
+
+        } catch (AuthorizationException ignored) {
+        }
+
+        try {
+            sellService = session.remoteSellService();
+
+        } catch (AuthorizationException ignored) {
+        }
     }
 
     private <T> String formatCurrency(T amount) {
@@ -86,10 +100,7 @@ public class MusicShopController {
     }
 
     @FXML
-    public void initialize() throws RemoteException {
-
-        // populate combo box selection
-        searchGenre.getItems().setAll(releaseSearchService.knownGenres());
+    public void initialize()  {
 
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
@@ -199,9 +210,6 @@ public class MusicShopController {
                 this.setGraphic(button);
             }
         });
-
-        // initialize basket
-        fetchBasket();
     }
 
     public void search() throws RemoteException {

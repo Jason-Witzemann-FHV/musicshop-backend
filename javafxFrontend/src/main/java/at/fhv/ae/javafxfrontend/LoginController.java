@@ -43,14 +43,19 @@ public class LoginController {
             final Stage currentStage = (Stage) source.getScene().getWindow();
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MusicShop.fxml"));
-            Parent root = (Parent)fxmlLoader.load();
-            MusicShopController controller = fxmlLoader.<MusicShopController>getController();
+            Parent root = fxmlLoader.load();
+
+            MusicShopController controller = fxmlLoader.getController();
             controller.setSession(session);
+
             Scene scene = new Scene(root);
+
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setTitle("Soundkraut");
+
+            stage.setTitle("SoundKraut");
             stage.show();
+
             currentStage.close();
 
         } catch (AuthorizationException e) {
