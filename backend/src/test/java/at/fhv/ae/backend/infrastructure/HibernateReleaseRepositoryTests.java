@@ -110,8 +110,8 @@ class HibernateReleaseRepositoryTests {
         em.flush();
 
 
-        var actual = releaseRepository.query("UFF", "", "");
-        var actually = releaseRepository.query("UFF", "UERGEN", "Acoustic");
+        var actual = releaseRepository.query("UFF", "", null);
+        var actually = releaseRepository.query("UFF", "UERGEN", Genre.ACOUSTIC);
 
 
         transaction.rollback();
@@ -151,7 +151,7 @@ class HibernateReleaseRepositoryTests {
         em.persist(recording);
         em.flush();
 
-        var actual = releaseRepository.query("781", "", "");
+        var actual = releaseRepository.query("781", "", null);
 
         transaction.rollback();
 
