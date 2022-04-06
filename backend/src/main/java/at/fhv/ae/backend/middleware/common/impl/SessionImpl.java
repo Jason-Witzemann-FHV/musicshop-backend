@@ -17,6 +17,8 @@ public class SessionImpl implements Session {
 
     private SellService sellService;
 
+    private String userId;
+
     public SessionImpl(User user) {
         if (user.hasPermission(Permission.SEARCH_RELEASES))
             releaseSearchService = ServiceRegistry.releaseService();
@@ -25,6 +27,7 @@ public class SessionImpl implements Session {
             sellService = ServiceRegistry.sellService();
             basketService = ServiceRegistry.basketService();
         }
+        this.userId = user.userId().name();
 
     }
 
@@ -50,5 +53,10 @@ public class SessionImpl implements Session {
             throw new AuthorizationException();
 
         return sellService;
+    }
+
+    @Override
+    public String getUserId() {
+        return this.userId;
     }
 }

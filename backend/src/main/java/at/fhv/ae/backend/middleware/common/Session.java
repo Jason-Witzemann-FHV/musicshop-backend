@@ -13,4 +13,6 @@ public interface Session {
 
     SellService sellService() throws AuthorizationException;
 
+    String getUserId();
+
 }

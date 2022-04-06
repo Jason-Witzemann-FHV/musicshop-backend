@@ -14,18 +14,20 @@ import static org.mockito.Mockito.verify;
 class RemoteSellServiceTests {
 
     private RemoteSellService remoteSellService;
+    private String customerId;
     private SellService sellService;
 
     @BeforeEach
     void setupMocksAndTestClass() throws RemoteException {
         sellService = mock(SellService.class);
-        remoteSellService = new RemoteSellServiceImpl(sellService);
+        customerId = "nsu3146";
+        remoteSellService = new RemoteSellServiceImpl(customerId, sellService);
     }
 
     @Test
     void given_nothing_when_sell_then_application_service_executed() throws RemoteException {
         remoteSellService.sellItemsInBasket();
-        verify(sellService).sellItemsInBasket();
+        verify(sellService).sellItemsInBasket(customerId);
     }
 
 }

@@ -5,7 +5,7 @@ public interface SellService {
     /**
      * @return true if sale was successful. false on unexpected error
      */
-    boolean sellItemsInBasket();
+    boolean sellItemsInBasket(String userId);
 
 
 }

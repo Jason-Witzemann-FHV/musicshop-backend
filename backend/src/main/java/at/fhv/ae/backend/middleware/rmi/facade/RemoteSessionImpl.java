@@ -30,12 +30,12 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
         }
 
         try {
-            remoteSellService = new RemoteSellServiceImpl(session.sellService());
+            remoteSellService = new RemoteSellServiceImpl(session.getUserId(), session.sellService());
         } catch (AuthorizationException ignored) {
         }
 
         try {
-            remoteBasketService = new RemoteBasketServiceImpl(session.basketService());
+            remoteBasketService = new RemoteBasketServiceImpl(session.getUserId(), session.basketService());
         } catch (AuthorizationException ignored) {
         }
     }

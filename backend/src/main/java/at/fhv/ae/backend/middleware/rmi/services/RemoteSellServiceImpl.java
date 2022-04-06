@@ -9,14 +9,16 @@ import java.rmi.server.UnicastRemoteObject;
 public class RemoteSellServiceImpl extends UnicastRemoteObject implements RemoteSellService {
 
     private final transient SellService sellService;
+    private final String userId;
 
-    public RemoteSellServiceImpl(SellService sellService) throws RemoteException {
+    public RemoteSellServiceImpl(String userId, SellService sellService) throws RemoteException {
         super();
         this.sellService = sellService;
+        this.userId = userId;
     }
 
     @Override
     public boolean sellItemsInBasket() throws RemoteException {
-        return sellService.sellItemsInBasket();
+        return sellService.sellItemsInBasket(userId);
     }
 }

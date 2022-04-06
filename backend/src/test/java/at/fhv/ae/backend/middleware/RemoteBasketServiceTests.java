@@ -18,13 +18,15 @@ import static org.mockito.Mockito.*;
 
 class RemoteBasketServiceTests {
 
+    private String userId;
     private BasketService basketService;
     private RemoteBasketService remoteBasketService;
 
     @BeforeEach
     void setupMocksAndTestClass() throws RemoteException {
         basketService = mock(BasketService.class);
-        remoteBasketService = new RemoteBasketServiceImpl(basketService);
+        userId = "nsu3146";
+        remoteBasketService = new RemoteBasketServiceImpl(userId, basketService);
     }
 
     @Test
@@ -33,7 +35,7 @@ class RemoteBasketServiceTests {
         var quantity = 2;
         remoteBasketService.addItemToBasket(id, quantity);
 
-        verify(basketService).addItemToBasket(id, quantity);
+        verify(basketService).addItemToBasket("nsu3146", id, quantity);
     }
 
     @Test
@@ -42,7 +44,7 @@ class RemoteBasketServiceTests {
         var newQuantity = 2;
         remoteBasketService.changeQuantityOfItem(id, newQuantity);
 
-        verify(basketService).changeQuantityOfItem(id, newQuantity);
+        verify(basketService).changeQuantityOfItem(userId, id, newQuantity);
     }
 
     @Test
@@ -50,7 +52,7 @@ class RemoteBasketServiceTests {
         var id = UUID.randomUUID();
         remoteBasketService.removeItemFromBasket(id);
 
-        verify(basketService).removeItemFromBasket(id);
+        verify(basketService).removeItemFromBasket(userId, id);
     }
 
     @Test
@@ -61,7 +63,7 @@ class RemoteBasketServiceTests {
                 new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 2", 4, 6, "CD", 4.30),
                 new BasketItemDisplayDTO(UUID.randomUUID(), "TestRelease 2", 2, 10,"Music cassette", 8.22)
         );
-        when(basketService.itemsInBasket()).thenReturn(items);
+        when(basketService.itemsInBasket(userId)).thenReturn(items);
         var remoteItems = remoteBasketService.itemsInBasket();
         assertEquals(items.size(), remoteItems.size());
         for (int i = 0; i < items.size(); i++) {
@@ -72,13 +74,13 @@ class RemoteBasketServiceTests {
             assertEquals(items.get(i).price(), remoteItems.get(i).getPrice());
         }
 
-        verify(basketService).itemsInBasket();
+        verify(basketService).itemsInBasket(userId);
     }
 
     @Test
     void given_setup_when_get_amount_of_items_from_basket_then_application_method_called() throws RemoteException {
         remoteBasketService.amountOfItemsInBasket();
-        verify(basketService).amountOfItemsInBasket();
+        verify(basketService).amountOfItemsInBasket(userId);
     }
 
 }

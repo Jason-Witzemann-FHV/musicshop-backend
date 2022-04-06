@@ -8,17 +8,17 @@ import java.util.UUID;
 
 public interface BasketService {
 
-    void addItemToBasket(UUID releaseId, int quantity);
+    void addItemToBasket(String userId, UUID releaseId, int quantity);
 
-    void changeQuantityOfItem(UUID releaseId, int newQuantity);
+    void changeQuantityOfItem(String userId, UUID releaseId, int newQuantity);
 
-    void removeItemFromBasket(UUID releaseId);
+    void removeItemFromBasket(String userId, UUID releaseId);
 
-    List<BasketItemDisplayDTO> itemsInBasket();
+    List<BasketItemDisplayDTO> itemsInBasket(String userId);
 
-    int amountOfItemsInBasket();
+    int amountOfItemsInBasket(String userId);
 
-    void clearBasket();
+    void clearBasket(String userId);
 
 
 }

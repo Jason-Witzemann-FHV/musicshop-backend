@@ -13,31 +13,33 @@ import java.util.stream.Collectors;
 public class RemoteBasketServiceImpl extends UnicastRemoteObject implements RemoteBasketService {
 
     private final transient BasketService basketService;
+    private final String userId;
 
-    public RemoteBasketServiceImpl(BasketService basketService) throws RemoteException {
+    public RemoteBasketServiceImpl(String userId, BasketService basketService) throws RemoteException {
         super();
         this.basketService = basketService;
+        this.userId = userId;
     }
 
 
     @Override
     public void addItemToBasket(UUID releaseId, int quantity) {
-        basketService.addItemToBasket(releaseId, quantity);
+        basketService.addItemToBasket(userId, releaseId, quantity);
     }
 
     @Override
     public void changeQuantityOfItem(UUID releaseId, int newQuantity) {
-        basketService.changeQuantityOfItem(releaseId, newQuantity);
+        basketService.changeQuantityOfItem(userId, releaseId, newQuantity);
     }
 
     @Override
     public void removeItemFromBasket(UUID releaseId) {
-        basketService.removeItemFromBasket(releaseId);
+        basketService.removeItemFromBasket(userId, releaseId);
     }
 
     @Override
     public List<BasketItemRemoteDTO> itemsInBasket() {
-        return basketService.itemsInBasket()
+        return basketService.itemsInBasket(userId)
                 .stream()
                 .map(dto -> new BasketItemRemoteDTO(dto.releaseId(), dto.title(), dto.quantity(), dto.stock(), dto.medium(), dto.price()))
                 .collect(Collectors.toList());
@@ -45,11 +47,11 @@ public class RemoteBasketServiceImpl extends UnicastRemoteObject implements Remo
 
     @Override
     public int amountOfItemsInBasket() {
-        return basketService.amountOfItemsInBasket();
+        return basketService.amountOfItemsInBasket(userId);
     }
 
     @Override
     public void clearBasket() {
-        basketService.clearBasket();
+        basketService.clearBasket(userId);
     }
 }
