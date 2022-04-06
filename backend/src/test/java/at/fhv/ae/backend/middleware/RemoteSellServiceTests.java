@@ -26,8 +26,8 @@ class RemoteSellServiceTests {
 
     @Test
     void given_nothing_when_sell_then_application_service_executed() throws RemoteException {
-        remoteSellService.sellItemsInBasket();
-        verify(sellService).sellItemsInBasket(customerId);
+        remoteSellService.sellItemsInBasket(null);
+        verify(sellService).sellItemsInBasket(customerId, null);
     }
 
 }

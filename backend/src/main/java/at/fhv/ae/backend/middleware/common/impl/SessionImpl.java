@@ -8,6 +8,7 @@ import at.fhv.ae.backend.domain.model.user.Permission;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.shared.AuthorizationException;
+import at.fhv.ae.shared.repository.CustomerRepository;
 
 public class SessionImpl implements Session {
 
@@ -16,6 +17,8 @@ public class SessionImpl implements Session {
     private ReleaseSearchService releaseSearchService;
 
     private SellService sellService;
+
+    private CustomerRepository customerRepository;
 
     private String userId;
 
@@ -26,6 +29,7 @@ public class SessionImpl implements Session {
         if (user.hasPermission(Permission.SELL_RELEASES)) {
             sellService = ServiceRegistry.sellService();
             basketService = ServiceRegistry.basketService();
+            customerRepository = ServiceRegistry.customerRepository();
         }
         this.userId = user.userId().name();
 
@@ -53,6 +57,14 @@ public class SessionImpl implements Session {
             throw new AuthorizationException();
 
         return sellService;
+    }
+
+    @Override
+    public CustomerRepository customerRepository() throws AuthorizationException {
+        if (customerRepository == null)
+            throw new AuthorizationException();
+
+        return customerRepository;
     }
 
     @Override

@@ -1,11 +1,14 @@
 package at.fhv.ae.backend.application;
 
+import org.bson.types.ObjectId;
+
 public interface SellService {
 
     /**
-     * @return true if sale was successful. false on unexpected error
+     * @param customerId can be null if sale is anonymous
+     * @return true on sell success; false on une
      */
-    boolean sellItemsInBasket(String userId);
+    boolean sellItemsInBasket(String userId, ObjectId customerId);
 
 
 }
