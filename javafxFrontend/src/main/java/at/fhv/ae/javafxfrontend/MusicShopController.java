@@ -8,13 +8,20 @@ import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -54,6 +61,14 @@ public class MusicShopController {
     @FXML TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
     @FXML TableColumn<BasketItemRemoteDTO, UUID> basketColRemove;
 
+    // buttons and tabs - autorization
+    @FXML Button toBasketInDetails;
+    @FXML Button clearBasketButton;
+    @FXML Button sellBasketButton;
+    @FXML Tab basketTab;
+    @FXML Tab searchTab;
+    @FXML TabPane tabPane;
+
     public void setSession(RemoteSession session) throws RemoteException {
         this.session = session;
 
@@ -66,21 +81,50 @@ public class MusicShopController {
             searchGenre.getItems().setAll(genres);
 
         } catch (AuthorizationException ignored) {
+            // Hide unauthorized
+            tabPane.getTabs().remove(searchTab);
         }
 
         try {
             basketService = session.remoteBasketService();
 
             fetchBasket();
-
         } catch (AuthorizationException ignored) {
+            // Hide unauthorized
+            toBasketInDetails.setVisible(false);
+            searchColAddToBasket.setVisible(false);
+            tabPane.getTabs().remove(basketTab);
         }
 
         try {
             sellService = session.remoteSellService();
 
         } catch (AuthorizationException ignored) {
+            // Hide unauthorized
+            clearBasketButton.setVisible(false);
+            sellBasketButton.setVisible(false);
         }
+    }
+
+    public void logout(ActionEvent event) throws IOException {
+        // Remove Session
+        this.session = null;
+
+        // Current stage
+        final Node source = (Node) event.getSource();
+        final Stage currentStage = (Stage) source.getScene().getWindow();
+
+        // Load Login Stage
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Login");
+        stage.show();
+
+        // Close Soundkraut stage
+        currentStage.close();
     }
 
     private <T> String formatCurrency(T amount) {

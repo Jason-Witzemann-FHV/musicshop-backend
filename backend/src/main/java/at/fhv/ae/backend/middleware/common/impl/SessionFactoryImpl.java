@@ -22,6 +22,7 @@ public class SessionFactoryImpl implements SessionFactory {
 
     @Override
     public Session logIn(String username, String password) throws AuthorizationException {
+
         if (!credentialsService.authorize(username, password)) {
             throw new AuthorizationException("Bad Credentials");
         }

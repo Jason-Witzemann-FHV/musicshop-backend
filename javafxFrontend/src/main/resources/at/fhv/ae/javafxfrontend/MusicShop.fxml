@@ -19,6 +19,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.Region?>
 <AnchorPane
             stylesheets="/css/MusicShop.css"
             xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
@@ -28,13 +29,16 @@
           prefHeight="80"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Text text="SoundKraut" style="-fx-font-size: 45"/>
+        <VBox alignment="TOP_RIGHT">
+            <Button fx:id="logoutButton" text="Logout" onAction="#logout" />
+        </VBox>
     </VBox>
 
-    <TabPane side="LEFT" rotateGraphic="true" styleClass="header-background-color"
+    <TabPane fx:id="tabPane" side="LEFT" rotateGraphic="true" styleClass="header-background-color"
              tabMinHeight="120" tabMaxHeight="120"
              tabClosingPolicy="UNAVAILABLE"
              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0"
-             AnchorPane.topAnchor="80.0" AnchorPane.bottomAnchor="0">
+             AnchorPane.topAnchor="95.0" AnchorPane.bottomAnchor="0">
 
         <Tab>
             <graphic>
@@ -44,7 +48,7 @@
             </graphic>
         </Tab>
 
-        <Tab>
+        <Tab fx:id="searchTab">
             <graphic>
                 <StackPane rotate="90">
                     <Group><Label rotate="90" style="-fx-font-size: 16">Music Search</Label></Group>
@@ -95,7 +99,7 @@
 
                     <Button AnchorPane.rightAnchor="0"
                             text="Back" onAction="#switchSearchView"/>
-                    <Button AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0"
+                    <Button fx:id="toBasketInDetails" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0"
                             text="Add to Basket" onAction="#addToBasket" />
                 </AnchorPane>
 
@@ -157,7 +161,7 @@
             </StackPane>
         </Tab>
 
-        <Tab>
+        <Tab fx:id="basketTab">
             <graphic>
                 <StackPane rotate="90">
                     <Group><Label rotate="90" style="-fx-font-size: 16">Basket</Label></Group>
@@ -185,8 +189,8 @@
                     </columns>
                 </TableView>
                 <HBox alignment="BOTTOM_RIGHT" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
-                    <Button text="Clear Basket" onAction="#clearBasket"/>
-                    <Button text="Sell Items" onAction="#sell"/>
+                    <Button fx:id="clearBasketButton" text="Clear Basket" onAction="#clearBasket"/>
+                    <Button fx:id="sellBasketButton" text="Sell Items" onAction="#sell"/>
                 </HBox>
             </AnchorPane>
         </Tab>
