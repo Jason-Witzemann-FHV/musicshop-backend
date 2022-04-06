@@ -5,6 +5,7 @@ import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
@@ -32,7 +33,7 @@ class HibernateSaleRepositoryTests {
 
         var sale = Sale.create(new SaleId(UUID.randomUUID()),
                 new UserId("nsu3146"),
-                null,
+                ObjectId.get(),
                 PaymentType.CASH, // First sprint only supports cash sale
                 SaleType.IN_PERSON,
                 saleItems

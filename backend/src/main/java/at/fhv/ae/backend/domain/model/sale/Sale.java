@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.bson.types.ObjectId;
 
 import javax.persistence.*;
 import java.util.Collections;
@@ -28,9 +29,7 @@ public class Sale {
     @AttributeOverrides({ @AttributeOverride(name = "name", column = @Column(name = "employee_id")) })
     private UserId employeeId;
 
-    @Embedded
-    @AttributeOverrides({ @AttributeOverride(name = "name", column = @Column(name = "customer_id")) })
-    private UserId customerId;
+    private ObjectId customerId;
 
     private PaymentType paymentType;
 
@@ -41,7 +40,7 @@ public class Sale {
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Item> items;
 
-    private Sale(SaleId saleId, UserId employeeId, UserId customerId, PaymentType paymentType, SaleType saleType, double totalPrice, List<Item> items) {
+    private Sale(SaleId saleId, UserId employeeId, ObjectId customerId, PaymentType paymentType, SaleType saleType, double totalPrice, List<Item> items) {
         this.saleId = saleId;
         this.employeeId = employeeId;
         this.customerId = customerId;
@@ -55,7 +54,7 @@ public class Sale {
         return Collections.unmodifiableList(this.items);
     }
 
-    public static Sale create(SaleId saleId, UserId employeeId, UserId customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
+    public static Sale create(SaleId saleId, UserId employeeId, ObjectId customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
        return new Sale(
                 saleId,
                 employeeId,
