@@ -2,6 +2,7 @@ package at.fhv.ae.javafxfrontend;
 
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
+import at.fhv.ae.shared.dto.basket.CustomerSearchResponseDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
@@ -36,6 +37,7 @@ public class MusicShopController {
     private RemoteReleaseSearchService releaseSearchService;
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
+    private RemoteCustomerSearchService customerSearchService;
 
     // search fields
     @FXML TextField searchTitle;
@@ -62,6 +64,10 @@ public class MusicShopController {
     @FXML TableColumn<BasketItemRemoteDTO, QuantityColumnInfo> basketColQuantity;
     @FXML TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
     @FXML TableColumn<BasketItemRemoteDTO, UUID> basketColRemove;
+    @FXML TextField customerSearchFirstName;
+    @FXML TextField customerSearchSurname;
+    @FXML TableView<CustomerSearchResponseDTO> customerSearchView;
+
 
     // buttons and tabs - autorization
     @FXML Button toBasketInDetails;
@@ -105,6 +111,13 @@ public class MusicShopController {
             // Hide unauthorized
             clearBasketButton.setVisible(false);
             sellBasketButton.setVisible(false);
+        }
+
+        try {
+            customerSearchService = session.remoteCustomerSearchService();
+
+        } catch (AuthorizationException ignored) {
+
         }
     }
 
@@ -335,5 +348,12 @@ public class MusicShopController {
         alert.showAndWait();
 
         fetchBasket();
+    }
+
+    public void searchCustomer() throws RemoteException {
+
+        List<CustomerSearchResponseDTO> customers = customerSearchService.findCustomerByName(customerSearchFirstName.getText(), customerSearchSurname.getText());
+        customerSearchView.getItems().setAll(customers);
+
     }
 }
