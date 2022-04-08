@@ -9,6 +9,7 @@ import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
+import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 import at.fhv.ae.backend.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,13 +26,15 @@ class SellServiceTests {
     private BasketRepository basketRepository;
     private SaleRepository sellRepository;
     private UserRepository userRepository;
+    private ReleaseRepository releaseRepository;
 
     @BeforeEach
     void setup() {
         basketRepository = mock(BasketRepository.class);
         sellRepository = mock(SaleRepository.class);
         userRepository = mock(UserRepository.class);
-        sellService = new SellServiceImpl(sellRepository, basketRepository, userRepository, ServiceRegistry.entityManager());
+        releaseRepository = mock(ReleaseRepository.class);
+        sellService = new SellServiceImpl(sellRepository, basketRepository, userRepository, releaseRepository,ServiceRegistry.entityManager());
     }
 
     @Test
