@@ -2,13 +2,11 @@ package at.fhv.ae.backend.middleware.rmi.facade;
 
 import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
+import at.fhv.ae.backend.middleware.rmi.services.RemoteCustomerSearchServiceImpl;
 import at.fhv.ae.backend.middleware.rmi.services.RemoteReleaseSearchServiceImpl;
 import at.fhv.ae.backend.middleware.rmi.services.RemoteSellServiceImpl;
 import at.fhv.ae.shared.AuthorizationException;
-import at.fhv.ae.shared.rmi.RemoteBasketService;
-import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
-import at.fhv.ae.shared.rmi.RemoteSellService;
-import at.fhv.ae.shared.rmi.RemoteSession;
+import at.fhv.ae.shared.rmi.*;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -20,6 +18,8 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     private RemoteBasketService remoteBasketService;
 
     private RemoteSellService remoteSellService;
+
+    private RemoteCustomerSearchService remoteCustomerSearchService;
 
     public RemoteSessionImpl(Session session) throws RemoteException {
         super();
@@ -36,6 +36,11 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
 
         try {
             remoteBasketService = new RemoteBasketServiceImpl(session.getUserId(), session.basketService());
+        } catch (AuthorizationException ignored) {
+        }
+
+        try {
+            remoteCustomerSearchService = new RemoteCustomerSearchServiceImpl(session.customerRepository());
         } catch (AuthorizationException ignored) {
         }
     }
@@ -62,5 +67,13 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
             throw new AuthorizationException();
 
         return remoteReleaseSearchService;
+    }
+
+    @Override
+    public RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException, RemoteException {
+        if (remoteCustomerSearchService == null)
+            throw new AuthorizationException();
+
+        return remoteCustomerSearchService;
     }
 }

@@ -8,6 +8,7 @@ import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 import at.fhv.ae.backend.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -26,7 +27,7 @@ public class SellServiceImpl implements SellService {
 
 
     @Override
-    public boolean sellItemsInBasket(String userId) {
+    public boolean sellItemsInBasket(String userId, ObjectId customerId) {
         var user = userRepository.userById(new UserId(userId)).orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " was not found!"));
 
         try {
@@ -39,7 +40,7 @@ public class SellServiceImpl implements SellService {
 
             Sale sale = Sale.create(new SaleId(UUID.randomUUID()),
                     user.userId(),
-                    null, // anonymous customer, currently hardcored. todo change when interconnectivity with customerdb is given
+                    customerId,
                     PaymentType.CASH, // First sprint only supports cash sale
                     SaleType.IN_PERSON,
                     saleItems

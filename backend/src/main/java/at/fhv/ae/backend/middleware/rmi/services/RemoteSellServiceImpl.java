@@ -2,6 +2,7 @@ package at.fhv.ae.backend.middleware.rmi.services;
 
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.shared.rmi.RemoteSellService;
+import org.bson.types.ObjectId;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,7 +19,7 @@ public class RemoteSellServiceImpl extends UnicastRemoteObject implements Remote
     }
 
     @Override
-    public boolean sellItemsInBasket() throws RemoteException {
-        return sellService.sellItemsInBasket(userId);
+    public boolean sellItemsInBasket(ObjectId customerId) throws RemoteException {
+        return sellService.sellItemsInBasket(userId, customerId);
     }
 }

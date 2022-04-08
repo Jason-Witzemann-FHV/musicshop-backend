@@ -319,7 +319,7 @@ public class MusicShopController {
 
     public void sell() throws RemoteException {
 
-        boolean success = sellService.sellItemsInBasket();
+        boolean success = sellService.sellItemsInBasket(null); // todo assign customer
 
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(success ? "Items sold" : "Error confirming Sale");

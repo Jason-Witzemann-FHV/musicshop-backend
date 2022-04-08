@@ -2,17 +2,18 @@ package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.backend.application.ReleaseSearchService;
+import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
-import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.*;
 import at.fhv.ae.backend.infrastructure.*;
 import at.fhv.ae.backend.middleware.common.CredentialsService;
+import at.fhv.ae.shared.repository.CustomerRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import java.util.function.Function;
+import java.rmi.Naming;
 
 public class ServiceRegistry {
 
@@ -43,6 +44,10 @@ public class ServiceRegistry {
     private static SellService sellService;
 
     private static CredentialsService credentialsService;
+
+    // remote customer db services
+
+    private static CustomerRepository customerRepository;
 
 
 
@@ -108,5 +113,19 @@ public class ServiceRegistry {
             sellService = new SellServiceImpl(saleRepository(), basketRepository(), userRepository() ,entityManager());
         }
         return sellService;
+    }
+
+
+
+    public static CustomerRepository customerRepository() {
+        if (customerRepository == null) {
+            try {
+                customerRepository = (CustomerRepository) Naming.lookup("rmi://localhost:10990/customer-repository"); // todo change url
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new IllegalStateException("Couldn't connect to Customer DB!");
+            }
+        }
+        return customerRepository;
     }
 }
