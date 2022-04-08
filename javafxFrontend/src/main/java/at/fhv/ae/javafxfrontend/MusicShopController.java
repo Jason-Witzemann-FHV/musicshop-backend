@@ -67,9 +67,12 @@ public class MusicShopController {
     @FXML TextField customerSearchFirstName;
     @FXML TextField customerSearchSurname;
     @FXML TableView<CustomerSearchResponseDTO> customerSearchView;
+    @FXML Label netPrice;
+    @FXML Label taxPrice;
+    @FXML Label grossPrice;
 
 
-    // buttons and tabs - autorization
+    // buttons and tabs - authorization
     @FXML Button toBasketInDetails;
     @FXML Button clearBasketButton;
     @FXML Button sellBasketButton;
