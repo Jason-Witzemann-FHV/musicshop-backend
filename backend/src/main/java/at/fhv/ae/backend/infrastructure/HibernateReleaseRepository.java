@@ -47,18 +47,12 @@ public class HibernateReleaseRepository implements ReleaseRepository {
     }
 
     @Override
-    public int currentStock(ReleaseId releaseId) {
-        var query = em.createQuery("select r.stock from Release r where r.releaseId = :releaseId")
-            .setParameter("releaseId", releaseId);
-
-        return query.getFirstResult();
+    public Optional<Integer> currentStock(ReleaseId releaseId) {
+        return findById(releaseId).map(Release::stock);
     }
 
     @Override
     public void decreaseStock(ReleaseId releaseId, int amount) {
-        em.createQuery("update Release r set r.stock = (r.stock - :amount)")
-                .setParameter("amount", amount);
-        em.flush();
-
+        findById(releaseId).ifPresent(release -> release.decreaseStock(amount));
     }
 }

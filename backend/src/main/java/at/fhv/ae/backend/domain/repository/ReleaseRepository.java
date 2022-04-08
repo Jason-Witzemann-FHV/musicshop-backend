@@ -13,7 +13,7 @@ public interface ReleaseRepository {
 
     List<Release> query(String title, String artist, Genre genre);
 
-    int currentStock(ReleaseId releaseId);
+    Optional<Integer> currentStock(ReleaseId releaseId);
 
     void decreaseStock(ReleaseId releaseId, int amount);
 }

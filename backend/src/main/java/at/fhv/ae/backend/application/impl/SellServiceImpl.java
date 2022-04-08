@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.application.impl;
 
+import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
@@ -14,7 +15,6 @@ import org.bson.types.ObjectId;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -37,6 +37,16 @@ public class SellServiceImpl implements SellService {
         try {
             Map<Release, Integer> basket = basketRepository.itemsInBasket(user.userId());
 
+            for (var item : basket.entrySet()) {
+                int amount = item.getValue();
+                int stock = releaseRepository.currentStock(item.getKey().releaseId()).orElseThrow();
+
+                if (amount > stock) {
+                    throw new OutOfStockException();
+                }
+            }
+
+
             List<Item> saleItems = basket.entrySet()
                     .stream()
                     .map(entry -> new Item(entry.getKey().releaseId(), entry.getValue(), entry.getKey().price()))
@@ -53,47 +63,21 @@ public class SellServiceImpl implements SellService {
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
             saleRepository.addSale(sale);
+
+            for (var item : basket.entrySet()) {
+                int amount = item.getValue();
+                var releaseId = item.getKey().releaseId();
+
+                releaseRepository.decreaseStock(releaseId, amount);
+            }
+
             transaction.commit();
             basketRepository.clearBasket(user.userId());
 
-        } catch (Exception e) { // only case of unsuccessful persist of sale is an unexpected exception
+        } catch (Exception | OutOfStockException e) { // only case of unsuccessful persist of sale is an unexpected exception
             return false;
         }
         return true;
     }
 
-    @Override
-    public void sellBasket(HashMap<ReleaseId, Integer> saleItems)  {
-        boolean inStock = true;
-
-        for (Map.Entry<ReleaseId, Integer> entry: saleItems.entrySet()){
-            ReleaseId releaseId = entry.getKey();
-            Integer amount = entry.getValue();
-
-            var stock = releaseRepository.currentStock(releaseId);
-
-            if (amount > stock){
-                inStock = false;
-            } else {
-                try {
-                    throw new Exception();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (inStock) {
-            for (Map.Entry<ReleaseId, Integer> entry : saleItems.entrySet()) {
-                ReleaseId releaseId = entry.getKey();
-                Integer amount = entry.getValue();
-
-                EntityTransaction transaction = entityManager.getTransaction();
-                transaction.begin();
-                releaseRepository.decreaseStock(releaseId, amount);
-                transaction.commit();
-
-            }
-        }
-    }
 }

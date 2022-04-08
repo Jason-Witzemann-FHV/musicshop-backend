@@ -53,6 +53,10 @@ public class Release {
         this.recordingIds = recordingIds;
     }
 
+    public void decreaseStock(int amount){
+        this.stock = stock - amount;
+    }
+
     public List<Supplier> suppliers() {
         return Collections.unmodifiableList(suppliers);
     }

@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.application;
 
+import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import org.bson.types.ObjectId;
 
@@ -14,7 +15,5 @@ public interface SellService {
      * @return true on sell success; false on une
      */
     boolean sellItemsInBasket(String userId, ObjectId customerId);
-
-    void sellBasket(HashMap<ReleaseId, Integer> saleItems);
 
 }

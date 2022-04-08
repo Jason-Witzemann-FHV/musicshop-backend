@@ -181,7 +181,7 @@ class HibernateReleaseRepositoryTests {
         em.persist(release);
         em.flush();
 
-        var actual = releaseRepository.currentStock(release.releaseId());
+        var actual = releaseRepository.currentStock(release.releaseId()).get();
 
         transaction.rollback();
 
@@ -205,16 +205,16 @@ class HibernateReleaseRepositoryTests {
                 recordingIds
         );
 
-        var oldStock = releaseRepository.currentStock(release.releaseId());
-
         var transaction = em.getTransaction();
         transaction.begin();
         em.persist(release);
         em.flush();
 
         releaseRepository.decreaseStock(release.releaseId(), 3);
-        var actual = releaseRepository.currentStock(release.releaseId());
+        em.flush();
 
-        assertEquals(oldStock - 3, actual);
+        var actual = releaseRepository.currentStock(release.releaseId()).orElseThrow();
+
+        assertEquals(4, actual);
     }
 }
