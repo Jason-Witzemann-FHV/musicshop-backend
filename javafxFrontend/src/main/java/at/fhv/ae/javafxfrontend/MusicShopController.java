@@ -20,12 +20,14 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MusicShopController {
@@ -148,6 +150,7 @@ public class MusicShopController {
     @FXML
     public void initialize()  {
         basketView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        customerSearchView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         searchResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailRecordings.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -320,7 +323,11 @@ public class MusicShopController {
 
     public void sell() throws RemoteException {
 
-        boolean success = sellService.sellItemsInBasket(null); // todo assign customer
+        ObjectId customerId = Optional.ofNullable(customerSearchView.getSelectionModel().getSelectedItem())
+                .map(CustomerSearchResponseDTO::getId)
+                .orElse(null);
+
+        boolean success = sellService.sellItemsInBasket(customerId); // todo assign customer
 
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(success ? "Items sold" : "Error confirming Sale");
