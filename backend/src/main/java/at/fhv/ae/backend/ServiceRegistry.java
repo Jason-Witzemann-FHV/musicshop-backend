@@ -120,7 +120,7 @@ public class ServiceRegistry {
     public static CustomerRepository customerRepository() {
         if (customerRepository == null) {
             try {
-                customerRepository = (CustomerRepository) Naming.lookup("rmi://localhost:10990/customer-repository"); // todo change url
+                customerRepository = null;//(CustomerRepository) Naming.lookup("rmi://localhost:10990/customer-repository"); // todo change url
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new IllegalStateException("Couldn't connect to Customer DB!");
