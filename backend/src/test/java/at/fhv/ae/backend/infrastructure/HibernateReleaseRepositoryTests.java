@@ -215,6 +215,8 @@ class HibernateReleaseRepositoryTests {
 
         var actual = releaseRepository.currentStock(release.releaseId()).orElseThrow();
 
+        transaction.rollback();
+
         assertEquals(4, actual);
     }
 }
