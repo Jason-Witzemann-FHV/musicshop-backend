@@ -39,7 +39,7 @@ public class SellServiceImpl implements SellService {
 
             for (var item : basket.entrySet()) {
                 int amount = item.getValue();
-                int stock = releaseRepository.currentStock(item.getKey().releaseId()).orElseThrow();
+                int stock = item.getKey().stock();
 
                 if (amount > stock) {
                     throw new OutOfStockException();
