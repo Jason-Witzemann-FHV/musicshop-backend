@@ -19,7 +19,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.layout.Region?>
 <AnchorPane
             stylesheets="/css/MusicShop.css"
             xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
@@ -77,11 +76,10 @@
                                 </TableColumn>
                             </columns>
                         </TableView>
-                        <TableView fx:id="detailRecordings"
-                                   GridPane.columnIndex="1">
+                        <TableView fx:id="detailRecordings" GridPane.columnIndex="1" style="-fx-pref-width: 800">
                             <columns>
-                                <TableColumn text="Title">
-                                    <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                                <TableColumn text="Title" style="-fx-pref-width: 350">
+                                    <cellValueFactory><PropertyValueFactory property="title" /></cellValueFactory>
                                 </TableColumn>
                                 <TableColumn fx:id="detailRecordingsColArtists" text="Artists"/>
                                 <TableColumn fx:id="detailRecordingsColGenres" text="Genres"/>
@@ -143,16 +141,16 @@
                             <TableColumn text="Title" minWidth="200">
                                 <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
                             </TableColumn>
-                            <TableColumn text="Medium">
+                            <TableColumn text="Medium" styleClass="center">
                                 <cellValueFactory><PropertyValueFactory property="medium"/></cellValueFactory>
                             </TableColumn>
-                            <TableColumn text="Stock">
+                            <TableColumn text="Stock" styleClass="center">
                                 <cellValueFactory><PropertyValueFactory property="stock"/></cellValueFactory>
                             </TableColumn>
-                            <TableColumn text="Price" fx:id="searchColPrice">
+                            <TableColumn text="Price" fx:id="searchColPrice" styleClass="center">
                                 <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
                             </TableColumn>
-                            <TableColumn text="Add to Basket" fx:id="searchColAddToBasket">
+                            <TableColumn text="Add to Basket" fx:id="searchColAddToBasket" styleClass="center">
                                 <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
                             </TableColumn>
                         </columns>
@@ -176,14 +174,14 @@
                         <TableColumn text="Title">
                             <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Medium">
+                        <TableColumn text="Medium" styleClass="center">
                             <cellValueFactory><PropertyValueFactory property="medium"/></cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Price" fx:id="basketColPrice">
+                        <TableColumn text="Price" fx:id="basketColPrice" styleClass="center">
                             <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="basketColQuantity" text="Quantity"/>
-                        <TableColumn fx:id="basketColRemove" text="🗑">
+                        <TableColumn fx:id="basketColQuantity" text="Quantity" styleClass="center"/>
+                        <TableColumn fx:id="basketColRemove" text="🗑" styleClass="center">
                             <cellValueFactory><PropertyValueFactory property="releaseId"/></cellValueFactory>
                         </TableColumn>
                     </columns>
