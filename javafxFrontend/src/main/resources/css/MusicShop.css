@@ -35,3 +35,24 @@
 .loginForm{
     -fx-padding: 0 0 10 0;
 }
+
+.table-row-cell:empty{
+    -fx-background-color: #F4F4F4;
+}
+
+.table-row-cell:empty .table-cell{
+    -fx-border-width: 0;
+}
+
+
+
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button {
+    -fx-padding: 0;
+}
+
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow {
+    -fx-padding: 0;
+}
+

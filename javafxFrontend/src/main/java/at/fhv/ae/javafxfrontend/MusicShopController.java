@@ -150,7 +150,7 @@ public class MusicShopController {
         basketView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         searchResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-       //detailRecordings.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        detailRecordings.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
 
         // double click / hit enter on a search result for details
@@ -288,9 +288,7 @@ public class MusicShopController {
                 new Pair<>("Medium", details.getMedium()),
                 new Pair<>("Stock", Integer.toString(details.getStock()))));
         detailRecordings.getItems().setAll(details.getRecordings());
-
         switchSearchView();
-
     }
 
     public void switchSearchView() {

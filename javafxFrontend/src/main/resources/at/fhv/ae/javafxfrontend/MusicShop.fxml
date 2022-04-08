@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -12,24 +11,22 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
 <AnchorPane
-            stylesheets="/css/MusicShop.css"
-            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.fhv.ae.javafxfrontend.MusicShopController">
+        stylesheets="/css/MusicShop.css"
+        xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="at.fhv.ae.javafxfrontend.MusicShopController">
 
     <VBox styleClass="background-color, padding"
           prefHeight="80"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Text text="SoundKraut" style="-fx-font-size: 45"/>
         <VBox alignment="TOP_RIGHT">
-            <Button fx:id="logoutButton" text="Logout" onAction="#logout" />
+            <Button text="Logout" onAction="#logout"/>
         </VBox>
     </VBox>
 
@@ -42,7 +39,9 @@
         <Tab>
             <graphic>
                 <StackPane rotate="90">
-                    <Group><Label rotate="90" style="-fx-font-size: 16">Dashboard</Label></Group>
+                    <Group>
+                        <Label rotate="90" style="-fx-font-size: 16">Dashboard</Label>
+                    </Group>
                 </StackPane>
             </graphic>
         </Tab>
@@ -50,7 +49,9 @@
         <Tab fx:id="searchTab">
             <graphic>
                 <StackPane rotate="90">
-                    <Group><Label rotate="90" style="-fx-font-size: 16">Music Search</Label></Group>
+                    <Group>
+                        <Label rotate="90" style="-fx-font-size: 16">Music Search</Label>
+                    </Group>
                 </StackPane>
             </graphic>
 
@@ -60,45 +61,50 @@
                 <AnchorPane>
                     <Label fx:id="detailTitle" style="-fx-font-size: 24pt"/>
 
-                    <GridPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="60" hgap="20">
-                        <TableView fx:id="detailView" styleClass="no-header"
-                                   GridPane.columnIndex="0">
-                            <columns>
-                                <TableColumn>
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="key"/>
-                                    </cellValueFactory>
-                                </TableColumn>
-                                <TableColumn>
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="value"/>
-                                    </cellValueFactory>
-                                </TableColumn>
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="detailRecordings" GridPane.columnIndex="1" style="-fx-pref-width: 800">
-                            <columns>
-                                <TableColumn text="Title" style="-fx-pref-width: 350">
-                                    <cellValueFactory><PropertyValueFactory property="title" /></cellValueFactory>
-                                </TableColumn>
-                                <TableColumn fx:id="detailRecordingsColArtists" text="Artists"/>
-                                <TableColumn fx:id="detailRecordingsColGenres" text="Genres"/>
-                                <TableColumn text="Year">
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="year"/></cellValueFactory>
-                                </TableColumn>
-                                <TableColumn text="Duration">
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="duration"/></cellValueFactory>
-                                </TableColumn>
-                            </columns>
-                        </TableView>
-                    </GridPane>
+                    <TableView fx:id="detailView" styleClass="no-header" AnchorPane.leftAnchor="0"
+                               AnchorPane.rightAnchor="815"
+                               AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
+                        <columns>
+                            <TableColumn>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="key"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="value"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+
+                    <TableView fx:id="detailRecordings" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                               AnchorPane.topAnchor="200" AnchorPane.bottomAnchor="0">
+                        <columns>
+                            <TableColumn text="Title">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="title"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="detailRecordingsColArtists" text="Artists" styleClass="center"/>
+                            <TableColumn fx:id="detailRecordingsColGenres" text="Genres" styleClass="center"/>
+                            <TableColumn text="Year" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="year"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Duration" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="duration"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
 
                     <Button AnchorPane.rightAnchor="0"
                             text="Back" onAction="#switchSearchView"/>
                     <Button fx:id="toBasketInDetails" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0"
-                            text="Add to Basket" onAction="#addToBasket" />
+                            text="Add to Basket" onAction="#addToBasket"/>
                 </AnchorPane>
 
                 <!-- search form & result table -->
@@ -138,20 +144,30 @@
                                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
                                AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
                         <columns>
-                            <TableColumn text="Title" minWidth="200">
-                                <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                            <TableColumn text="Title">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="title"/>
+                                </cellValueFactory>
                             </TableColumn>
                             <TableColumn text="Medium" styleClass="center">
-                                <cellValueFactory><PropertyValueFactory property="medium"/></cellValueFactory>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="medium"/>
+                                </cellValueFactory>
                             </TableColumn>
                             <TableColumn text="Stock" styleClass="center">
-                                <cellValueFactory><PropertyValueFactory property="stock"/></cellValueFactory>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="stock"/>
+                                </cellValueFactory>
                             </TableColumn>
                             <TableColumn text="Price" fx:id="searchColPrice" styleClass="center">
-                                <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="price"/>
+                                </cellValueFactory>
                             </TableColumn>
                             <TableColumn text="Add to Basket" fx:id="searchColAddToBasket" styleClass="center">
-                                <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="id"/>
+                                </cellValueFactory>
                             </TableColumn>
                         </columns>
                     </TableView>
@@ -162,7 +178,9 @@
         <Tab fx:id="basketTab">
             <graphic>
                 <StackPane rotate="90">
-                    <Group><Label rotate="90" style="-fx-font-size: 16">Basket</Label></Group>
+                    <Group>
+                        <Label rotate="90" style="-fx-font-size: 16">Basket</Label>
+                    </Group>
                 </StackPane>
             </graphic>
 
@@ -172,17 +190,25 @@
                            AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="200">
                     <columns>
                         <TableColumn text="Title">
-                            <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                            <cellValueFactory>
+                                <PropertyValueFactory property="title"/>
+                            </cellValueFactory>
                         </TableColumn>
                         <TableColumn text="Medium" styleClass="center">
-                            <cellValueFactory><PropertyValueFactory property="medium"/></cellValueFactory>
+                            <cellValueFactory>
+                                <PropertyValueFactory property="medium"/>
+                            </cellValueFactory>
                         </TableColumn>
                         <TableColumn text="Price" fx:id="basketColPrice" styleClass="center">
-                            <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
+                            <cellValueFactory>
+                                <PropertyValueFactory property="price"/>
+                            </cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="basketColQuantity" text="Quantity" styleClass="center"/>
                         <TableColumn fx:id="basketColRemove" text="🗑" styleClass="center">
-                            <cellValueFactory><PropertyValueFactory property="releaseId"/></cellValueFactory>
+                            <cellValueFactory>
+                                <PropertyValueFactory property="releaseId"/>
+                            </cellValueFactory>
                         </TableColumn>
                     </columns>
                 </TableView>
