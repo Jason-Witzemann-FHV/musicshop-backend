@@ -147,6 +147,11 @@ public class MusicShopController {
 
     @FXML
     public void initialize()  {
+        basketView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        searchResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        detailView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        detailRecordings.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
 
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
@@ -184,7 +189,7 @@ public class MusicShopController {
                     return;
                 }
 
-                var button = new Button("Add");
+                var button = new Button("+");
                 button.setOnAction(e -> {
                     try {
                         addToBasket(this.getItem());
@@ -244,7 +249,7 @@ public class MusicShopController {
                     return;
                 }
 
-                var button = new Button("Remove");
+                var button = new Button("-");
                 button.setOnAction(e -> {
                     try {
                         basketService.removeItemFromBasket(this.getItem());
@@ -278,16 +283,12 @@ public class MusicShopController {
         DetailedReleaseRemoteDTO details = releaseSearchService.getDetails(UUID.fromString(result.getId()));
 
         detailTitle.setText(details.getTitle());
-
         detailView.getItems().setAll(List.of(
                 new Pair<>("Price", formatCurrency(details.getPrice())),
                 new Pair<>("Medium", details.getMedium()),
                 new Pair<>("Stock", Integer.toString(details.getStock()))));
-
         detailRecordings.getItems().setAll(details.getRecordings());
-
         switchSearchView();
-
     }
 
     public void switchSearchView() {
