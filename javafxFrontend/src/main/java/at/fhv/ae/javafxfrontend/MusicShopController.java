@@ -2,6 +2,7 @@ package at.fhv.ae.javafxfrontend;
 
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
+import at.fhv.ae.shared.dto.basket.CustomerSearchResponseDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
@@ -20,12 +21,14 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MusicShopController {
@@ -34,6 +37,7 @@ public class MusicShopController {
     private RemoteReleaseSearchService releaseSearchService;
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
+    private RemoteCustomerSearchService customerSearchService;
 
     // search fields
     @FXML TextField searchTitle;
@@ -60,6 +64,10 @@ public class MusicShopController {
     @FXML TableColumn<BasketItemRemoteDTO, QuantityColumnInfo> basketColQuantity;
     @FXML TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
     @FXML TableColumn<BasketItemRemoteDTO, UUID> basketColRemove;
+    @FXML TextField customerSearchFirstName;
+    @FXML TextField customerSearchSurname;
+    @FXML TableView<CustomerSearchResponseDTO> customerSearchView;
+
 
     // buttons and tabs - autorization
     @FXML Button toBasketInDetails;
@@ -103,6 +111,13 @@ public class MusicShopController {
             // Hide unauthorized
             clearBasketButton.setVisible(false);
             sellBasketButton.setVisible(false);
+        }
+
+        try {
+            customerSearchService = session.remoteCustomerSearchService();
+
+        } catch (AuthorizationException ignored) {
+
         }
     }
 
@@ -148,6 +163,7 @@ public class MusicShopController {
     @FXML
     public void initialize()  {
         basketView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        customerSearchView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         searchResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailRecordings.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -320,7 +336,11 @@ public class MusicShopController {
 
     public void sell() throws RemoteException {
 
-        boolean success = sellService.sellItemsInBasket(null); // todo assign customer
+        ObjectId customerId = Optional.ofNullable(customerSearchView.getSelectionModel().getSelectedItem())
+                .map(CustomerSearchResponseDTO::getId)
+                .orElse(null);
+
+        boolean success = sellService.sellItemsInBasket(customerId); // todo assign customer
 
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(success ? "Items sold" : "Error confirming Sale");
@@ -328,5 +348,12 @@ public class MusicShopController {
         alert.showAndWait();
 
         fetchBasket();
+    }
+
+    public void searchCustomer() throws RemoteException {
+
+        List<CustomerSearchResponseDTO> customers = customerSearchService.findCustomerByName(customerSearchFirstName.getText(), customerSearchSurname.getText());
+        customerSearchView.getItems().setAll(customers);
+
     }
 }

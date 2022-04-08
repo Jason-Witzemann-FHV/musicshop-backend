@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.BorderPane?>
 <AnchorPane
         stylesheets="/css/MusicShop.css"
         xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
@@ -184,39 +185,86 @@
                 </StackPane>
             </graphic>
 
-            <AnchorPane styleClass="big-padding">
-                <TableView fx:id="basketView"
-                           AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0"
-                           AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="200">
-                    <columns>
-                        <TableColumn text="Title">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="title"/>
-                            </cellValueFactory>
-                        </TableColumn>
-                        <TableColumn text="Medium" styleClass="center">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="medium"/>
-                            </cellValueFactory>
-                        </TableColumn>
-                        <TableColumn text="Price" fx:id="basketColPrice" styleClass="center">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="price"/>
-                            </cellValueFactory>
-                        </TableColumn>
-                        <TableColumn fx:id="basketColQuantity" text="Quantity" styleClass="center"/>
-                        <TableColumn fx:id="basketColRemove" text="🗑" styleClass="center">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="releaseId"/>
-                            </cellValueFactory>
-                        </TableColumn>
-                    </columns>
-                </TableView>
-                <HBox alignment="BOTTOM_RIGHT" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
-                    <Button fx:id="clearBasketButton" text="Clear Basket" onAction="#clearBasket"/>
-                    <Button fx:id="sellBasketButton" text="Sell Items" onAction="#sell"/>
-                </HBox>
-            </AnchorPane>
+            <BorderPane styleClass="big-padding">
+
+                <top>
+                    <TableView fx:id="basketView" maxHeight="250">
+                        <columns>
+                            <TableColumn text="Title">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="title"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Medium" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="medium"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Price" fx:id="basketColPrice" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="price"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="basketColQuantity" text="Quantity" styleClass="center"/>
+                            <TableColumn fx:id="basketColRemove" text="🗑" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="releaseId"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                </top>
+
+
+                <center>
+                    <AnchorPane minHeight="0">
+                        <GridPane hgap="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                            <Label text="First Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="customerSearchFirstName" prefHeight="26.0" prefWidth="250.0"
+                                       GridPane.rowIndex="1"/>
+                            <Label text="Surname" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            <TextField fx:id="customerSearchSurname" GridPane.columnIndex="1"
+                                       GridPane.rowIndex="1"/>
+                            <Button text="Search" onAction="#searchCustomer"
+                                    GridPane.columnIndex="2" GridPane.rowSpan="2"
+                                    GridPane.fillHeight="true" maxHeight="Infinity"/>
+
+                            <TableView fx:id="customerSearchView" GridPane.rowIndex="2" GridPane.columnSpan="3"
+                                       maxHeight="200" prefWidth="Infinity">
+                                <columns>
+                                    <TableColumn text="Firstname" styleClass="center">
+                                        <cellValueFactory>
+                                            <PropertyValueFactory property="givenName"/>
+                                        </cellValueFactory>
+                                    </TableColumn>
+                                    <TableColumn text="Surname" styleClass="center">
+                                        <cellValueFactory>
+                                            <PropertyValueFactory property="familyName"/>
+                                        </cellValueFactory>
+                                    </TableColumn>
+                                    <TableColumn text="Address" styleClass="center">
+                                        <cellValueFactory>
+                                            <PropertyValueFactory property="address"/>
+                                        </cellValueFactory>
+                                    </TableColumn>
+                                </columns>
+                            </TableView>
+
+
+                        </GridPane>
+                    </AnchorPane>
+
+                </center>
+
+
+                <bottom>
+                    <HBox alignment="BOTTOM_RIGHT">
+                        <Button fx:id="clearBasketButton" text="Clear Basket" onAction="#clearBasket"/>
+                        <Button fx:id="sellBasketButton" text="Sell Items" onAction="#sell"/>
+                    </HBox>
+                </bottom>
+
+            </BorderPane>
         </Tab>
     </TabPane>
 </AnchorPane>
