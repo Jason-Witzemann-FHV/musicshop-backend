@@ -24,15 +24,12 @@ import javafx.util.Pair;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
-
-import static java.lang.Math.round;
 
 public class MusicShopController {
 
@@ -329,9 +326,9 @@ public class MusicShopController {
         double dnetPrice = basketItems.stream().mapToDouble(b -> b.getPrice() * b.getQuantity()).sum();
         double dtaxPrice = dnetPrice * 0.2;
         double dgrossPrice = dnetPrice + dtaxPrice;
-        netPrice.setText(String.format("%.2f", dnetPrice));
-        taxPrice.setText(String.format("%.2f", dtaxPrice));
-        grossPrice.setText(String.format("%.2f", dgrossPrice));
+        netPrice.setText(formatCurrency(dnetPrice));
+        taxPrice.setText("+ " + formatCurrency(dtaxPrice));
+        grossPrice.setText(formatCurrency(dgrossPrice));
     }
 
     public void addToBasket(String id) throws RemoteException {
