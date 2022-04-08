@@ -220,8 +220,8 @@
                         <HBox alignment="BASELINE_RIGHT">
                             <Label fx:id="taxPrice"  text="MWst" />
                         </HBox>
-                        <HBox alignment="BASELINE_RIGHT">
-                            <Label fx:id="grossPrice" text="Brutto" />
+                        <HBox alignment="BASELINE_RIGHT" >
+                            <Label fx:id="grossPrice" text="Brutto" styleClass="grossPrice"/>
                         </HBox>
                     </VBox>
                 </top>

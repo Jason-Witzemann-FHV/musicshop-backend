@@ -24,12 +24,15 @@ import javafx.util.Pair;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+
+import static java.lang.Math.round;
 
 public class MusicShopController {
 
@@ -249,6 +252,7 @@ public class MusicShopController {
                     item.setValue(newVal);
                     try {
                         basketService.changeQuantityOfItem(item.productId(), newVal);
+                        calcPrice();
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
@@ -316,6 +320,18 @@ public class MusicShopController {
 
     private void fetchBasket() throws RemoteException {
         basketView.getItems().setAll(basketService.itemsInBasket());
+        calcPrice();
+    }
+
+    private void calcPrice() throws RemoteException {
+        List<BasketItemRemoteDTO> basketItems = basketService.itemsInBasket();
+
+        double dnetPrice = basketItems.stream().mapToDouble(b -> b.getPrice() * b.getQuantity()).sum();
+        double dtaxPrice = dnetPrice * 0.2;
+        double dgrossPrice = dnetPrice + dtaxPrice;
+        netPrice.setText(String.format("%.2f", dnetPrice));
+        taxPrice.setText(String.format("%.2f", dtaxPrice));
+        grossPrice.setText(String.format("%.2f", dgrossPrice));
     }
 
     public void addToBasket(String id) throws RemoteException {
