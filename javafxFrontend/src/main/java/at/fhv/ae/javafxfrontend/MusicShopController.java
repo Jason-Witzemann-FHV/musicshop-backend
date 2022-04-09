@@ -326,9 +326,9 @@ public class MusicShopController {
         double dnetPrice = basketItems.stream().mapToDouble(b -> b.getPrice() * b.getQuantity()).sum();
         double dtaxPrice = dnetPrice * 0.2;
         double dgrossPrice = dnetPrice + dtaxPrice;
-        netPrice.setText(formatCurrency(dnetPrice));
-        taxPrice.setText("+ " + formatCurrency(dtaxPrice));
-        grossPrice.setText(formatCurrency(dgrossPrice));
+        netPrice.setText(formatCurrency(dnetPrice) + " Net");
+        taxPrice.setText("+ " + formatCurrency(dtaxPrice) + " Tax");
+        grossPrice.setText(formatCurrency(dgrossPrice) + " Total");
     }
 
     public void addToBasket(String id) throws RemoteException {
