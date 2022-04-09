@@ -2,7 +2,8 @@
   <configuration default="false" name="FVH2-RMI-CustomerAPI" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="at.fhv.ae.CustomerApiMain" />
     <module name="musicshop-backend.customer.main" />
-    <target name="fhv_team@10.0.40.161:22" />
+    <projectPathOnTarget name="projectPathOnTarget" value="/home/fhv_team/musicshop-backend" />
+    <target name="@@@LOCAL@@@" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="at.fhv.ae.*" />
