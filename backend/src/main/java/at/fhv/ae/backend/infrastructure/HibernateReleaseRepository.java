@@ -45,14 +45,4 @@ public class HibernateReleaseRepository implements ReleaseRepository {
 
         return query.getResultList();
     }
-
-    @Override
-    public Optional<Integer> currentStock(ReleaseId releaseId) {
-        return findById(releaseId).map(Release::stock);
-    }
-
-    @Override
-    public void decreaseStock(ReleaseId releaseId, int amount) {
-        findById(releaseId).ifPresent(release -> release.decreaseStock(amount));
-    }
 }

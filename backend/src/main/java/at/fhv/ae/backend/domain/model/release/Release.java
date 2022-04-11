@@ -53,8 +53,11 @@ public class Release {
         this.recordingIds = recordingIds;
     }
 
-    public void decreaseStock(int amount){
-        this.stock = stock - amount;
+    public void decreaseStock(int amount) {
+        if(amount > stock)
+            throw new IllegalArgumentException("stock cannot become negative");
+
+        this.stock -= amount;
     }
 
     public List<Supplier> suppliers() {

@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.middleware.rmi.services;
 
 import at.fhv.ae.backend.application.SellService;
+import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.shared.rmi.RemoteSellService;
 import org.bson.types.ObjectId;
 
@@ -20,6 +21,11 @@ public class RemoteSellServiceImpl extends UnicastRemoteObject implements Remote
 
     @Override
     public boolean sellItemsInBasket(ObjectId customerId) throws RemoteException {
-        return sellService.sellItemsInBasket(userId, customerId);
+        try {
+            sellService.sellItemsInBasket(userId, customerId);
+            return true;
+        } catch (OutOfStockException e) {
+            return false;
+        }
     }
 }

@@ -12,8 +12,4 @@ public interface ReleaseRepository {
     Optional<Release> findById(ReleaseId id);
 
     List<Release> query(String title, String artist, Genre genre);
-
-    Optional<Integer> currentStock(ReleaseId releaseId);
-
-    void decreaseStock(ReleaseId releaseId, int amount);
 }

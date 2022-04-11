@@ -110,7 +110,7 @@ public class ServiceRegistry {
 
     public static SellService sellService() {
         if(sellService == null) {
-            sellService = new SellServiceImpl(saleRepository(), basketRepository(), userRepository() ,releaseRepository(), entityManager());
+            sellService = new SellServiceImpl(saleRepository(), basketRepository(), userRepository(), entityManager());
         }
         return sellService;
     }

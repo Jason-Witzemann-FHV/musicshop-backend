@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.middleware;
 
 import at.fhv.ae.backend.application.SellService;
+import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.backend.middleware.rmi.services.RemoteSellServiceImpl;
 import at.fhv.ae.shared.rmi.RemoteSellService;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,7 @@ class RemoteSellServiceTests {
     }
 
     @Test
-    void given_nothing_when_sell_then_application_service_executed() throws RemoteException {
+    void given_nothing_when_sell_then_application_service_executed() throws RemoteException, OutOfStockException {
         remoteSellService.sellItemsInBasket(null);
         verify(sellService).sellItemsInBasket(customerId, null);
     }
