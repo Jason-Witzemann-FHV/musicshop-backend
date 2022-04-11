@@ -2,6 +2,13 @@
     -fx-background-color: skyblue;
 }
 
+.grossPrice {
+    -fx-border-width: 2px 0 0 0;
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-font-weight: bold;
+}
+
 .padding {
     -fx-padding: 8px;
 }

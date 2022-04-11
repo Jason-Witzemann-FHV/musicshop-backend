@@ -188,31 +188,42 @@
             <BorderPane styleClass="big-padding">
 
                 <top>
-                    <TableView fx:id="basketView" maxHeight="250">
-                        <columns>
-                            <TableColumn text="Title">
-                                <cellValueFactory>
-                                    <PropertyValueFactory property="title"/>
-                                </cellValueFactory>
-                            </TableColumn>
-                            <TableColumn text="Medium" styleClass="center">
-                                <cellValueFactory>
-                                    <PropertyValueFactory property="medium"/>
-                                </cellValueFactory>
-                            </TableColumn>
-                            <TableColumn text="Price" fx:id="basketColPrice" styleClass="center">
-                                <cellValueFactory>
-                                    <PropertyValueFactory property="price"/>
-                                </cellValueFactory>
-                            </TableColumn>
-                            <TableColumn fx:id="basketColQuantity" text="Quantity" styleClass="center"/>
-                            <TableColumn fx:id="basketColRemove" text="🗑" styleClass="center">
-                                <cellValueFactory>
-                                    <PropertyValueFactory property="releaseId"/>
-                                </cellValueFactory>
-                            </TableColumn>
-                        </columns>
-                    </TableView>
+                    <VBox>
+                        <TableView fx:id="basketView" maxHeight="250">
+                            <columns>
+                                <TableColumn text="Title">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="title"/>
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Medium" styleClass="center">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="medium"/>
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Price" fx:id="basketColPrice" styleClass="center">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="price"/>
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="basketColQuantity" text="Quantity" styleClass="center"/>
+                                <TableColumn fx:id="basketColRemove" text="🗑" styleClass="center">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="releaseId"/>
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                        <HBox alignment="BASELINE_RIGHT">
+                            <Label fx:id="netPrice" text="Netto" />
+                        </HBox>
+                        <HBox alignment="BASELINE_RIGHT">
+                            <Label fx:id="taxPrice"  text="MWst" />
+                        </HBox>
+                        <HBox alignment="BASELINE_RIGHT" >
+                            <Label fx:id="grossPrice" text="Brutto" styleClass="grossPrice"/>
+                        </HBox>
+                    </VBox>
                 </top>
 
 

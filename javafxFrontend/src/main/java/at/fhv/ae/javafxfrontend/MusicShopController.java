@@ -38,6 +38,7 @@ public class MusicShopController {
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
     private RemoteCustomerSearchService customerSearchService;
+    private static double TAX_RATE = 0.2;
 
     // search fields
     @FXML TextField searchTitle;
@@ -67,9 +68,12 @@ public class MusicShopController {
     @FXML TextField customerSearchFirstName;
     @FXML TextField customerSearchSurname;
     @FXML TableView<CustomerSearchResponseDTO> customerSearchView;
+    @FXML Label netPrice;
+    @FXML Label taxPrice;
+    @FXML Label grossPrice;
 
 
-    // buttons and tabs - autorization
+    // buttons and tabs - authorization
     @FXML Button toBasketInDetails;
     @FXML Button clearBasketButton;
     @FXML Button sellBasketButton;
@@ -246,6 +250,7 @@ public class MusicShopController {
                     item.setValue(newVal);
                     try {
                         basketService.changeQuantityOfItem(item.productId(), newVal);
+                        calcPrice();
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
@@ -313,6 +318,18 @@ public class MusicShopController {
 
     private void fetchBasket() throws RemoteException {
         basketView.getItems().setAll(basketService.itemsInBasket());
+        calcPrice();
+    }
+
+    private void calcPrice() throws RemoteException {
+        List<BasketItemRemoteDTO> basketItems = basketService.itemsInBasket();
+
+        double dnetPrice = basketItems.stream().mapToDouble(b -> b.getPrice() * b.getQuantity()).sum();
+        double dtaxPrice = dnetPrice * TAX_RATE;
+        double dgrossPrice = dnetPrice + dtaxPrice;
+        netPrice.setText(formatCurrency(dnetPrice) + " Net");
+        taxPrice.setText("+ " + formatCurrency(dtaxPrice) + " Tax");
+        grossPrice.setText(formatCurrency(dgrossPrice) + " Total");
     }
 
     public void addToBasket(String id) throws RemoteException {
