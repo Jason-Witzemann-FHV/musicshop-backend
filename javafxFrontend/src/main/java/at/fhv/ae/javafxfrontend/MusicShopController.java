@@ -38,6 +38,7 @@ public class MusicShopController {
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
     private RemoteCustomerSearchService customerSearchService;
+    private static double TAX_RATE = 0.2;
 
     // search fields
     @FXML TextField searchTitle;
@@ -324,7 +325,7 @@ public class MusicShopController {
         List<BasketItemRemoteDTO> basketItems = basketService.itemsInBasket();
 
         double dnetPrice = basketItems.stream().mapToDouble(b -> b.getPrice() * b.getQuantity()).sum();
-        double dtaxPrice = dnetPrice * 0.2;
+        double dtaxPrice = dnetPrice * TAX_RATE;
         double dgrossPrice = dnetPrice + dtaxPrice;
         netPrice.setText(formatCurrency(dnetPrice) + " Net");
         taxPrice.setText("+ " + formatCurrency(dtaxPrice) + " Tax");
