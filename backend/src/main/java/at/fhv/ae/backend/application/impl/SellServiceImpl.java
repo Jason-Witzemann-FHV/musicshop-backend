@@ -1,10 +1,12 @@
 package at.fhv.ae.backend.application.impl;
 
+import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
+import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 import at.fhv.ae.backend.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,37 +27,48 @@ public class SellServiceImpl implements SellService {
     private final UserRepository userRepository;
     private final EntityManager entityManager;
 
-
     @Override
-    public boolean sellItemsInBasket(String userId, ObjectId customerId) {
-        var user = userRepository.userById(new UserId(userId)).orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " was not found!"));
+    public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {
 
-        try {
-            Map<Release, Integer> basket = basketRepository.itemsInBasket(user.userId());
+        var user = userRepository.userById(new UserId(userId))
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " was not found!"));
 
-            List<Item> saleItems = basket.entrySet()
-                    .stream()
-                    .map(entry -> new Item(entry.getKey().releaseId(), entry.getValue(), entry.getKey().price()))
-                    .collect(Collectors.toList());
+        Map<Release, Integer> basket = basketRepository.itemsInBasket(user.userId());
 
-            Sale sale = Sale.create(new SaleId(UUID.randomUUID()),
-                    user.userId(),
-                    customerId,
-                    PaymentType.CASH, // First sprint only supports cash sale
-                    SaleType.IN_PERSON,
-                    saleItems
-            );
+        for (var item : basket.entrySet()) {
+            int amount = item.getValue();
+            int stock = item.getKey().stock();
 
-            EntityTransaction transaction = entityManager.getTransaction();
-            transaction.begin();
-            saleRepository.addSale(sale);
-            transaction.commit();
-            basketRepository.clearBasket(user.userId());
-
-        } catch (Exception e) { // only case of unsuccessful persist of sale is an unexpected exception
-            return false;
+            if (amount > stock) {
+                throw new OutOfStockException();
+            }
         }
-        return true;
-    }
 
+        List<Item> saleItems = basket.entrySet()
+                .stream()
+                .map(entry -> new Item(entry.getKey().releaseId(), entry.getValue(), entry.getKey().price()))
+                .collect(Collectors.toList());
+
+        Sale sale = Sale.create(new SaleId(UUID.randomUUID()),
+                user.userId(),
+                customerId,
+                PaymentType.CASH, // First sprint only supports cash sale
+                SaleType.IN_PERSON,
+                saleItems
+        );
+
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+
+        saleRepository.addSale(sale);
+
+        for (var item : basket.entrySet()) {
+            int amount = item.getValue();
+            item.getKey().decreaseStock(amount);
+        }
+
+        basketRepository.clearBasket(user.userId());
+
+        transaction.commit();
+    }
 }

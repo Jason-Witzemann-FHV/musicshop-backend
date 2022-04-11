@@ -157,8 +157,5 @@ class HibernateReleaseRepositoryTests {
 
         assertFalse(actual.contains(release));
         assertEquals(0, actual.size());
-
-
-
     }
 }
