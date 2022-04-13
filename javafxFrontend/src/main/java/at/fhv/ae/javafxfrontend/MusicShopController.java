@@ -3,6 +3,7 @@ package at.fhv.ae.javafxfrontend;
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.dto.basket.CustomerSearchResponseDTO;
+import at.fhv.ae.shared.dto.news.NewsRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
@@ -26,6 +27,7 @@ import org.bson.types.ObjectId;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -40,6 +42,8 @@ public class MusicShopController {
     private RemoteCustomerSearchService customerSearchService;
     private static double TAX_RATE = 0.2;
 
+    @FXML
+    TableView<NewsRemoteDTO> newsView;
     // search fields
     @FXML TextField searchTitle;
     @FXML TextField searchArtist;
@@ -290,6 +294,8 @@ public class MusicShopController {
                 this.setGraphic(button);
             }
         });
+
+        newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
     }
 
     public void search() throws RemoteException {
