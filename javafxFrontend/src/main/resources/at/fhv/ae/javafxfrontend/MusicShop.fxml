@@ -18,6 +18,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.DatePicker?>
 <AnchorPane
         stylesheets="/css/MusicShop.css"
         xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
@@ -48,7 +51,8 @@
             </graphic>
 
             <AnchorPane styleClass="big-padding">
-                <TableView fx:id="newsView" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
+                <TableView fx:id="newsView" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0"
+                           AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
                     <columns>
                         <TableColumn text="Title">
                             <cellValueFactory>
@@ -244,12 +248,12 @@
                             </columns>
                         </TableView>
                         <HBox alignment="BASELINE_RIGHT">
-                            <Label fx:id="netPrice" text="Netto" />
+                            <Label fx:id="netPrice" text="Netto"/>
                         </HBox>
                         <HBox alignment="BASELINE_RIGHT">
-                            <Label fx:id="taxPrice"  text="MWst" />
+                            <Label fx:id="taxPrice" text="MWst"/>
                         </HBox>
-                        <HBox alignment="BASELINE_RIGHT" >
+                        <HBox alignment="BASELINE_RIGHT">
                             <Label fx:id="grossPrice" text="Brutto" styleClass="grossPrice"/>
                         </HBox>
                     </VBox>
@@ -316,37 +320,42 @@
                 </StackPane>
             </graphic>
 
-            <AnchorPane styleClass="big-padding">
-                <GridPane AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
-                    <columnConstraints>
-                        <ColumnConstraints/>
-                        <ColumnConstraints/>
-                        <ColumnConstraints/>
-                        <ColumnConstraints/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints/>
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                    </rowConstraints>
-                    <children>
+            <BorderPane styleClass="big-padding">
+                <top>
+                    <GridPane AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                              styleClass="border, padding" hgap="40">
+                        <columnConstraints>
+                            <ColumnConstraints/>
+                            <ColumnConstraints/>
+                            <ColumnConstraints/>
+                        </columnConstraints>
+
                         <Label text="Topic" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                         <ComboBox fx:id="topicCombobox" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 
-                        <Label text="Title" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                        <TextField fx:id="messageTitle" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <Label text="Expiration Date" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <DatePicker fx:id="expirationDate" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                        <Label text="Message" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                        <TextField fx:id="message" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                        <Label text="Title" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                        <TextField fx:id="messageTitle" GridPane.rowIndex="1" GridPane.columnIndex="2"
+                                   prefWidth="250"/>
+                    </GridPane>
+                </top>
 
-                        <Label text="Expiration Date" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
-                        <TextField fx:id="expirationDate" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
-                    </children>
+                <center>
+                    <VBox AnchorPane.topAnchor="70" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                        <Label text="Message" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-padding: 10 0 0 0"/>
+                        <TextArea fx:id="message" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+
+                        <HBox alignment="BASELINE_RIGHT" style="-fx-padding: 10 0 0 0">
+                            <Button text="Send Message" onAction="#sendMessage"/>
+                        </HBox>
+                    </VBox>
+                </center>
 
 
-                </GridPane>
-            </AnchorPane>
+
+            </BorderPane>
         </Tab>
     </TabPane>
 </AnchorPane>
