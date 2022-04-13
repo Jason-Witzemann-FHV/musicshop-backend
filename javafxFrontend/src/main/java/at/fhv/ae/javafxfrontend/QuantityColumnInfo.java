@@ -1,19 +1,19 @@
 package at.fhv.ae.javafxfrontend;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class QuantityColumnInfo {
 
     private final UUID productId;
-    private final Supplier<Integer> min;
-    private final Supplier<Integer> max;
+    private final int min;
+    private final int stock;
     private int value;
 
-    public QuantityColumnInfo(UUID productId, Supplier<Integer> min, Supplier<Integer> max, int initial) {
+    public QuantityColumnInfo(UUID productId, int min, int stock, int initial) {
+
         this.productId = productId;
         this.min = min;
-        this.max = max;
+        this.stock = stock;
         this.value = initial;
     }
 
@@ -22,11 +22,11 @@ public class QuantityColumnInfo {
     }
 
     public int min() {
-        return min.get();
+        return min;
     }
 
-    public int max() {
-        return max.get();
+    public int stock() {
+        return stock;
     }
 
     public int value() {
@@ -34,8 +34,13 @@ public class QuantityColumnInfo {
     }
 
     public void setValue(int v) {
-        if(v < min.get() || v > max.get())
+        if(v < min)
             throw new IllegalArgumentException();
+
+        // can't increase quantity if it's already over the stock
+        if(stock < value && v > value)
+            throw new IllegalArgumentException();
+
         value = v;
     }
 }

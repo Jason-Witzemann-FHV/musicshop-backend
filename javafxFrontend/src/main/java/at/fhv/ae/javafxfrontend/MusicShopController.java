@@ -232,7 +232,7 @@ public class MusicShopController {
 
         // basket table - quantity column
         basketColQuantity.setCellValueFactory(data -> new SimpleObjectProperty<>(
-                new QuantityColumnInfo(data.getValue().getReleaseId(), () -> 1, () -> data.getValue().getStock(), data.getValue().getQuantity())
+                new QuantityColumnInfo(data.getValue().getReleaseId(), 1, data.getValue().getStock(), data.getValue().getQuantity())
         ));
 
         basketColQuantity.setCellFactory(column -> new TableCell<>() {
@@ -245,8 +245,16 @@ public class MusicShopController {
                     return;
                 }
 
-                var spinner = new Spinner<Integer>(item.min(), item.max(), item.value());
+
+                var spinner = new Spinner<Integer>(item.min(), Math.max(item.stock(), item.value()), item.value());
+                var spinnerValueFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory)spinner.getValueFactory();
+
                 spinner.valueProperty().addListener((observable, oldVal, newVal) -> {
+                    // reduce max so you can't go back up
+                    if(item.stock() < spinnerValueFactory.getMax() && newVal < spinnerValueFactory.getMax()) {
+                        spinnerValueFactory.setMax(newVal);
+                    }
+
                     item.setValue(newVal);
                     try {
                         basketService.changeQuantityOfItem(item.productId(), newVal);
