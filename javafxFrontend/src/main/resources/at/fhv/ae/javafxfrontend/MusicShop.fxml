@@ -17,6 +17,7 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <AnchorPane
         stylesheets="/css/MusicShop.css"
         xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
@@ -304,6 +305,48 @@
                 </bottom>
 
             </BorderPane>
+        </Tab>
+
+        <Tab>
+            <graphic>
+                <StackPane rotate="90">
+                    <Group>
+                        <Label rotate="90" style="-fx-font-size: 16">Broadcast</Label>
+                    </Group>
+                </StackPane>
+            </graphic>
+
+            <AnchorPane styleClass="big-padding">
+                <GridPane AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints/>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Topic" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="topicCombobox" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+
+                        <Label text="Title" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <TextField fx:id="messageTitle" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Message" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                        <TextField fx:id="message" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+                        <Label text="Expiration Date" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                        <TextField fx:id="expirationDate" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                    </children>
+
+
+                </GridPane>
+            </AnchorPane>
         </Tab>
     </TabPane>
 </AnchorPane>
