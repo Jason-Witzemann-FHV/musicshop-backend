@@ -1,9 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="FVH2-RMI-CustomerAPI" type="Application" factoryName="Application">
+  <configuration default="false" name="FHV2-RMI-CustomerAPI" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="at.fhv.ae.CustomerApiMain" />
     <module name="musicshop-backend.customer.main" />
-    <projectPathOnTarget name="projectPathOnTarget" value="/home/fhv_team/musicshop-backend" />
-    <target name="@@@LOCAL@@@" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="at.fhv.ae.*" />
