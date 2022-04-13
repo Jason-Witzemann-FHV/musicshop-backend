@@ -45,31 +45,34 @@
                     </Group>
                 </StackPane>
             </graphic>
-            <TableView fx:id="newsView">
-                <columns>
-                    <TableColumn text="Title">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="title"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn text="Message">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="message"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn text="Date of Event">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="dateOfEvent"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn text="Topic">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="topic"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                </columns>
 
-            </TableView>
+            <AnchorPane styleClass="big-padding">
+                <TableView fx:id="newsView" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
+                    <columns>
+                        <TableColumn text="Title">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="title"/>
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Message">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="message"/>
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="newsDateColumn" text="Date of Event">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="dateOfEvent"/>
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Topic">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="topic"/>
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+
+                </TableView>
+            </AnchorPane>
         </Tab>
 
         <Tab fx:id="searchTab">

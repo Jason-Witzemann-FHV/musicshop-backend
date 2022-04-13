@@ -26,8 +26,11 @@ import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -44,6 +47,8 @@ public class MusicShopController {
 
     @FXML
     TableView<NewsRemoteDTO> newsView;
+    @FXML
+    TableColumn<NewsRemoteDTO, LocalDateTime> newsDateColumn;
     // search fields
     @FXML TextField searchTitle;
     @FXML TextField searchArtist;
@@ -170,12 +175,12 @@ public class MusicShopController {
 
     @FXML
     public void initialize()  {
+        newsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         basketView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         customerSearchView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         searchResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailRecordings.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
 
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
