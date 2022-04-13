@@ -10,6 +10,8 @@ import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,10 +47,8 @@ public class MusicShopController {
     private RemoteCustomerSearchService customerSearchService;
     private static double TAX_RATE = 0.2;
 
-    @FXML
-    TableView<NewsRemoteDTO> newsView;
-    @FXML
-    TableColumn<NewsRemoteDTO, LocalDateTime> newsDateColumn;
+    @FXML TableView<NewsRemoteDTO> newsView;
+    @FXML TableColumn<NewsRemoteDTO, LocalDateTime> newsDateColumn;
     // search fields
     @FXML TextField searchTitle;
     @FXML TextField searchArtist;
@@ -67,10 +67,11 @@ public class MusicShopController {
     @FXML TableView<Pair<String, String>> detailView;
     @FXML TableView<RecordingRemoteDTO> detailRecordings;
     @FXML TableColumn<RecordingRemoteDTO, String> detailRecordingsColArtists;
-    @FXML TableColumn<RecordingRemoteDTO, String> detailRecordingsColGenres;
+    @FXML  TableColumn<RecordingRemoteDTO, String> detailRecordingsColGenres;
 
     // basket
     @FXML TableView<BasketItemRemoteDTO> basketView;
+
     @FXML TableColumn<BasketItemRemoteDTO, QuantityColumnInfo> basketColQuantity;
     @FXML TableColumn<BasketItemRemoteDTO, Double> basketColPrice;
     @FXML TableColumn<BasketItemRemoteDTO, UUID> basketColRemove;
@@ -89,6 +90,13 @@ public class MusicShopController {
     @FXML Tab basketTab;
     @FXML Tab searchTab;
     @FXML TabPane tabPane;
+
+    // fields and button - broadcast
+    @FXML ComboBox topicCombobox;
+    @FXML DatePicker expirationDate;
+    @FXML TextField messageTitle;
+    @FXML TextArea message;
+
 
     public void setSession(RemoteSession session) throws RemoteException {
         this.session = session;
@@ -132,6 +140,15 @@ public class MusicShopController {
         } catch (AuthorizationException ignored) {
 
         }
+
+        // broadCastService
+        ObservableList<String> topics = FXCollections.observableArrayList(
+                "SystemTopic",
+                "RockTopic",
+                "PopTopic"
+        );
+
+        topicCombobox.getItems().setAll(topics);
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -159,13 +176,13 @@ public class MusicShopController {
         return DecimalFormat.getCurrencyInstance(Locale.GERMANY).format(amount);
     }
 
-    private <S, T> Callback<TableColumn<S,T>, TableCell<S,T>> currencyCellFactory() {
+    private <S, T> Callback<TableColumn<S, T>, TableCell<S, T>> currencyCellFactory() {
         return column -> new TableCell<>() {
             @Override
             protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if(item == null || empty)
+                if (item == null || empty)
                     setText(null);
                 else
                     setText(formatCurrency(item));
@@ -174,7 +191,7 @@ public class MusicShopController {
     }
 
     @FXML
-    public void initialize()  {
+    public void initialize() {
         newsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         basketView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         customerSearchView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -185,7 +202,7 @@ public class MusicShopController {
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
             ReleaseSearchResultDTO selectedResult = searchResultsView.getSelectionModel().getSelectedItem();
-            if(selectedResult != null) {
+            if (selectedResult != null) {
                 try {
                     showDetailsOf(selectedResult);
                 } catch (RemoteException e) {
@@ -195,11 +212,11 @@ public class MusicShopController {
         };
 
         searchResultsView.setOnKeyReleased(event -> {
-            if(event.getCode().equals(KeyCode.ENTER))
+            if (event.getCode().equals(KeyCode.ENTER))
                 userActionOnSearchResults.run();
         });
         searchResultsView.setOnMouseClicked(event -> {
-            if(event.getClickCount() >= 2)
+            if (event.getClickCount() >= 2)
                 userActionOnSearchResults.run();
         });
 
@@ -213,7 +230,7 @@ public class MusicShopController {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if(item == null || empty) {
+                if (item == null || empty) {
                     this.setGraphic(null);
                     return;
                 }
@@ -249,18 +266,18 @@ public class MusicShopController {
             public void updateItem(QuantityColumnInfo item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if(item == null || empty) {
+                if (item == null || empty) {
                     this.setGraphic(null);
                     return;
                 }
 
 
                 var spinner = new Spinner<Integer>(item.min(), Math.max(item.stock(), item.value()), item.value());
-                var spinnerValueFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory)spinner.getValueFactory();
+                var spinnerValueFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) spinner.getValueFactory();
 
                 spinner.valueProperty().addListener((observable, oldVal, newVal) -> {
                     // reduce max so you can't go back up
-                    if(item.stock() < spinnerValueFactory.getMax() && newVal < spinnerValueFactory.getMax()) {
+                    if (item.stock() < spinnerValueFactory.getMax() && newVal < spinnerValueFactory.getMax()) {
                         spinnerValueFactory.setMax(newVal);
                     }
 
@@ -282,7 +299,7 @@ public class MusicShopController {
             public void updateItem(UUID item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if(item == null || empty) {
+                if (item == null || empty) {
                     this.setGraphic(null);
                     return;
                 }
@@ -304,11 +321,11 @@ public class MusicShopController {
     }
 
     public void search() throws RemoteException {
-         searchResultsView.getItems().setAll(
-                 releaseSearchService.query(
-                         searchTitle.getText(),
-                         searchArtist.getText(),
-                         searchGenre.getValue()));
+        searchResultsView.getItems().setAll(
+                releaseSearchService.query(
+                        searchTitle.getText(),
+                        searchArtist.getText(),
+                        searchGenre.getValue()));
     }
 
     public void reset() {
@@ -352,13 +369,13 @@ public class MusicShopController {
     }
 
     public void addToBasket(String id) throws RemoteException {
-        basketService.addItemToBasket(UUID.fromString(id),1);
+        basketService.addItemToBasket(UUID.fromString(id), 1);
         fetchBasket();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Release added");
-            alert.setContentText("Release added");
-            alert.showAndWait();
+        alert.setTitle("Release added");
+        alert.setContentText("Release added");
+        alert.showAndWait();
     }
 
     public void addToBasket() throws RemoteException {
@@ -391,5 +408,9 @@ public class MusicShopController {
         List<CustomerSearchResponseDTO> customers = customerSearchService.findCustomerByName(customerSearchFirstName.getText(), customerSearchSurname.getText());
         customerSearchView.getItems().setAll(customers);
 
+    }
+
+    public void sendMessage(ActionEvent event) {
+        System.out.println("We will do it.");
     }
 }
