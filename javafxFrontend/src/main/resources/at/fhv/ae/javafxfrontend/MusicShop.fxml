@@ -17,9 +17,7 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.DatePicker?>
 <AnchorPane
         stylesheets="/css/MusicShop.css"
@@ -166,15 +164,15 @@
                             <Button GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.rowSpan="2"
                                     GridPane.fillWidth="true" GridPane.fillHeight="true"
                                     maxWidth="Infinity" maxHeight="Infinity"
-                                    text="Search" onAction="#search"/>
+                                    text="Search" onAction="#releaseSearch"/>
                             <Button GridPane.columnIndex="4" GridPane.rowIndex="0" GridPane.rowSpan="2"
                                     GridPane.fillWidth="true" GridPane.fillHeight="true"
                                     maxWidth="Infinity" maxHeight="Infinity"
-                                    text="Reset" onAction="#reset"/>
+                                    text="Reset" onAction="#releaseReset"/>
 
                         </GridPane>
                     </VBox>
-                    <TableView fx:id="searchResultsView"
+                    <TableView fx:id="searchReleaseResultsView"
                                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
                                AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
                         <columns>
@@ -309,6 +307,114 @@
                 </bottom>
 
             </BorderPane>
+        </Tab>
+
+        <Tab fx:id="salesTab">
+            <graphic>
+                <StackPane rotate="90">
+                    <Group>
+                        <Label rotate="90" style="-fx-font-size: 16">Sale History</Label>
+                    </Group>
+                </StackPane>
+            </graphic>
+
+            <StackPane fx:id="saleStackPane" styleClass="stack-pane-opaque-items, big-padding" minWidth="0">
+
+                <!-- search result details -->
+                <AnchorPane>
+                    <Label fx:id="saleNumber" style="-fx-font-size: 24pt"/>
+
+                    <TableView fx:id="saleGeneralInfo" styleClass="no-header" AnchorPane.leftAnchor="0"
+                               AnchorPane.rightAnchor="815"
+                               AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
+                        <columns>
+                            <TableColumn>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="key"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn>
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="value"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+
+                    <TableView fx:id="saleItems" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                               AnchorPane.topAnchor="200" AnchorPane.bottomAnchor="0">
+                        <columns>
+                            <TableColumn text="Release title">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="title"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Amount" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="amount"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Price per release" fx:id="itemColPrice" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="pricePerItem"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+
+                    <Button AnchorPane.rightAnchor="0"
+                            text="Back" onAction="#switchSaleView"/>
+                </AnchorPane>
+
+                <!-- search form & result table -->
+                <AnchorPane>
+                    <VBox styleClass="border"
+                          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+
+                        <GridPane styleClass="padding" hgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                            </columnConstraints>
+
+                            <Button GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.rowSpan="2"
+                                    GridPane.fillWidth="true" GridPane.fillHeight="true"
+                                    maxWidth="Infinity" maxHeight="Infinity"
+                                    text="Load" onAction="#saleSearch"/>
+
+                        </GridPane>
+                    </VBox>
+                    <TableView fx:id="saleResultsView"
+                               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                               AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
+                        <columns>
+                            <TableColumn text="Sale No">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="saleNumber"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Date of sale" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="dateOfSale"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Customer" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="customerId"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Total price" fx:id="saleColPrice" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="totalPrice"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                </AnchorPane>
+            </StackPane>
         </Tab>
 
         <Tab>

@@ -7,6 +7,9 @@ import at.fhv.ae.shared.dto.news.NewsRemoteDTO;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
+import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
+import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
+import at.fhv.ae.shared.dto.sale.SaleSearchResultRemoteDTO;
 import at.fhv.ae.shared.rmi.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -28,15 +31,9 @@ import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class MusicShopController {
 
@@ -58,7 +55,7 @@ public class MusicShopController {
     @FXML StackPane searchStackPane;
 
     // search table
-    @FXML TableView<ReleaseSearchResultDTO> searchResultsView;
+    @FXML TableView<ReleaseSearchResultDTO> searchReleaseResultsView;
     @FXML TableColumn<ReleaseSearchResultDTO, Double> searchColPrice;
     @FXML TableColumn<ReleaseSearchResultDTO, String> searchColAddToBasket;
 
@@ -67,7 +64,21 @@ public class MusicShopController {
     @FXML TableView<Pair<String, String>> detailView;
     @FXML TableView<RecordingRemoteDTO> detailRecordings;
     @FXML TableColumn<RecordingRemoteDTO, String> detailRecordingsColArtists;
-    @FXML  TableColumn<RecordingRemoteDTO, String> detailRecordingsColGenres;
+    @FXML TableColumn<RecordingRemoteDTO, String> detailRecordingsColGenres;
+
+    // container for sale table & details
+    @FXML StackPane saleStackPane;
+
+    // sales table
+    @FXML TableView<SaleSearchResultRemoteDTO> saleResultsView;
+    @FXML TableColumn<SaleSearchResultRemoteDTO, Double> saleColPrice;
+
+    // sale detail
+    @FXML Label saleNumber;
+    @FXML TableView <Pair<String, String>> saleGeneralInfo;
+    @FXML TableView<ItemRemoteDTO> saleItems;
+    @FXML TableColumn<ItemRemoteDTO, Double> itemColPrice;
+
 
     // basket
     @FXML TableView<BasketItemRemoteDTO> basketView;
@@ -195,13 +206,16 @@ public class MusicShopController {
         newsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         basketView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         customerSearchView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        searchResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        searchReleaseResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        saleResultsView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        saleGeneralInfo.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        saleItems.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         detailRecordings.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // double click / hit enter on a search result for details
         Runnable userActionOnSearchResults = () -> {
-            ReleaseSearchResultDTO selectedResult = searchResultsView.getSelectionModel().getSelectedItem();
+            ReleaseSearchResultDTO selectedResult = searchReleaseResultsView.getSelectionModel().getSelectedItem();
             if (selectedResult != null) {
                 try {
                     showDetailsOf(selectedResult);
@@ -211,17 +225,40 @@ public class MusicShopController {
             }
         };
 
-        searchResultsView.setOnKeyReleased(event -> {
+        // double click / hit enter on a sale result for details
+        Runnable userActionOnSaleResults = () -> {
+            SaleSearchResultRemoteDTO selectedResult = saleResultsView.getSelectionModel().getSelectedItem();
+            if (selectedResult != null) {
+                try {
+                    showDetailsOf(selectedResult);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        searchReleaseResultsView.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.ENTER))
                 userActionOnSearchResults.run();
         });
-        searchResultsView.setOnMouseClicked(event -> {
+        searchReleaseResultsView.setOnMouseClicked(event -> {
             if (event.getClickCount() >= 2)
                 userActionOnSearchResults.run();
         });
 
+        saleResultsView.setOnKeyReleased(event -> {
+            if (event.getCode().equals(KeyCode.ENTER))
+                userActionOnSaleResults.run();
+        });
+        saleResultsView.setOnMouseClicked(event -> {
+            if (event.getClickCount() >= 2)
+                userActionOnSaleResults.run();
+        });
+
         // format price columns as currency
         searchColPrice.setCellFactory(currencyCellFactory());
+        saleColPrice.setCellFactory(currencyCellFactory());
+        itemColPrice.setCellFactory(currencyCellFactory());
         basketColPrice.setCellFactory(currencyCellFactory());
 
         // search result table - add to basket button column
@@ -320,19 +357,32 @@ public class MusicShopController {
         newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
     }
 
-    public void search() throws RemoteException {
-        searchResultsView.getItems().setAll(
+    public void saleSearch() {
+        // TODO: implement call to backend
+        saleResultsView.getItems().setAll(
+                new SaleSearchResultRemoteDTO(
+                        "this is the UUID",
+                        "00001",
+                        "2022-04-15",
+                        "c0012",
+                        123.23
+                )
+        );
+    }
+
+    public void releaseSearch() throws RemoteException {
+        searchReleaseResultsView.getItems().setAll(
                 releaseSearchService.query(
                         searchTitle.getText(),
                         searchArtist.getText(),
                         searchGenre.getValue()));
     }
 
-    public void reset() {
+    public void releaseReset() {
         searchTitle.clear();
         searchArtist.clear();
         searchGenre.setValue("");
-        searchResultsView.getItems().clear();
+        searchReleaseResultsView.getItems().clear();
     }
 
     public void showDetailsOf(ReleaseSearchResultDTO result) throws RemoteException {
@@ -348,8 +398,51 @@ public class MusicShopController {
         switchSearchView();
     }
 
+    // overloading Methodname
+    public void showDetailsOf(SaleSearchResultRemoteDTO result) throws RemoteException {
+
+        // TODO: call application layer
+        ArrayList<ItemRemoteDTO> itemList = new ArrayList<>();
+        itemList.add(new ItemRemoteDTO(
+                "One Shot",
+                5,
+                5.32
+        ));
+        itemList.add(new ItemRemoteDTO(
+                "Two You",
+                2,
+                2.12
+        ));
+        itemList.add(new ItemRemoteDTO(
+                "Three Me",
+                4,
+                15.62
+        ));
+
+        SaleItemsRemoteDTO details = new SaleItemsRemoteDTO(
+                "00001",
+                "2022-04-15",
+                "c0012",
+                123.23,
+                itemList
+        );
+
+        saleNumber.setText(details.getSaleNumber());
+        saleGeneralInfo.getItems().setAll(List.of(
+                new Pair<>("Sale number",details.getSaleNumber()),
+                new Pair<>("Date of Sale", details.getDateOfSale()),
+                new Pair<>("Customer", details.getCustomerId()),
+                new Pair<>("Total price", formatCurrency(details.getTotalPrice()))));
+        saleItems.getItems().setAll(details.getItems());
+        switchSaleView();
+    }
+
     public void switchSearchView() {
         searchStackPane.getChildren().add(1, searchStackPane.getChildren().remove(0));
+    }
+
+    public void switchSaleView() {
+        saleStackPane.getChildren().add(1,saleStackPane.getChildren().remove(0));
     }
 
     private void fetchBasket() throws RemoteException {
@@ -379,7 +472,7 @@ public class MusicShopController {
     }
 
     public void addToBasket() throws RemoteException {
-        addToBasket(searchResultsView.getSelectionModel().getSelectedItem().getId());
+        addToBasket(searchReleaseResultsView.getSelectionModel().getSelectedItem().getId());
     }
 
     public void clearBasket() throws RemoteException {
