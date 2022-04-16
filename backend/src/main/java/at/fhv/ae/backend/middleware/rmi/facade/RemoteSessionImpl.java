@@ -1,10 +1,7 @@
 package at.fhv.ae.backend.middleware.rmi.facade;
 
 import at.fhv.ae.backend.middleware.common.Session;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteCustomerSearchServiceImpl;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteReleaseSearchServiceImpl;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteSellServiceImpl;
+import at.fhv.ae.backend.middleware.rmi.services.*;
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.rmi.*;
 
@@ -20,6 +17,8 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     private RemoteSellService remoteSellService;
 
     private RemoteCustomerSearchService remoteCustomerSearchService;
+
+    private RemoteBroadcastService remoteBroadcastService;
 
     public RemoteSessionImpl(Session session) throws RemoteException {
         super();
@@ -42,6 +41,12 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
         try {
             remoteCustomerSearchService = new RemoteCustomerSearchServiceImpl(session.customerRepository());
         } catch (AuthorizationException ignored) {
+        }
+
+        try {
+            remoteBroadcastService = new RemoteBroadcastServiceImpl(session.broadcastService());
+        } catch (AuthorizationException ignored) {
+
         }
     }
 
@@ -75,5 +80,13 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
             throw new AuthorizationException();
 
         return remoteCustomerSearchService;
+    }
+
+    @Override
+    public RemoteBroadcastService remoteBroadcastService() throws AuthorizationException, RemoteException {
+        if (remoteBroadcastService == null)
+            throw new AuthorizationException();
+
+        return remoteBroadcastService;
     }
 }

@@ -14,4 +14,6 @@ public interface RemoteSession extends Remote {
     RemoteReleaseSearchService remoteReleaseService() throws AuthorizationException, RemoteException;
 
     RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException, RemoteException;
+
+    RemoteBroadcastService remoteBroadcastService() throws AuthorizationException, RemoteException;
 }

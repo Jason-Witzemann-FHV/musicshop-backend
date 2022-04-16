@@ -1,21 +1,30 @@
 package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.application.BasketService;
+import at.fhv.ae.backend.application.BroadcastService;
 import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
+import at.fhv.ae.backend.application.impl.BroadcastServiceImpl;
 import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
 import at.fhv.ae.backend.domain.repository.*;
 import at.fhv.ae.backend.infrastructure.*;
 import at.fhv.ae.backend.middleware.common.CredentialsService;
 import at.fhv.ae.shared.repository.CustomerRepository;
+import lombok.SneakyThrows;
+import org.apache.activemq.ActiveMQConnectionFactory;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import java.rmi.Naming;
+import java.util.Map;
+import java.util.Properties;
 
 public class ServiceRegistry {
+
 
 
     private ServiceRegistry() { } // hide public constructor
@@ -49,6 +58,11 @@ public class ServiceRegistry {
 
     private static CustomerRepository customerRepository;
 
+    // messaging
+
+    private static BroadcastService broadcastService;
+
+    private static JmsMessageProducer jmsMessageProducer;
 
 
     public static EntityManager entityManager() {
@@ -128,4 +142,35 @@ public class ServiceRegistry {
         }
         return customerRepository;
     }
+
+    public static BroadcastService broadcastService() {
+        if(broadcastService == null) {
+            broadcastService = new BroadcastServiceImpl(jmsMessageProducer());
+        }
+        return broadcastService;
+    }
+
+    @SneakyThrows
+    public static JmsMessageProducer jmsMessageProducer() {
+        if(jmsMessageProducer == null) {
+
+            var env = new Properties();
+            env.putAll(Map.of(
+                    Context.INITIAL_CONTEXT_FACTORY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory",
+                    Context.PROVIDER_URL, "vm://10.0.40.160",
+                    "topic.System", "SystemTopic",
+                    "topic.Pop", "PopTopic",
+                    "topic.Rock", "RockTopic"
+            ));
+
+            jmsMessageProducer = new JmsMessageProducer(
+                    new InitialContext(env),
+                    new ActiveMQConnectionFactory("tcp://10.0.40.160:61616")
+            );
+        }
+
+        return jmsMessageProducer;
+    }
+
+
 }

@@ -42,7 +42,9 @@ public class MusicShopController {
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
     private RemoteCustomerSearchService customerSearchService;
-    private static double TAX_RATE = 0.2;
+    private RemoteBroadcastService broadcastService;
+
+    private static final double TAX_RATE = 0.2;
 
     @FXML TableView<NewsRemoteDTO> newsView;
     @FXML TableColumn<NewsRemoteDTO, LocalDateTime> newsDateColumn;
@@ -103,7 +105,7 @@ public class MusicShopController {
     @FXML TabPane tabPane;
 
     // fields and button - broadcast
-    @FXML ComboBox topicCombobox;
+    @FXML ComboBox<String> topicCombobox;
     @FXML DatePicker expirationDate;
     @FXML TextField messageTitle;
     @FXML TextArea message;
@@ -152,14 +154,14 @@ public class MusicShopController {
 
         }
 
-        // broadCastService
-        ObservableList<String> topics = FXCollections.observableArrayList(
-                "SystemTopic",
-                "RockTopic",
-                "PopTopic"
-        );
+        try {
+            broadcastService = session.remoteBroadcastService();
+        } catch (AuthorizationException ignored) {
+            // todo hide tab?
+        }
 
-        topicCombobox.getItems().setAll(topics);
+        // broadCastService
+        topicCombobox.getItems().setAll(List.of("System", "Rock", "Pop"));
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -503,7 +505,16 @@ public class MusicShopController {
 
     }
 
-    public void sendMessage(ActionEvent event) {
-        System.out.println("We will do it.");
+    public void sendMessage() {
+        try {
+
+            broadcastService.broadcast(topicCombobox.getValue(),
+                    messageTitle.getText(),
+                    message.getText(),
+                    expirationDate.getValue().atStartOfDay());
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 }
