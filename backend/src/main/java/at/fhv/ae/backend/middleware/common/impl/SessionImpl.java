@@ -2,6 +2,7 @@ package at.fhv.ae.backend.middleware.common.impl;
 
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.application.BasketService;
+import at.fhv.ae.backend.application.BroadcastService;
 import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.domain.model.user.Permission;
@@ -20,6 +21,8 @@ public class SessionImpl implements Session {
 
     private CustomerRepository customerRepository;
 
+    private BroadcastService broadcastService;
+
     private String userId;
 
     public SessionImpl(User user) {
@@ -31,8 +34,12 @@ public class SessionImpl implements Session {
             basketService = ServiceRegistry.basketService();
             customerRepository = ServiceRegistry.customerRepository();
         }
-        this.userId = user.userId().name();
 
+        if(user.hasPermission(Permission.PUBLISH_WEBFEED)) {
+            broadcastService = ServiceRegistry.broadcastService();
+        }
+
+        this.userId = user.userId().name();
     }
 
     @Override
@@ -65,6 +72,14 @@ public class SessionImpl implements Session {
             throw new AuthorizationException();
 
         return customerRepository;
+    }
+
+    @Override
+    public BroadcastService broadcastService() throws AuthorizationException {
+        if(broadcastService == null)
+            throw new AuthorizationException();
+
+        return broadcastService;
     }
 
     @Override
