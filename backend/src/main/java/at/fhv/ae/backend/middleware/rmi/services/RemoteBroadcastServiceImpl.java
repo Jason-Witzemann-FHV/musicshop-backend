@@ -2,15 +2,18 @@ package at.fhv.ae.backend.middleware.rmi.services;
 
 import at.fhv.ae.backend.application.BroadcastService;
 import at.fhv.ae.shared.rmi.RemoteBroadcastService;
-import lombok.AllArgsConstructor;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-public class RemoteBroadcastServiceImpl implements RemoteBroadcastService {
+public class RemoteBroadcastServiceImpl extends UnicastRemoteObject implements RemoteBroadcastService {
 
-    private BroadcastService broadcastService;
+    private final BroadcastService broadcastService;
+
+    public RemoteBroadcastServiceImpl(BroadcastService broadcastService) throws RemoteException {
+        this.broadcastService = broadcastService;
+    }
 
     @Override
     public void broadcast(String topic, String title, String message, LocalDateTime expiration) throws RemoteException {

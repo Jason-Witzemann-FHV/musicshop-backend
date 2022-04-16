@@ -81,4 +81,12 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
 
         return remoteCustomerSearchService;
     }
+
+    @Override
+    public RemoteBroadcastService remoteBroadcastService() throws AuthorizationException, RemoteException {
+        if (remoteBroadcastService == null)
+            throw new AuthorizationException();
+
+        return remoteBroadcastService;
+    }
 }
