@@ -109,6 +109,7 @@ public class MusicShopController {
     @FXML DatePicker expirationDate;
     @FXML TextField messageTitle;
     @FXML TextArea message;
+    @FXML Tab broadcastTab;
 
 
     public void setSession(RemoteSession session) throws RemoteException {
@@ -156,12 +157,11 @@ public class MusicShopController {
 
         try {
             broadcastService = session.remoteBroadcastService();
+            topicCombobox.getItems().setAll(List.of("System", "Rock", "Pop"));
         } catch (AuthorizationException ignored) {
-            // todo hide tab?
+            tabPane.getTabs().remove(broadcastTab);
         }
 
-        // broadCastService
-        topicCombobox.getItems().setAll(List.of("System", "Rock", "Pop"));
     }
 
     public void logout(ActionEvent event) throws IOException {

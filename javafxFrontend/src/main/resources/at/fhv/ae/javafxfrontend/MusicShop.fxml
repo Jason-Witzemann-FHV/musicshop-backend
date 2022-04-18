@@ -417,7 +417,7 @@
             </StackPane>
         </Tab>
 
-        <Tab>
+        <Tab fx:id="broadcastTab">
             <graphic>
                 <StackPane rotate="90">
                     <Group>
