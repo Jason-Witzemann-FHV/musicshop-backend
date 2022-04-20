@@ -162,6 +162,9 @@ public class MusicShopController {
             tabPane.getTabs().remove(broadcastTab);
         }
 
+        // do not show UI -insert Statement here!
+
+
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -512,6 +515,11 @@ public class MusicShopController {
                     messageTitle.getText(),
                     message.getText(),
                     expirationDate.getValue().atStartOfDay());
+
+            topicCombobox.setValue("");
+            messageTitle.clear();
+            message.clear();
+            expirationDate.getEditor().clear();
 
         } catch (RemoteException e) {
             e.printStackTrace();
