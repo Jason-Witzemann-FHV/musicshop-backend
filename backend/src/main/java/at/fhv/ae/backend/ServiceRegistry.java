@@ -1,13 +1,7 @@
 package at.fhv.ae.backend;
 
-import at.fhv.ae.backend.application.BasketService;
-import at.fhv.ae.backend.application.BroadcastService;
-import at.fhv.ae.backend.application.ReleaseSearchService;
-import at.fhv.ae.backend.application.SellService;
-import at.fhv.ae.backend.application.impl.BasketServiceImpl;
-import at.fhv.ae.backend.application.impl.BroadcastServiceImpl;
-import at.fhv.ae.backend.application.impl.ReleaseServiceImpl;
-import at.fhv.ae.backend.application.impl.SellServiceImpl;
+import at.fhv.ae.backend.application.*;
+import at.fhv.ae.backend.application.impl.*;
 import at.fhv.ae.backend.domain.repository.*;
 import at.fhv.ae.backend.infrastructure.*;
 import at.fhv.ae.backend.middleware.common.CredentialsService;
@@ -23,6 +17,7 @@ import javax.persistence.Persistence;
 import java.rmi.Naming;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 public class ServiceRegistry {
 
@@ -55,6 +50,8 @@ public class ServiceRegistry {
 
     private static CredentialsService credentialsService;
 
+    private static NewsPublisherService newsPublisherService;
+
     // remote customer db services
 
     private static CustomerRepository customerRepository;
@@ -65,7 +62,8 @@ public class ServiceRegistry {
 
     private static ConnectionFactory jmsConnectionFactory;
 
-    private static JmsMessageProducer jmsMessageProducer;
+    private static NewsRepository newsRepository;
+
 
 
     public static EntityManager entityManager() {
@@ -132,6 +130,12 @@ public class ServiceRegistry {
         return sellService;
     }
 
+    public static NewsPublisherService newsPublisherService() {
+        if(newsPublisherService == null) {
+            newsPublisherService = new NewsPublisherServiceImpl(newsRepository());
+        }
+        return newsPublisherService;
+    }
 
 
     public static CustomerRepository customerRepository() {
@@ -148,7 +152,7 @@ public class ServiceRegistry {
 
     public static BroadcastService broadcastService() {
         if(broadcastService == null) {
-            broadcastService = new BroadcastServiceImpl(jmsMessageProducer());
+            broadcastService = new BroadcastServiceImpl(newsRepository());
         }
         return broadcastService;
     }
@@ -162,22 +166,25 @@ public class ServiceRegistry {
         return jmsConnectionFactory;
     }
 
+
     @SneakyThrows
-    public static JmsMessageProducer jmsMessageProducer() {
-        if(jmsMessageProducer == null) {
+    public static NewsRepository newsRepository() {
+        if(newsRepository == null) {
 
             var env = new Hashtable<>(Map.of(
                     Context.INITIAL_CONTEXT_FACTORY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory",
                     Context.PROVIDER_URL, "vm://10.0.40.160",
-                    "topic.System", "SystemTopic",
-                    "topic.Pop", "PopTopic",
-                    "topic.Rock", "RockTopic"
+                    "topic.SystemTopic", "SystemTopic",
+                    "topic.PopTopic", "PopTopic",
+                    "topic.RockTopic", "RockTopic"
             ));
 
-            jmsMessageProducer = new JmsMessageProducer(new InitialContext(env), jmsConnectionFactory());
+            var topics = Set.of("SystemTopic", "PopTopic", "RockTopic");
+
+            newsRepository = new JmsNewsRepository(new InitialContext(env), jmsConnectionFactory(), topics);
         }
 
-        return jmsMessageProducer;
+        return newsRepository;
     }
 
 }

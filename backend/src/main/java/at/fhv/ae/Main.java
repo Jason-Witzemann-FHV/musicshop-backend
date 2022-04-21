@@ -18,6 +18,8 @@ import java.util.function.Function;
 public class Main {
     public static void main(String[] args) {
 
+        ServiceRegistry.newsPublisherService(); // skip lazy loading for debugging
+
         final String ldap = "ldap://10.0.40.161:389";
         final Function<String, String> usernameToDistinguishedName = username ->
                 "cn=" + username + ",ou=employees,dc=ad,dc=teama,dc=net";

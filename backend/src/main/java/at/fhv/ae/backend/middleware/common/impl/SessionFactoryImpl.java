@@ -8,16 +8,21 @@ import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.backend.middleware.common.SessionFactory;
 import at.fhv.ae.shared.AuthorizationException;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class SessionFactoryImpl implements SessionFactory {
     private final CredentialsService credentialsService;
     private final UserRepository userRepository;
 
+    private final Set<Session> activeSessions;
+
 
     public SessionFactoryImpl(CredentialsService credentialsService, UserRepository userRepository) {
         this.credentialsService = credentialsService;
         this.userRepository = userRepository;
+        this.activeSessions = new HashSet<>();
     }
 
     @Override
@@ -29,11 +34,7 @@ public class SessionFactoryImpl implements SessionFactory {
 
         Optional<User> optUser = userRepository.userById(new UserId(username));
 
-        if (optUser.isEmpty()) {
-            throw new AuthorizationException("Not found in User/Role/Permission DB");
-        }
-
-        User user = optUser.get();
+        User user = optUser.orElseThrow(() -> new AuthorizationException("Not found in User/Role/Permission DB"));
 
         return new SessionImpl(user);
     }

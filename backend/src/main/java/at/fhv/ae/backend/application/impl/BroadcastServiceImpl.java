@@ -1,26 +1,19 @@
 package at.fhv.ae.backend.application.impl;
 
 import at.fhv.ae.backend.application.BroadcastService;
-import at.fhv.ae.backend.infrastructure.JmsMessageProducer;
+import at.fhv.ae.backend.domain.model.news.News;
+import at.fhv.ae.backend.domain.repository.NewsRepository;
 import lombok.AllArgsConstructor;
 
-import javax.jms.JMSException;
-import javax.naming.NamingException;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 public class BroadcastServiceImpl implements BroadcastService {
 
-    private final JmsMessageProducer jmsMessageProducer;
+    private final NewsRepository newsRepository;
 
     @Override
     public void broadcast(String topic, String title, String message, LocalDateTime expiration) {
-        try {
-            jmsMessageProducer.produce(topic, title, message, expiration);
-        } catch (JMSException e) {
-            throw new IllegalStateException("JMS exception", e);
-        } catch (NamingException e) {
-            throw new IllegalStateException("invalid names provided", e);
-        }
+        newsRepository.put(new News(topic, title, message, expiration));
     }
 }
