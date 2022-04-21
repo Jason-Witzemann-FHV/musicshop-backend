@@ -15,13 +15,14 @@ import at.fhv.ae.shared.repository.CustomerRepository;
 import lombok.SneakyThrows;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+import javax.jms.ConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import java.rmi.Naming;
+import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 public class ServiceRegistry {
 
@@ -61,6 +62,8 @@ public class ServiceRegistry {
     // messaging
 
     private static BroadcastService broadcastService;
+
+    private static ConnectionFactory jmsConnectionFactory;
 
     private static JmsMessageProducer jmsMessageProducer;
 
@@ -150,12 +153,20 @@ public class ServiceRegistry {
         return broadcastService;
     }
 
+    public static ConnectionFactory jmsConnectionFactory() {
+
+        if(jmsConnectionFactory == null) {
+            jmsConnectionFactory = new ActiveMQConnectionFactory("tcp://10.0.40.160:61616");
+        }
+
+        return jmsConnectionFactory;
+    }
+
     @SneakyThrows
     public static JmsMessageProducer jmsMessageProducer() {
         if(jmsMessageProducer == null) {
 
-            var env = new Properties();
-            env.putAll(Map.of(
+            var env = new Hashtable<>(Map.of(
                     Context.INITIAL_CONTEXT_FACTORY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory",
                     Context.PROVIDER_URL, "vm://10.0.40.160",
                     "topic.System", "SystemTopic",
@@ -163,14 +174,10 @@ public class ServiceRegistry {
                     "topic.Rock", "RockTopic"
             ));
 
-            jmsMessageProducer = new JmsMessageProducer(
-                    new InitialContext(env),
-                    new ActiveMQConnectionFactory("tcp://10.0.40.160:61616")
-            );
+            jmsMessageProducer = new JmsMessageProducer(new InitialContext(env), jmsConnectionFactory());
         }
 
         return jmsMessageProducer;
     }
-
 
 }
