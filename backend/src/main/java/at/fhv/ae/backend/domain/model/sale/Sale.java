@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.bson.types.ObjectId;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class Sale {
 
     private ObjectId customerId;
 
+    private LocalDateTime sellTimestamp;
+
     private PaymentType paymentType;
 
     private SaleType saleType;
@@ -40,10 +43,11 @@ public class Sale {
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Item> items;
 
-    private Sale(SaleId saleId, UserId employeeId, ObjectId customerId, PaymentType paymentType, SaleType saleType, double totalPrice, List<Item> items) {
+    private Sale(SaleId saleId, UserId employeeId, ObjectId customerId, LocalDateTime sellTimestamp, PaymentType paymentType, SaleType saleType, double totalPrice, List<Item> items) {
         this.saleId = saleId;
         this.employeeId = employeeId;
         this.customerId = customerId;
+        this.sellTimestamp = sellTimestamp;
         this.paymentType = paymentType;
         this.saleType = saleType;
         this.totalPrice = totalPrice;
@@ -59,6 +63,7 @@ public class Sale {
                 saleId,
                 employeeId,
                 customerId,
+                LocalDateTime.now(),
                 paymentType,
                 saleType,
                 items.stream().mapToDouble(Item::price).sum(),
