@@ -9,12 +9,9 @@ import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
-import at.fhv.ae.shared.dto.sale.SaleSearchResultRemoteDTO;
 import at.fhv.ae.shared.rmi.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +25,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import org.bson.types.ObjectId;
-
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
@@ -97,19 +93,22 @@ public class MusicShopController {
 
 
     // buttons and tabs - authorization
+    @FXML TabPane tabPane;
+    @FXML Tab searchTab;
+    @FXML Tab basketTab;
+    @FXML Tab salesHistoryTab;
+    @FXML Tab broadcastTab;
     @FXML Button toBasketInDetails;
     @FXML Button clearBasketButton;
     @FXML Button sellBasketButton;
-    @FXML Tab basketTab;
-    @FXML Tab searchTab;
-    @FXML TabPane tabPane;
+
 
     // fields and button - broadcast
     @FXML ComboBox<String> topicCombobox;
     @FXML DatePicker expirationDate;
     @FXML TextField messageTitle;
     @FXML TextArea message;
-    @FXML Tab broadcastTab;
+
 
 
     public void setSession(RemoteSession session) throws RemoteException {
@@ -147,6 +146,7 @@ public class MusicShopController {
             // Hide unauthorized
             clearBasketButton.setVisible(false);
             sellBasketButton.setVisible(false);
+            tabPane.getTabs().remove(salesHistoryTab);
         }
 
         try {
@@ -162,9 +162,6 @@ public class MusicShopController {
         } catch (AuthorizationException ignored) {
             tabPane.getTabs().remove(broadcastTab);
         }
-
-        // do not show UI -insert Statement here!
-
 
     }
 
@@ -465,6 +462,7 @@ public class MusicShopController {
         alert.setContentText(alert.getTitle());
         alert.showAndWait();
 
+        customerSearchView.getItems().clear();
         fetchBasket();
         saleSearch();
     }
@@ -473,24 +471,41 @@ public class MusicShopController {
 
         List<CustomerSearchResponseDTO> customers = customerSearchService.findCustomerByName(customerSearchFirstName.getText(), customerSearchSurname.getText());
         customerSearchView.getItems().setAll(customers);
-
     }
 
     public void sendMessage() {
+        boolean success = false;
+
         try {
+            if( topicCombobox.getValue() == null || expirationDate.getValue() == null ||
+                topicCombobox.getValue().equals("") || messageTitle.getText().isEmpty() ||
+                    message.getText().isEmpty()) {
 
-            broadcastService.broadcast(topicCombobox.getValue(),
-                    messageTitle.getText(),
-                    message.getText(),
-                    expirationDate.getValue().atStartOfDay());
+                throw new IllegalArgumentException("Not all message fields are filled in");
 
-            topicCombobox.setValue("");
-            messageTitle.clear();
-            message.clear();
-            expirationDate.getEditor().clear();
+            } else {
+                broadcastService.broadcast(topicCombobox.getValue(),
+                        messageTitle.getText(),
+                        message.getText(),
+                        expirationDate.getValue().atStartOfDay());
 
-        } catch (RemoteException e) {
+                topicCombobox.setValue("");
+                messageTitle.clear();
+                message.clear();
+                expirationDate.getEditor().clear();
+
+                success = true;
+            }
+
+        } catch (RemoteException | RuntimeException e) {
             e.printStackTrace();
+
         }
+
+        Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+        alert.setTitle(success ? "Message sent" : "Error by sending message");
+        alert.setContentText(alert.getTitle());
+        alert.showAndWait();
+
     }
 }

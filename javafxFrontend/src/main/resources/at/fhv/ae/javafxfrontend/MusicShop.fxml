@@ -19,18 +19,20 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.DatePicker?>
-<AnchorPane
-        stylesheets="/css/MusicShop.css"
-        xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="at.fhv.ae.javafxfrontend.MusicShopController">
+
+<AnchorPane stylesheets="/css/MusicShop.css"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.fhv.ae.javafxfrontend.MusicShopController">
 
     <VBox styleClass="background-color, padding"
           prefHeight="80"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
         <Text text="SoundKraut" style="-fx-font-size: 45"/>
         <VBox alignment="TOP_RIGHT">
             <Button text="Logout" onAction="#logout"/>
         </VBox>
+
     </VBox>
 
     <TabPane fx:id="tabPane" side="LEFT" rotateGraphic="true" styleClass="header-background-color"
@@ -49,8 +51,10 @@
             </graphic>
 
             <AnchorPane styleClass="big-padding">
-                <TableView fx:id="newsView" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0"
-                           AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
+                <TableView fx:id="newsView"
+                           AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                           AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" >
+
                     <columns>
                         <TableColumn text="Title">
                             <cellValueFactory>
@@ -79,6 +83,7 @@
         </Tab>
 
         <Tab fx:id="searchTab">
+
             <graphic>
                 <StackPane rotate="90">
                     <Group>
@@ -88,13 +93,11 @@
             </graphic>
 
             <StackPane fx:id="searchStackPane" styleClass="stack-pane-opaque-items, big-padding" minWidth="0">
-
                 <!-- search result details -->
                 <AnchorPane>
                     <Label fx:id="detailTitle" style="-fx-font-size: 24pt"/>
-
-                    <TableView fx:id="detailView" styleClass="no-header" AnchorPane.leftAnchor="0"
-                               AnchorPane.rightAnchor="815"
+                    <TableView fx:id="detailView" styleClass="no-header"
+                               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="815"
                                AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
                         <columns>
                             <TableColumn>
@@ -205,6 +208,7 @@
                     </TableView>
                 </AnchorPane>
             </StackPane>
+
         </Tab>
 
         <Tab fx:id="basketTab">
@@ -257,7 +261,6 @@
                     </VBox>
                 </top>
 
-
                 <center>
                     <AnchorPane minHeight="0">
                         <GridPane hgap="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
@@ -291,13 +294,9 @@
                                     </TableColumn>
                                 </columns>
                             </TableView>
-
-
                         </GridPane>
                     </AnchorPane>
-
                 </center>
-
 
                 <bottom>
                     <HBox alignment="BOTTOM_RIGHT">
@@ -309,7 +308,7 @@
             </BorderPane>
         </Tab>
 
-        <Tab fx:id="salesTab">
+        <Tab fx:id="salesHistoryTab">
             <graphic>
                 <StackPane rotate="90">
                     <Group>
@@ -324,8 +323,8 @@
                 <AnchorPane>
                     <Label fx:id="saleNumber" style="-fx-font-size: 24pt"/>
 
-                    <TableView fx:id="saleGeneralInfo" styleClass="no-header" AnchorPane.leftAnchor="0"
-                               AnchorPane.rightAnchor="815"
+                    <TableView fx:id="saleGeneralInfo" styleClass="no-header"
+                               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="815"
                                AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
                         <columns>
                             <TableColumn>
@@ -440,9 +439,6 @@
                         </HBox>
                     </VBox>
                 </center>
-
-
-
             </BorderPane>
         </Tab>
     </TabPane>
