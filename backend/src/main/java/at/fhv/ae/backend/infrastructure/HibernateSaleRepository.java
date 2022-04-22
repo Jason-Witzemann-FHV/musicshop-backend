@@ -2,10 +2,12 @@ package at.fhv.ae.backend.infrastructure;
 
 import at.fhv.ae.backend.domain.model.sale.Sale;
 import at.fhv.ae.backend.domain.model.sale.SaleId;
+import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 import lombok.AllArgsConstructor;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -26,4 +28,13 @@ public class HibernateSaleRepository implements SaleRepository {
     public void addSale(Sale sale) {
         em.persist(sale);
     }
+
+    @Override
+    public List<Sale> salesOfUser(UserId userId) {
+        return em.createQuery("select s from Sale s where s.employeeId = :userId", Sale.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+
 }

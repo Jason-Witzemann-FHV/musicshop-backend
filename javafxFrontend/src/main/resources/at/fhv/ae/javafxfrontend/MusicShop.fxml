@@ -368,28 +368,10 @@
 
                 <!-- search form & result table -->
                 <AnchorPane>
-                    <VBox styleClass="border"
-                          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
-                        <GridPane styleClass="padding" hgap="20">
-                            <columnConstraints>
-                                <ColumnConstraints/>
-                                <ColumnConstraints/>
-                                <ColumnConstraints/>
-                                <ColumnConstraints/>
-                                <ColumnConstraints/>
-                            </columnConstraints>
-
-                            <Button GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.rowSpan="2"
-                                    GridPane.fillWidth="true" GridPane.fillHeight="true"
-                                    maxWidth="Infinity" maxHeight="Infinity"
-                                    text="Load" onAction="#saleSearch"/>
-
-                        </GridPane>
-                    </VBox>
                     <TableView fx:id="saleResultsView"
                                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-                               AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
+                               AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
                         <columns>
                             <TableColumn text="Sale No">
                                 <cellValueFactory>

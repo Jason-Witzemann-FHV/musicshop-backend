@@ -23,4 +23,9 @@ public class SaleId implements Serializable {
     public SaleId(UUID id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }
