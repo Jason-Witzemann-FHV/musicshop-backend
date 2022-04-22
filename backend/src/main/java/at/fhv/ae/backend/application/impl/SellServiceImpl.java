@@ -1,5 +1,7 @@
 package at.fhv.ae.backend.application.impl;
 
+import at.fhv.ae.backend.application.dto.ItemDTO;
+import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.domain.model.release.Release;
@@ -14,8 +16,10 @@ import org.bson.types.ObjectId;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,6 +28,7 @@ public class SellServiceImpl implements SellService {
 
     private final SaleRepository saleRepository;
     private final BasketRepository basketRepository;
+    private final ReleaseRepository releaseRepository;
     private final UserRepository userRepository;
     private final EntityManager entityManager;
 
@@ -70,5 +75,22 @@ public class SellServiceImpl implements SellService {
         basketRepository.clearBasket(user.userId());
 
         transaction.commit();
+    }
+
+    @Override
+    public List<SaleItemsDTO> salesOfUser(String userId) {
+        return saleRepository.salesOfUser(new UserId(userId)).stream()
+                .map(sale -> {
+                    return new SaleItemsDTO(
+                            sale.saleId().toString(),
+                            sale.sellTimestamp().toString(),
+                            Optional.ofNullable(sale.customerId()).map(ObjectId::toString).orElse("anonymous"),
+                            sale.totalPrice(),
+                            sale.items().stream().map(item -> {
+                                var release = releaseRepository.findById(item.releaseId()).get();
+                                return new ItemDTO(release.title(), item.amount(), item.price());
+                            }).collect(Collectors.toList())
+                    );
+                }).collect(Collectors.toList());
     }
 }

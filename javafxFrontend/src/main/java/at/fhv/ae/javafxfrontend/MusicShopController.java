@@ -72,8 +72,8 @@ public class MusicShopController {
     @FXML StackPane saleStackPane;
 
     // sales table
-    @FXML TableView<SaleSearchResultRemoteDTO> saleResultsView;
-    @FXML TableColumn<SaleSearchResultRemoteDTO, Double> saleColPrice;
+    @FXML TableView<SaleItemsRemoteDTO> saleResultsView;
+    @FXML TableColumn<SaleItemsRemoteDTO, Double> saleColPrice;
 
     // sale detail
     @FXML Label saleNumber;
@@ -141,6 +141,7 @@ public class MusicShopController {
 
         try {
             sellService = session.remoteSellService();
+            saleSearch();
 
         } catch (AuthorizationException ignored) {
             // Hide unauthorized
@@ -229,7 +230,7 @@ public class MusicShopController {
 
         // double click / hit enter on a sale result for details
         Runnable userActionOnSaleResults = () -> {
-            SaleSearchResultRemoteDTO selectedResult = saleResultsView.getSelectionModel().getSelectedItem();
+            SaleItemsRemoteDTO selectedResult = saleResultsView.getSelectionModel().getSelectedItem();
             if (selectedResult != null) {
                 try {
                     showDetailsOf(selectedResult);
@@ -359,17 +360,9 @@ public class MusicShopController {
         newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
     }
 
-    public void saleSearch() {
-        // TODO: implement call to backend
-        saleResultsView.getItems().setAll(
-                new SaleSearchResultRemoteDTO(
-                        "this is the UUID",
-                        "00001",
-                        "2022-04-15",
-                        "c0012",
-                        123.23
-                )
-        );
+    public void saleSearch() throws RemoteException {
+        var sales = sellService.salesOfUser();
+        saleResultsView.getItems().setAll(sales);
     }
 
     public void releaseSearch() throws RemoteException {
@@ -401,33 +394,7 @@ public class MusicShopController {
     }
 
     // overloading Methodname
-    public void showDetailsOf(SaleSearchResultRemoteDTO result) throws RemoteException {
-
-        // TODO: call application layer
-        ArrayList<ItemRemoteDTO> itemList = new ArrayList<>();
-        itemList.add(new ItemRemoteDTO(
-                "One Shot",
-                5,
-                5.32
-        ));
-        itemList.add(new ItemRemoteDTO(
-                "Two You",
-                2,
-                2.12
-        ));
-        itemList.add(new ItemRemoteDTO(
-                "Three Me",
-                4,
-                15.62
-        ));
-
-        SaleItemsRemoteDTO details = new SaleItemsRemoteDTO(
-                "00001",
-                "2022-04-15",
-                "c0012",
-                123.23,
-                itemList
-        );
+    public void showDetailsOf(SaleItemsRemoteDTO details) throws RemoteException {
 
         saleNumber.setText(details.getSaleNumber());
         saleGeneralInfo.getItems().setAll(List.of(
@@ -496,6 +463,7 @@ public class MusicShopController {
         alert.showAndWait();
 
         fetchBasket();
+        saleSearch();
     }
 
     public void searchCustomer() throws RemoteException {
