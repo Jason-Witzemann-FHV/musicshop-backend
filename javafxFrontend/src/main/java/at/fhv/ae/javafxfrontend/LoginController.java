@@ -1,6 +1,5 @@
 package at.fhv.ae.javafxfrontend;
 
-import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.rmi.RemoteSession;
 import at.fhv.ae.shared.rmi.RemoteSessionFactory;
 import javafx.event.ActionEvent;
@@ -11,9 +10,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -21,7 +20,7 @@ import java.rmi.RemoteException;
 
 public class LoginController {
 
-    private final RemoteSessionFactory sessionFactory;
+    private RemoteSessionFactory sessionFactory;
 
     @FXML
     TextField userName;
@@ -31,12 +30,36 @@ public class LoginController {
     @FXML
     Button loginButton;
 
-    public LoginController() throws NotBoundException, MalformedURLException, RemoteException {
-        sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://localhost/music-shop");
+    @FXML
+    RadioButton local;
+
+    @FXML
+    TextField ownServer;
+
+    public LoginController() {
     }
 
-    public void login(ActionEvent event) throws IOException {
+    public void hide() {
+        ownServer.setVisible(false);
+    }
+
+    public void show() {
+        ownServer.setVisible(true);
+    }
+
+    public void connectToServer(String server) throws IllegalArgumentException, MalformedURLException, NotBoundException, RemoteException {
+        System.out.println("Connect to: '" + server + "'");
+        sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://" + server + "/music-shop");
+    }
+
+    public void login(ActionEvent event) {
         try {
+            if (local.isSelected()) {
+                connectToServer("localhost");
+            } else {
+                connectToServer(ownServer.getText());
+            }
+
             RemoteSession session = sessionFactory.logIn(userName.getText(),password.getText());
 
             final Node source = (Node) event.getSource();
@@ -58,7 +81,7 @@ public class LoginController {
 
             currentStage.close();
 
-        } catch (AuthorizationException e) {
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.getDialogPane().setPrefWidth(200);
             alert.setTitle("Could not log in");
