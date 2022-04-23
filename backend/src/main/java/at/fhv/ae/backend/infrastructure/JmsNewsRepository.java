@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 public class JmsNewsRepository implements NewsRepository {
 
     private static final String TITLE_PROP = "title";
+    private static final String EXPIRATION_PROP = "expiration";
 
     private final Context context;
     private final Session session;
@@ -42,15 +43,6 @@ public class JmsNewsRepository implements NewsRepository {
         connection.start();
     }
 
-    private static LocalDateTime toExpirationDate(long millis) {
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
-
-    }
-
-    private static long toTimeToLive(LocalDateTime expirationDate) {
-        return Duration.between(java.time.LocalDateTime.now(), expirationDate).toMillis();
-    }
-
     @SneakyThrows
     private void onMessage(Message m) {
         if (!(m instanceof TextMessage) || !(m.getJMSDestination() instanceof Topic))
@@ -63,7 +55,7 @@ public class JmsNewsRepository implements NewsRepository {
                 topic.getTopicName(),
                 message.getStringProperty(TITLE_PROP),
                 message.getText(),
-                toExpirationDate(message.getJMSExpiration()));
+                LocalDateTime.parse(message.getStringProperty(EXPIRATION_PROP)));
 
         subscribers.forEach(c -> c.accept(news));
     }
@@ -80,9 +72,9 @@ public class JmsNewsRepository implements NewsRepository {
 
         var msg = session.createTextMessage(news.body());
         msg.setStringProperty(TITLE_PROP, news.title());
+        msg.setStringProperty(EXPIRATION_PROP, news.expiration().toString());
 
         var producer = session.createProducer((Destination) context.lookup(news.topic()));
-        producer.setTimeToLive(toTimeToLive(news.expiration()));
         producer.send(msg);
         producer.close();
     }
