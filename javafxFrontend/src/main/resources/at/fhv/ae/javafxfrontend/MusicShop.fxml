@@ -41,7 +41,7 @@
              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0"
              AnchorPane.topAnchor="95.0" AnchorPane.bottomAnchor="0">
 
-        <Tab fx:id="notifyMessage">
+        <Tab fx:id="newsTab">
             <graphic>
                 <StackPane rotate="90">
                     <Group>

@@ -39,6 +39,7 @@ public class MusicShopController {
     private RemoteSellService sellService;
     private RemoteCustomerSearchService customerSearchService;
     private RemoteBroadcastService broadcastService;
+    private RemoteNewsPublisherService newsPublisherService;
 
     private static final double TAX_RATE = 0.2;
 
@@ -108,7 +109,7 @@ public class MusicShopController {
     @FXML DatePicker expirationDate;
     @FXML TextField messageTitle;
     @FXML TextArea message;
-    @FXML Tab notifyMessage;
+    @FXML Tab newsTab;
 
 
 
@@ -159,9 +160,23 @@ public class MusicShopController {
 
         try {
             broadcastService = session.remoteBroadcastService();
-            topicCombobox.getItems().setAll(List.of("System", "Rock", "Pop"));
+            topicCombobox.getItems().setAll(List.of("SystemTopic", "RockTopic", "PopTopic"));
         } catch (AuthorizationException ignored) {
             tabPane.getTabs().remove(broadcastTab);
+        }
+
+        try {
+            newsPublisherService = session.remoteNewsPublisherService();
+            newsPublisherService.addReceiver(new RemoteNewsRecieverImpl(news -> {
+                newsView.getItems().add(news);
+                newsTab.setStyle("-fx-background-color: #FA7878");
+                    })
+
+            );
+
+
+        } catch (AuthorizationException e) {
+            tabPane.getTabs().remove(newsTab);
         }
 
     }
@@ -361,7 +376,7 @@ public class MusicShopController {
         newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
 
         // newsTab opened - change color to default color
-        notifyMessage.setOnSelectionChanged(event -> notifyMessage.setStyle(null));
+        newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));
     }
 
     public void saleSearch() throws RemoteException {
@@ -499,9 +514,6 @@ public class MusicShopController {
                 expirationDate.getEditor().clear();
 
                 success = true;
-
-                //change pos when jere is ready - muss beim abholen rein
-                notifyMessage.setStyle("-fx-background-color: #FA7878");
             }
 
         } catch (RemoteException | RuntimeException e) {
