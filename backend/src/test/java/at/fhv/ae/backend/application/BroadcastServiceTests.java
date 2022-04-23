@@ -1,13 +1,12 @@
 package at.fhv.ae.backend.application;
 
 import at.fhv.ae.backend.application.impl.BroadcastServiceImpl;
-import at.fhv.ae.backend.infrastructure.JmsMessageProducer;
+import at.fhv.ae.backend.domain.model.news.News;
+import at.fhv.ae.backend.domain.repository.NewsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import javax.jms.JMSException;
-import javax.naming.NamingException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -16,16 +15,16 @@ import static org.mockito.Mockito.mock;
 public class BroadcastServiceTests {
 
     private BroadcastService broadcastService;
-    private JmsMessageProducer jmsMessageProducer;
+    private NewsRepository newsRepository;
 
     @BeforeEach
     void setUp() {
-        jmsMessageProducer = mock(JmsMessageProducer.class);
-        broadcastService = new BroadcastServiceImpl(jmsMessageProducer);
+        newsRepository = mock(NewsRepository.class);
+        broadcastService = new BroadcastServiceImpl(newsRepository);
     }
 
     @Test
-    public void given_someMessage_when_called_then_callImpl() throws JMSException, NamingException {
+    public void given_someMessage_when_called_then_callImpl() {
 
         String topic = "test";
         String title = "testing 123";
@@ -36,7 +35,7 @@ public class BroadcastServiceTests {
 
         broadcastService.broadcast(topic, title, message, expiration);
 
-        Mockito.verify(jmsMessageProducer).produce("test", title, message, expiration);
+        Mockito.verify(newsRepository).put(new News(topic, title, message, expiration));
     }
 
 }
