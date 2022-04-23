@@ -27,6 +27,10 @@ public class JmsNewsRepository implements NewsRepository {
         this.context = context;
 
         this.connection = cf.createConnection();
+
+        // durable subscribers are created on a per-client basis, they can't be shared.
+        // this uses one client-id globally:
+
         this.connection.setClientID("client");
         this.connection.start();
 
@@ -39,18 +43,26 @@ public class JmsNewsRepository implements NewsRepository {
         return (Topic) context.lookup(topic);
     }
 
-
     @Override
     @SneakyThrows
     public void addConsumer(String id, Consumer<News> handler) {
-        var sess = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-        var subs = subscribers.computeIfAbsent(id, k -> new HashMap<>());
+
+        Session sess = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+
+        // get the subscribers, or initialize as empty map
+        Map<Topic, TopicSubscriber> subs = subscribers.computeIfAbsent(id, k -> new HashMap<>());
+
         for(var t: topics.entrySet()) {
-            var sub = subs.get(t.getValue());
+            String topicName = t.getKey();
+            Topic topic = t.getValue();
+
+            // replace existing subscriber for this user if there is one, to receive all old messages again
+
+            TopicSubscriber sub = subs.get(topic);
             if(sub != null) {
                 sub.close();
             }
-            sub = sess.createDurableSubscriber(t.getValue(), id + "-" + t.getKey());
+            sub = sess.createDurableSubscriber(topic, id + "-" + topicName);
             subs.put(t.getValue(), sub);
             sub.setMessageListener(m -> parseMessage(m).ifPresent(handler));
         }
@@ -76,15 +88,15 @@ public class JmsNewsRepository implements NewsRepository {
     @SneakyThrows
     public void put(String id, News news) {
 
-        var sess = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
-        var prod = sess.createProducer(topics.get(news.topic()));
+        MessageProducer producer = session.createProducer(topics.get(news.topic()));
 
-        var mess = sess.createTextMessage(news.body());
-        mess.setStringProperty(TITLE_PROP, news.title());
-        mess.setStringProperty(EXPIRATION_PROP, news.expiration().toString());
+        TextMessage message = session.createTextMessage(news.body());
+        message.setStringProperty(TITLE_PROP, news.title());
+        message.setStringProperty(EXPIRATION_PROP, news.expiration().toString());
 
-        prod.send(mess);
+        producer.send(message);
     }
 
 }
