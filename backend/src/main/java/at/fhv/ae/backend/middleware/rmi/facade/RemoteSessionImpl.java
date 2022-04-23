@@ -20,6 +20,8 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
 
     private RemoteBroadcastService remoteBroadcastService;
 
+    private RemoteNewsPublisherService remoteNewsPublisherService;
+
     public RemoteSessionImpl(Session session) throws RemoteException {
         super();
 
@@ -45,6 +47,12 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
 
         try {
             remoteBroadcastService = new RemoteBroadcastServiceImpl(session.broadcastService());
+        } catch (AuthorizationException ignored) {
+
+        }
+
+        try {
+            remoteNewsPublisherService = new RemoteNewsPublisherServiceImpl(session.newsPublisherService());
         } catch (AuthorizationException ignored) {
 
         }
@@ -88,5 +96,13 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
             throw new AuthorizationException();
 
         return remoteBroadcastService;
+    }
+
+    @Override
+    public RemoteNewsPublisherService remoteNewsPublisherService() throws AuthorizationException, RemoteException {
+        if(remoteNewsPublisherService == null)
+            throw new AuthorizationException();
+
+        return remoteNewsPublisherService;
     }
 }

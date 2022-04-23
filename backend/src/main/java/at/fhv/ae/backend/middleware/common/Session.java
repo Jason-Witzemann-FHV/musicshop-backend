@@ -1,9 +1,6 @@
 package at.fhv.ae.backend.middleware.common;
 
-import at.fhv.ae.backend.application.BasketService;
-import at.fhv.ae.backend.application.BroadcastService;
-import at.fhv.ae.backend.application.ReleaseSearchService;
-import at.fhv.ae.backend.application.SellService;
+import at.fhv.ae.backend.application.*;
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.repository.CustomerRepository;
 
@@ -18,6 +15,8 @@ public interface Session {
     CustomerRepository customerRepository() throws AuthorizationException;
 
     BroadcastService broadcastService() throws AuthorizationException;
+
+    NewsPublisherService newsPublisherService() throws AuthorizationException;
 
     String getUserId();
 
