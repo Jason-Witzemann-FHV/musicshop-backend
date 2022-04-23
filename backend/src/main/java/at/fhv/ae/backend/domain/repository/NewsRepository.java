@@ -9,6 +9,4 @@ public interface NewsRepository {
     void put(String id, News news);
 
     void addConsumer(String id, Consumer<News> consumer);
-
-    void removeConsumer(String id);
 }

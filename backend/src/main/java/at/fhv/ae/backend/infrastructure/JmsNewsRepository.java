@@ -56,12 +56,6 @@ public class JmsNewsRepository implements NewsRepository {
         }
     }
 
-    @Override
-    @SneakyThrows
-    public void removeConsumer(String id) {
-        throw null;
-    }
-
     @SneakyThrows
     private Optional<News> parseMessage(Message m) {
         if(!(m instanceof TextMessage) || !(m.getJMSDestination() instanceof Topic))
