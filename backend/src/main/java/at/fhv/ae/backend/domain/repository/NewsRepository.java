@@ -6,7 +6,9 @@ import java.util.function.Consumer;
 
 public interface NewsRepository {
 
-    void put(News news);
+    void put(String id, News news);
 
-    void addConsumer(Consumer<News> consumer);
+    void addConsumer(String id, Consumer<News> consumer);
+
+    void removeConsumer(String id);
 }

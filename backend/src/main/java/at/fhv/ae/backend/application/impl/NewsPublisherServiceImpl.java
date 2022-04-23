@@ -13,7 +13,7 @@ public class NewsPublisherServiceImpl implements NewsPublisherService {
     private final NewsRepository newsRepository;
 
     @Override
-    public void addReceiver(Consumer<NewsDTO> receiver) {
-        newsRepository.addConsumer(n -> receiver.accept(new NewsDTO(n.title(), n.body(), n.expiration(), n.topic())));
+    public void addReceiver(String id, Consumer<NewsDTO> receiver) {
+        newsRepository.addConsumer(id, n -> receiver.accept(new NewsDTO(n.title(), n.body(), n.expiration(), n.topic())));
     }
 }
