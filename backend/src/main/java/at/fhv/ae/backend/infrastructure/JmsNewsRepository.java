@@ -7,10 +7,7 @@ import lombok.SneakyThrows;
 import javax.jms.*;
 import javax.naming.Context;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -20,19 +17,20 @@ public class JmsNewsRepository implements NewsRepository {
     private static final String EXPIRATION_PROP = "expiration";
 
     private final Context context;
-    private final ConnectionFactory cf;
     private final Map<String, Topic> topics;
 
-    private final Map<String, Connection> connections;
+    private final Connection connection;
+    private final Map<String, Map<Topic, TopicSubscriber>> subscribers;
 
-    private final Map<Connection, Map<Topic, TopicSubscriber>> subscribers;
-
-    public JmsNewsRepository(Context context, ConnectionFactory cf, Set<String> topics) {
+    public JmsNewsRepository(Context context, ConnectionFactory cf, Set<String> topics) throws JMSException {
 
         this.context = context;
-        this.cf = cf;
+
+        this.connection = cf.createConnection();
+        this.connection.setClientID("client");
+        this.connection.start();
+
         this.topics = topics.stream().collect(Collectors.toMap(t -> t, this::lookupTopic));
-        this.connections = new HashMap<>();
         this.subscribers = new HashMap<>();
     }
 
@@ -41,23 +39,12 @@ public class JmsNewsRepository implements NewsRepository {
         return (Topic) context.lookup(topic);
     }
 
-    @SneakyThrows
-    private Connection connectionFor(String id) {
-        var con = connections.get(id);
-        if(con == null) {
-            con = cf.createConnection();
-            con.setClientID(id);
-            connections.put(id, con);
-        }
-        return con;
-    }
 
     @Override
     @SneakyThrows
     public void addConsumer(String id, Consumer<News> handler) {
-        var conn = connectionFor(id);
-        var sess = conn.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-        var subs = subscribers.computeIfAbsent(conn, k -> new HashMap<>());
+        var sess = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        var subs = subscribers.computeIfAbsent(id, k -> new HashMap<>());
         for(var t: topics.entrySet()) {
             var sub = subs.get(t.getValue());
             if(sub != null) {
@@ -67,13 +54,12 @@ public class JmsNewsRepository implements NewsRepository {
             subs.put(t.getValue(), sub);
             sub.setMessageListener(m -> parseMessage(m).ifPresent(handler));
         }
-        conn.start();
     }
 
     @Override
     @SneakyThrows
     public void removeConsumer(String id) {
-        this.connections.remove(id).close();
+        throw null;
     }
 
     @SneakyThrows
@@ -96,7 +82,7 @@ public class JmsNewsRepository implements NewsRepository {
     @SneakyThrows
     public void put(String id, News news) {
 
-        var sess = connectionFor(id).createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        var sess = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
         var prod = sess.createProducer(topics.get(news.topic()));
 
