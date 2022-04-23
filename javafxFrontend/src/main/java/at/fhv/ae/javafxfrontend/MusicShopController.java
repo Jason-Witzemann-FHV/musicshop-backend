@@ -108,6 +108,7 @@ public class MusicShopController {
     @FXML DatePicker expirationDate;
     @FXML TextField messageTitle;
     @FXML TextArea message;
+    @FXML Tab notifyMessage;
 
 
 
@@ -358,6 +359,9 @@ public class MusicShopController {
         });
 
         newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
+
+        // newsTab opened - change color to default color
+        notifyMessage.setOnSelectionChanged(event -> notifyMessage.setStyle(null));
     }
 
     public void saleSearch() throws RemoteException {
@@ -495,17 +499,18 @@ public class MusicShopController {
                 expirationDate.getEditor().clear();
 
                 success = true;
+
+                //change pos when jere is ready - muss beim abholen rein
+                notifyMessage.setStyle("-fx-background-color: #FA7878");
             }
 
         } catch (RemoteException | RuntimeException e) {
             e.printStackTrace();
-
         }
 
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(success ? "Message sent" : "Error by sending message");
         alert.setContentText(alert.getTitle());
         alert.showAndWait();
-
     }
 }
