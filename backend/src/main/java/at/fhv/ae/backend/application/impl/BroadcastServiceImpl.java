@@ -13,7 +13,7 @@ public class BroadcastServiceImpl implements BroadcastService {
     private final NewsRepository newsRepository;
 
     @Override
-    public void broadcast(String topic, String title, String message, LocalDateTime expiration) {
-        newsRepository.put(new News(topic, title, message, expiration));
+    public void broadcast(String userId, String topic, String title, String message, LocalDateTime expiration) {
+        newsRepository.put(userId, new News(topic, title, message, expiration));
     }
 }

@@ -32,9 +32,9 @@ public class JmsNewsRepositoryTests {
                 "test",
                 LocalDateTime.now().plus(Duration.ofDays(1)));
 
-        newsRepository.addConsumer(listener);
+        newsRepository.addConsumer("TEST", listener);
 
-        newsRepository.put(news);
+        newsRepository.put("TEST", news);
 
         Mockito.verify(listener, Mockito.timeout(3000)).accept(news);
     }

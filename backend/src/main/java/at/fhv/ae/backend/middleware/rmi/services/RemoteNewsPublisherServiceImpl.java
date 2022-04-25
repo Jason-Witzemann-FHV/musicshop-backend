@@ -11,14 +11,16 @@ import java.rmi.server.UnicastRemoteObject;
 public class RemoteNewsPublisherServiceImpl extends UnicastRemoteObject implements RemoteNewsPublisherService {
 
     private final NewsPublisherService newsPublisherService;
+    private final String userId;
 
-    public RemoteNewsPublisherServiceImpl(NewsPublisherService newsPublisherService) throws RemoteException {
+    public RemoteNewsPublisherServiceImpl(NewsPublisherService newsPublisherService, String userId) throws RemoteException {
         this.newsPublisherService = newsPublisherService;
+        this.userId = userId;
     }
 
     @Override
     public void addReceiver(RemoteNewsReceiver receiver) {
-        newsPublisherService.addReceiver(m -> {
+        newsPublisherService.addReceiver(userId, m -> {
             try {
                 receiver.receive(new NewsRemoteDTO(m.title(), m.message(), m.dateOfEvent(), m.topic()));
             } catch (RemoteException e) {

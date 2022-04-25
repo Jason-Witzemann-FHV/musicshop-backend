@@ -6,5 +6,5 @@ import java.util.function.Consumer;
 
 public interface NewsPublisherService {
 
-    void addReceiver(Consumer<NewsDTO> receiver);
+    void addReceiver(String id, Consumer<NewsDTO> receiver);
 }

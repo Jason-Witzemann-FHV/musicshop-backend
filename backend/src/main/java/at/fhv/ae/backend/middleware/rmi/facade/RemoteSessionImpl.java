@@ -46,13 +46,13 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
         }
 
         try {
-            remoteBroadcastService = new RemoteBroadcastServiceImpl(session.broadcastService());
+            remoteBroadcastService = new RemoteBroadcastServiceImpl(session.broadcastService(), session.getUserId());
         } catch (AuthorizationException ignored) {
 
         }
 
         try {
-            remoteNewsPublisherService = new RemoteNewsPublisherServiceImpl(session.newsPublisherService());
+            remoteNewsPublisherService = new RemoteNewsPublisherServiceImpl(session.newsPublisherService(), session.getUserId());
         } catch (AuthorizationException ignored) {
 
         }
@@ -105,4 +105,6 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
 
         return remoteNewsPublisherService;
     }
+
+
 }

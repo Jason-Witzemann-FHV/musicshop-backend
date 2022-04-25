@@ -10,13 +10,15 @@ import java.time.LocalDateTime;
 public class RemoteBroadcastServiceImpl extends UnicastRemoteObject implements RemoteBroadcastService {
 
     private final BroadcastService broadcastService;
+    private final String userId;
 
-    public RemoteBroadcastServiceImpl(BroadcastService broadcastService) throws RemoteException {
+    public RemoteBroadcastServiceImpl(BroadcastService broadcastService, String userId) throws RemoteException {
         this.broadcastService = broadcastService;
+        this.userId = userId;
     }
 
     @Override
     public void broadcast(String topic, String title, String message, LocalDateTime expiration) throws RemoteException {
-        broadcastService.broadcast(topic, title, message, expiration);
+        broadcastService.broadcast(userId, topic, title, message, expiration);
     }
 }

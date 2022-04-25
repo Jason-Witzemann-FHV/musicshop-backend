@@ -33,9 +33,9 @@ public class BroadcastServiceTests {
                 "cannot be applied to '(java.lang.String, java.lang.String, java.lang.String)'";
         LocalDateTime expiration = LocalDateTime.now().plus(Duration.ofDays(5));
 
-        broadcastService.broadcast(topic, title, message, expiration);
+        broadcastService.broadcast("TEST", topic, title, message, expiration);
 
-        Mockito.verify(newsRepository).put(new News(topic, title, message, expiration));
+        Mockito.verify(newsRepository).put("TEST", new News(topic, title, message, expiration));
     }
 
 }

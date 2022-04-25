@@ -6,11 +6,10 @@ import lombok.SneakyThrows;
 
 import javax.jms.*;
 import javax.naming.Context;
-import javax.naming.NamingException;
-import java.time.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class JmsNewsRepository implements NewsRepository {
 
@@ -18,64 +17,86 @@ public class JmsNewsRepository implements NewsRepository {
     private static final String EXPIRATION_PROP = "expiration";
 
     private final Context context;
-    private final Session session;
+    private final Map<String, Topic> topics;
 
-    private final Set<MessageConsumer> jmsConsumers;
-    private final Set<Consumer<News>> subscribers;
+    private final Connection connection;
+    private final Map<String, Map<Topic, TopicSubscriber>> subscribers;
 
-    public JmsNewsRepository(Context context, ConnectionFactory cf, Set<String> topics) throws JMSException, NamingException {
-
-        this.jmsConsumers = new HashSet<>();
-        this.subscribers = new HashSet<>();
+    public JmsNewsRepository(Context context, ConnectionFactory cf, Set<String> topics) throws JMSException {
 
         this.context = context;
 
-        var connection = cf.createConnection();
+        this.connection = cf.createConnection();
 
-        this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        // durable subscribers are created on a per-client basis, they can't be shared.
+        // this uses one client-id globally:
 
-        for (String t : topics) {
-            var consumer = this.session.createConsumer((Destination) context.lookup(t));
-            consumer.setMessageListener(this::onMessage);
-            jmsConsumers.add(consumer);
-        }
+        this.connection.setClientID("client");
+        this.connection.start();
 
-        connection.start();
+        this.topics = topics.stream().collect(Collectors.toMap(t -> t, this::lookupTopic));
+        this.subscribers = new HashMap<>();
     }
 
     @SneakyThrows
-    private void onMessage(Message m) {
-        if (!(m instanceof TextMessage) || !(m.getJMSDestination() instanceof Topic))
-            return;
+    private Topic lookupTopic(String topic) {
+        return (Topic) context.lookup(topic);
+    }
 
-        TextMessage message = (TextMessage) m;
-        Topic topic = (Topic) m.getJMSDestination();
+    @Override
+    @SneakyThrows
+    public void addConsumer(String id, Consumer<News> handler) {
 
-        var news = new News(
+        Session sess = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+
+        // get the subscribers, or initialize as empty map
+        Map<Topic, TopicSubscriber> subs = subscribers.computeIfAbsent(id, k -> new HashMap<>());
+
+        for(var t: topics.entrySet()) {
+            String topicName = t.getKey();
+            Topic topic = t.getValue();
+
+            // replace existing subscriber for this user if there is one, to receive all old messages again
+
+            TopicSubscriber sub = subs.get(topic);
+            if(sub != null) {
+                sub.close();
+            }
+            sub = sess.createDurableSubscriber(topic, id + "-" + topicName);
+            subs.put(t.getValue(), sub);
+            sub.setMessageListener(m -> parseMessage(m).ifPresent(handler));
+        }
+    }
+
+    @SneakyThrows
+    private Optional<News> parseMessage(Message m) {
+        if(!(m instanceof TextMessage) || !(m.getJMSDestination() instanceof Topic))
+            return Optional.empty();
+
+        var message = (TextMessage) m;
+        var topic = (Topic) m.getJMSDestination();
+
+        return Optional.of(new News(
                 topic.getTopicName(),
                 message.getStringProperty(TITLE_PROP),
                 message.getText(),
-                LocalDateTime.parse(message.getStringProperty(EXPIRATION_PROP)));
-
-        subscribers.forEach(c -> c.accept(news));
+                LocalDateTime.parse(message.getStringProperty(EXPIRATION_PROP))
+        ));
     }
 
     @Override
     @SneakyThrows
-    public void addConsumer(Consumer<News> consumer) {
-        subscribers.add(consumer);
+    public void put(String id, News news) {
+
+        Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+
+        MessageProducer producer = session.createProducer(topics.get(news.topic()));
+
+        TextMessage message = session.createTextMessage(news.body());
+        message.setStringProperty(TITLE_PROP, news.title());
+        message.setStringProperty(EXPIRATION_PROP, news.expiration().toString());
+
+        producer.send(message);
     }
 
-    @Override
-    @SneakyThrows
-    public void put(News news) {
-
-        var msg = session.createTextMessage(news.body());
-        msg.setStringProperty(TITLE_PROP, news.title());
-        msg.setStringProperty(EXPIRATION_PROP, news.expiration().toString());
-
-        var producer = session.createProducer((Destination) context.lookup(news.topic()));
-        producer.send(msg);
-        producer.close();
-    }
 }
