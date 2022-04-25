@@ -9,7 +9,6 @@
 <AnchorPane
         stylesheets="/css/MusicShop.css" fx:controller="at.fhv.ae.javafxfrontend.LoginController"
         xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" prefHeight="350" prefWidth="350">
-
     <VBox styleClass="padding"
           AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
         <VBox styleClass="loginForm">
