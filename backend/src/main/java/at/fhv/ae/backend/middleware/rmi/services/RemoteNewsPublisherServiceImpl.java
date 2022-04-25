@@ -5,15 +5,27 @@ import at.fhv.ae.shared.dto.news.NewsRemoteDTO;
 import at.fhv.ae.shared.rmi.RemoteNewsPublisherService;
 import at.fhv.ae.shared.rmi.RemoteNewsReceiver;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RemoteNewsPublisherServiceImpl extends UnicastRemoteObject implements RemoteNewsPublisherService {
+@Stateful
+public class RemoteNewsPublisherServiceImpl implements RemoteNewsPublisherService {
 
-    private final NewsPublisherService newsPublisherService;
-    private final String userId;
+    @EJB
+    private NewsPublisherService newsPublisherService;
+    private String userId;
 
-    public RemoteNewsPublisherServiceImpl(NewsPublisherService newsPublisherService, String userId) throws RemoteException {
+    public RemoteNewsPublisherServiceImpl() {
+
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public RemoteNewsPublisherServiceImpl(NewsPublisherService newsPublisherService, String userId) {
         this.newsPublisherService = newsPublisherService;
         this.userId = userId;
     }
@@ -21,11 +33,9 @@ public class RemoteNewsPublisherServiceImpl extends UnicastRemoteObject implemen
     @Override
     public void addReceiver(RemoteNewsReceiver receiver) {
         newsPublisherService.addReceiver(userId, m -> {
-            try {
+
                 receiver.receive(new NewsRemoteDTO(m.title(), m.message(), m.dateOfEvent(), m.topic()));
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+
         });
     }
 }

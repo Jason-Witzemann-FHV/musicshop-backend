@@ -2,10 +2,12 @@ package at.fhv.ae.shared.rmi;
 
 import at.fhv.ae.shared.dto.news.NewsRemoteDTO;
 
-import java.rmi.Remote;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import java.rmi.RemoteException;
 
-public interface RemoteNewsReceiver extends Remote {
+@Remote
+public interface RemoteNewsReceiver {
 
-    void receive(NewsRemoteDTO news) throws RemoteException;
+    void receive(NewsRemoteDTO news);
 }

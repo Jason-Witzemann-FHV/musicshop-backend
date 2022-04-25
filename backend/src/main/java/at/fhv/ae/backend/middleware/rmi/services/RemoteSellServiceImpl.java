@@ -7,24 +7,34 @@ import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
 import at.fhv.ae.shared.rmi.RemoteSellService;
 import org.bson.types.ObjectId;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RemoteSellServiceImpl extends UnicastRemoteObject implements RemoteSellService {
+@Stateful
+public class RemoteSellServiceImpl implements RemoteSellService {
 
-    private final transient SellService sellService;
-    private final String userId;
+    @EJB
+    private SellService sellService;
 
-    public RemoteSellServiceImpl(String userId, SellService sellService) throws RemoteException {
-        super();
+    private String userId;
+
+    public RemoteSellServiceImpl() {
+
+    }
+
+    public RemoteSellServiceImpl(String userId, SellService sellService) {
         this.sellService = sellService;
         this.userId = userId;
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
-    public boolean sellItemsInBasket(ObjectId customerId) throws RemoteException {
+    public boolean sellItemsInBasket(ObjectId customerId) {
         try {
             sellService.sellItemsInBasket(userId, customerId);
             return true;

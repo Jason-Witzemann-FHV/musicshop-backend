@@ -1,9 +1,10 @@
 package at.fhv.ae.shared.rmi;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
 
-public interface RemoteNewsPublisherService extends Remote {
+import javax.ejb.Remote;
 
-    void addReceiver(RemoteNewsReceiver receiver) throws RemoteException;
+@Remote
+public interface RemoteNewsPublisherService {
+
+    void addReceiver(RemoteNewsReceiver receiver);
 }

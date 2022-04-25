@@ -11,18 +11,28 @@ import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Stateless
 public class BasketServiceImpl implements BasketService {
 
-    private final BasketRepository basketRepository;
+    @EJB
+    private BasketRepository basketRepository;
 
-    private final ReleaseRepository releaseRepository;
+    @EJB
+    private ReleaseRepository releaseRepository;
 
-    private final UserRepository userRepository;
+    @EJB
+    private UserRepository userRepository;
+
+    public BasketServiceImpl() {
+
+    }
 
     @Override
     public void addItemToBasket(String userId, UUID releaseId, int quantity) {

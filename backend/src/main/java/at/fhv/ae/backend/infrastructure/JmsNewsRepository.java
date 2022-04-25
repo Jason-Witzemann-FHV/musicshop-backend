@@ -4,6 +4,7 @@ import at.fhv.ae.backend.domain.model.news.News;
 import at.fhv.ae.backend.domain.repository.NewsRepository;
 import lombok.SneakyThrows;
 
+import javax.ejb.Stateful;
 import javax.jms.*;
 import javax.naming.Context;
 import java.time.LocalDateTime;
@@ -11,16 +12,21 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@Stateful
 public class JmsNewsRepository implements NewsRepository {
 
     private static final String TITLE_PROP = "title";
     private static final String EXPIRATION_PROP = "expiration";
 
-    private final Context context;
-    private final Map<String, Topic> topics;
+    private Context context;
+    private Map<String, Topic> topics;
 
-    private final Connection connection;
-    private final Map<String, Map<Topic, TopicSubscriber>> subscribers;
+    private Connection connection;
+    private Map<String, Map<Topic, TopicSubscriber>> subscribers;
+
+    public JmsNewsRepository() {
+
+    }
 
     public JmsNewsRepository(Context context, ConnectionFactory cf, Set<String> topics) throws JMSException {
 

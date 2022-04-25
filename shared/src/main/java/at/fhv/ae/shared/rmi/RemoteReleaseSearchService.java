@@ -3,16 +3,16 @@ package at.fhv.ae.shared.rmi;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+import javax.ejb.Remote;
 import java.util.List;
 import java.util.UUID;
 
-public interface RemoteReleaseSearchService extends Remote {
+@Remote
+public interface RemoteReleaseSearchService {
 
-    List<ReleaseSearchResultDTO> query(String title, String artist, String genre) throws RemoteException;
+    List<ReleaseSearchResultDTO> query(String title, String artist, String genre);
 
-    DetailedReleaseRemoteDTO getDetails(UUID releaseId) throws RemoteException;
+    DetailedReleaseRemoteDTO getDetails(UUID releaseId);
 
-    List<String> knownGenres() throws RemoteException;
+    List<String> knownGenres();
 }

@@ -2,13 +2,12 @@ package at.fhv.ae.backend.application;
 
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
-import at.fhv.ae.backend.domain.model.sale.Sale;
-import at.fhv.ae.backend.domain.model.user.UserId;
-import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
 import org.bson.types.ObjectId;
 
+import javax.ejb.Local;
 import java.util.List;
 
+@Local
 public interface SellService {
 
     /**

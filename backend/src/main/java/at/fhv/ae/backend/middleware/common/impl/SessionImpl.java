@@ -8,38 +8,55 @@ import at.fhv.ae.backend.middleware.common.Session;
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.repository.CustomerRepository;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
+
+@Stateful
 public class SessionImpl implements Session {
 
+    @EJB
     private BasketService basketService;
 
+    @EJB
     private ReleaseSearchService releaseSearchService;
 
+    @EJB
     private SellService sellService;
 
     private CustomerRepository customerRepository;
 
+    @EJB
     private BroadcastService broadcastService;
 
+    @EJB
     private NewsPublisherService newsPublisherService;
 
     private String userId;
 
-    public SessionImpl(User user) {
-        if (user.hasPermission(Permission.SEARCH_RELEASES))
-            releaseSearchService = ServiceRegistry.releaseService();
+    public SessionImpl() {
 
-        if (user.hasPermission(Permission.SELL_RELEASES)) {
-            sellService = ServiceRegistry.sellService();
-            basketService = ServiceRegistry.basketService();
+    }
+
+    public void setUserId(User user) {
+
+        if (!user.hasPermission(Permission.SEARCH_RELEASES))
+            releaseSearchService = null;
+
+
+        if (!user.hasPermission(Permission.SELL_RELEASES)) {
+            sellService = null;
+            basketService = null;
+            customerRepository = null;
+        } else {
             customerRepository = ServiceRegistry.customerRepository();
         }
 
         if(user.hasPermission(Permission.PUBLISH_WEBFEED)) {
-            broadcastService = ServiceRegistry.broadcastService();
+            broadcastService = null;
         }
 
         // TODO add permission for this?
-        newsPublisherService = ServiceRegistry.newsPublisherService();
+        // newsPublisherService = ServiceRegistry.newsPublisherService();
 
         this.userId = user.userId().name();
     }

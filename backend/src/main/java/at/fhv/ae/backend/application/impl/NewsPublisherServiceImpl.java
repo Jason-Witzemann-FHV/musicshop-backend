@@ -5,12 +5,20 @@ import at.fhv.ae.backend.application.dto.NewsDTO;
 import at.fhv.ae.backend.domain.repository.NewsRepository;
 import lombok.AllArgsConstructor;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.function.Consumer;
 
 @AllArgsConstructor
+@Stateless
 public class NewsPublisherServiceImpl implements NewsPublisherService {
 
-    private final NewsRepository newsRepository;
+    @EJB
+    private NewsRepository newsRepository;
+
+    public NewsPublisherServiceImpl() {
+
+    }
 
     @Override
     public void addReceiver(String id, Consumer<NewsDTO> receiver) {

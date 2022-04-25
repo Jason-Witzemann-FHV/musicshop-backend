@@ -27,6 +27,7 @@ class RemoteBasketServiceTests {
         basketService = mock(BasketService.class);
         userId = "nsu3146";
         remoteBasketService = new RemoteBasketServiceImpl(userId, basketService);
+
     }
 
     @Test

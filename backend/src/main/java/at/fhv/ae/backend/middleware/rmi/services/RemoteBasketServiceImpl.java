@@ -4,18 +4,37 @@ import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
 import at.fhv.ae.shared.rmi.RemoteBasketService;
 
+import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.ejb.SessionContext;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class RemoteBasketServiceImpl extends UnicastRemoteObject implements RemoteBasketService {
+@Stateful
+public class RemoteBasketServiceImpl implements RemoteBasketService {
 
-    private final transient BasketService basketService;
-    private final String userId;
+    @Resource
+    private SessionContext context;
 
-    public RemoteBasketServiceImpl(String userId, BasketService basketService) throws RemoteException {
+    @EJB
+    private BasketService basketService;
+
+    private String userId;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public RemoteBasketServiceImpl() {
+
+    }
+
+    public RemoteBasketServiceImpl(String userId, BasketService basketService)  {
         super();
         this.basketService = basketService;
         this.userId = userId;

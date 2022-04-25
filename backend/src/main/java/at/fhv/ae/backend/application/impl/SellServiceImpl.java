@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.application.impl;
 
+import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.application.dto.ItemDTO;
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
@@ -14,8 +15,11 @@ import at.fhv.ae.backend.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +27,34 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+
+@Stateless
 public class SellServiceImpl implements SellService {
 
-    private final SaleRepository saleRepository;
-    private final BasketRepository basketRepository;
-    private final ReleaseRepository releaseRepository;
-    private final UserRepository userRepository;
-    private final EntityManager entityManager;
+    @EJB
+    private SaleRepository saleRepository;
+
+    @EJB
+    private BasketRepository basketRepository;
+
+    @EJB
+    private ReleaseRepository releaseRepository;
+
+    @EJB
+    private UserRepository userRepository;
+
+    private EntityManager entityManager = ServiceRegistry.entityManager();
+
+    public SellServiceImpl() {
+
+    }
+
+    public SellServiceImpl(SaleRepository saleRepository, BasketRepository basketRepository, ReleaseRepository releaseRepository, UserRepository userRepository) {
+        this.saleRepository = saleRepository;
+        this.basketRepository = basketRepository;
+        this.releaseRepository = releaseRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {

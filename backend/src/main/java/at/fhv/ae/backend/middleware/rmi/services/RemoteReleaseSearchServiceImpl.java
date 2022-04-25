@@ -8,6 +8,8 @@ import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -15,11 +17,17 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class RemoteReleaseSearchServiceImpl extends UnicastRemoteObject implements RemoteReleaseSearchService {
+@Stateless
+public class RemoteReleaseSearchServiceImpl implements RemoteReleaseSearchService {
 
-    private final transient ReleaseSearchService releaseSearchService;
+    @EJB
+    private ReleaseSearchService releaseSearchService;
 
-    public RemoteReleaseSearchServiceImpl(ReleaseSearchService releaseSearchService) throws RemoteException {
+    public RemoteReleaseSearchServiceImpl() {
+
+    }
+
+    public RemoteReleaseSearchServiceImpl(ReleaseSearchService releaseSearchService) {
         super();
         this.releaseSearchService = releaseSearchService;
     }
@@ -33,7 +41,7 @@ public class RemoteReleaseSearchServiceImpl extends UnicastRemoteObject implemen
     }
 
     @Override
-    public DetailedReleaseRemoteDTO getDetails(UUID releaseId) throws RemoteException {
+    public DetailedReleaseRemoteDTO getDetails(UUID releaseId) {
         DetailedReleaseDTO result = releaseSearchService.detailedInformation(releaseId);
         return new DetailedReleaseRemoteDTO(
                 result.title(),
@@ -50,7 +58,7 @@ public class RemoteReleaseSearchServiceImpl extends UnicastRemoteObject implemen
     }
 
     @Override
-    public List<String> knownGenres() throws RemoteException {
+    public List<String> knownGenres() {
         return releaseSearchService.knownGenres()
                 .stream()
                 .map(Genre::friendlyName)

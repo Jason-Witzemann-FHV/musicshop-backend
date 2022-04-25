@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'war'
 }
 
 group 'at.fhv'
@@ -26,8 +27,19 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
 
-    implementation 'org.mongodb:mongodb-driver:3.12.10'
 
+    // https://mvnrepository.com/artifact/org.wildfly/wildfly-ejb-client-bom
+    implementation group: 'org.wildfly', name: 'wildfly-ejb-client-bom', version: '21.0.1.Final', ext: 'pom'
+
+    // https://mvnrepository.com/artifact/org.wildfly/wildfly-naming-client
+    implementation group: 'org.wildfly', name: 'wildfly-naming-client', version: '1.0.13.Final'
+
+    // https://mvnrepository.com/artifact/org.jboss/jboss-ejb-client
+    implementation group: 'org.jboss', name: 'jboss-ejb-client', version: '4.0.36.Final'
+
+    compileOnly('javax.ejb:javax.ejb-api:3.2.2')
+
+    implementation 'org.mongodb:mongodb-driver:3.12.10'
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'

@@ -12,16 +12,25 @@ import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
 import lombok.AllArgsConstructor;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
+@Stateless
 public class ReleaseServiceImpl implements ReleaseSearchService {
 
-    private final ReleaseRepository releaseRepository;
+    @EJB
+    private ReleaseRepository releaseRepository;
 
-    private final WorkRepository workRepository;
+    @EJB
+    private WorkRepository workRepository;
+
+    public ReleaseServiceImpl() {
+
+    }
 
     @Override
     public List<ReleaseDTO> query(String title, String artist,String genre) {

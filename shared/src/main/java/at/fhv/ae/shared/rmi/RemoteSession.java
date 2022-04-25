@@ -2,20 +2,21 @@ package at.fhv.ae.shared.rmi;
 
 import at.fhv.ae.shared.AuthorizationException;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+import javax.ejb.Remote;
 
-public interface RemoteSession extends Remote {
 
-    RemoteBasketService remoteBasketService() throws AuthorizationException, RemoteException;
+@Remote
+public interface RemoteSession {
 
-    RemoteSellService remoteSellService() throws AuthorizationException, RemoteException;
+    RemoteBasketService remoteBasketService() throws AuthorizationException;
 
-    RemoteReleaseSearchService remoteReleaseService() throws AuthorizationException, RemoteException;
+    RemoteSellService remoteSellService() throws AuthorizationException;
 
-    RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException, RemoteException;
+    RemoteReleaseSearchService remoteReleaseService() throws AuthorizationException;
 
-    RemoteBroadcastService remoteBroadcastService() throws AuthorizationException, RemoteException;
+    RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException;
 
-    RemoteNewsPublisherService remoteNewsPublisherService() throws AuthorizationException, RemoteException;
+    RemoteBroadcastService remoteBroadcastService() throws AuthorizationException;
+
+    RemoteNewsPublisherService remoteNewsPublisherService() throws AuthorizationException;
 }

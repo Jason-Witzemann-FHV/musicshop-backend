@@ -1,19 +1,24 @@
 package at.fhv.ae.backend.infrastructure;
 
+import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import lombok.AllArgsConstructor;
 
+import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Stateless
 public class HibernateReleaseRepository implements ReleaseRepository {
 
-    private final EntityManager em;
+    private final EntityManager em = ServiceRegistry.entityManager();
 
     @Override
     public Optional<Release> findById(ReleaseId id) {

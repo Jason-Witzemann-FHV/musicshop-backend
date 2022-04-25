@@ -2,10 +2,10 @@ package at.fhv.ae.shared.rmi;
 
 import at.fhv.ae.shared.AuthorizationException;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+import javax.ejb.Remote;
 
-public interface RemoteSessionFactory extends Remote {
+@Remote
+public interface RemoteSessionFactory {
 
-    RemoteSession logIn(String username, String password) throws RemoteException, AuthorizationException;
+    RemoteSession logIn(String username, String password) throws AuthorizationException;
 }
