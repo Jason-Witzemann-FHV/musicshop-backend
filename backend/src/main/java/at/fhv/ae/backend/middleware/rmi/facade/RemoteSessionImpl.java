@@ -5,10 +5,12 @@ import at.fhv.ae.backend.middleware.rmi.services.*;
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.rmi.*;
 
+import javax.ejb.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSession {
+@Stateful
+public class RemoteSessionImpl implements RemoteSession {
 
     private RemoteReleaseSearchService remoteReleaseSearchService;
 
@@ -22,44 +24,51 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
 
     private RemoteNewsPublisherService remoteNewsPublisherService;
 
-    public RemoteSessionImpl(Session session) throws RemoteException {
-        super();
+    public RemoteSessionImpl() {
+    }
+
+    public void setSession(Session session) {
+        //try {
+        remoteReleaseSearchService = new RemoteReleaseSearchServiceImpl();
+        //  } catch (AuthorizationException ignored) {
+        //}
+
+        //try {
+        remoteSellService = new RemoteSellServiceImpl();
+        ((RemoteSellServiceImpl) remoteSellService).setUserId(session.getUserId());
+        //} catch (AuthorizationException ignored) {
+        // }
+
+        //try {
+        remoteBasketService = new RemoteBasketServiceImpl();
+        ((RemoteBasketServiceImpl) remoteBasketService).setUserId(session.getUserId());
+        // } catch (AuthorizationException ignored) {
+        //}
 
         try {
-            remoteReleaseSearchService = new RemoteReleaseSearchServiceImpl(session.releaseSearchService());
+            remoteCustomerSearchService = new RemoteCustomerSearchServiceImpl();
+            ((RemoteCustomerSearchServiceImpl) remoteCustomerSearchService).setCustomerRepository(session.customerRepository());
         } catch (AuthorizationException ignored) {
         }
 
-        try {
-            remoteSellService = new RemoteSellServiceImpl(session.getUserId(), session.sellService());
-        } catch (AuthorizationException ignored) {
-        }
+        //try {
+        remoteBroadcastService = new RemoteBroadcastServiceImpl();
+        ((RemoteBroadcastServiceImpl) remoteBroadcastService).setUserId(session.getUserId());
+        //} catch (AuthorizationException ignored) {
 
-        try {
-            remoteBasketService = new RemoteBasketServiceImpl(session.getUserId(), session.basketService());
-        } catch (AuthorizationException ignored) {
-        }
+        //}
 
-        try {
-            remoteCustomerSearchService = new RemoteCustomerSearchServiceImpl(session.customerRepository());
-        } catch (AuthorizationException ignored) {
-        }
+        remoteNewsPublisherService = new RemoteNewsPublisherServiceImpl();
+        ((RemoteNewsPublisherServiceImpl) remoteNewsPublisherService ).setUserId(session.getUserId());
+        //try {
+        //    remoteNewsPublisherService = new RemoteNewsPublisherServiceImpl(session.newsPublisherService(), session.getUserId());
+        //} catch (AuthorizationException ignored) {
 
-        try {
-            remoteBroadcastService = new RemoteBroadcastServiceImpl(session.broadcastService(), session.getUserId());
-        } catch (AuthorizationException ignored) {
-
-        }
-
-        try {
-            remoteNewsPublisherService = new RemoteNewsPublisherServiceImpl(session.newsPublisherService(), session.getUserId());
-        } catch (AuthorizationException ignored) {
-
-        }
+        //}
     }
 
     @Override
-    public RemoteBasketService remoteBasketService() throws AuthorizationException, RemoteException {
+    public RemoteBasketService remoteBasketService() throws AuthorizationException {
         if (remoteBasketService == null)
             throw new AuthorizationException();
 
@@ -67,7 +76,7 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     }
 
     @Override
-    public RemoteSellService remoteSellService() throws AuthorizationException, RemoteException {
+    public RemoteSellService remoteSellService() throws AuthorizationException {
         if (remoteSellService == null)
             throw new AuthorizationException();
 
@@ -75,7 +84,7 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     }
 
     @Override
-    public RemoteReleaseSearchService remoteReleaseService() throws AuthorizationException, RemoteException {
+    public RemoteReleaseSearchService remoteReleaseService() throws AuthorizationException {
         if (remoteReleaseSearchService == null)
             throw new AuthorizationException();
 
@@ -83,7 +92,7 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     }
 
     @Override
-    public RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException, RemoteException {
+    public RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException {
         if (remoteCustomerSearchService == null)
             throw new AuthorizationException();
 
@@ -91,7 +100,7 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     }
 
     @Override
-    public RemoteBroadcastService remoteBroadcastService() throws AuthorizationException, RemoteException {
+    public RemoteBroadcastService remoteBroadcastService() throws AuthorizationException {
         if (remoteBroadcastService == null)
             throw new AuthorizationException();
 
@@ -99,7 +108,7 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     }
 
     @Override
-    public RemoteNewsPublisherService remoteNewsPublisherService() throws AuthorizationException, RemoteException {
+    public RemoteNewsPublisherService remoteNewsPublisherService() throws AuthorizationException {
         if(remoteNewsPublisherService == null)
             throw new AuthorizationException();
 

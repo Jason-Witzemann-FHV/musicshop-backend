@@ -7,15 +7,15 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.function.Consumer;
 
-public class RemoteNewsRecieverImpl extends UnicastRemoteObject implements RemoteNewsReceiver {
+public class RemoteNewsRecieverImpl implements RemoteNewsReceiver {
     private final Consumer<NewsRemoteDTO> consumer;
 
-    public RemoteNewsRecieverImpl(Consumer<NewsRemoteDTO> consumer) throws RemoteException {
+    public RemoteNewsRecieverImpl(Consumer<NewsRemoteDTO> consumer) {
         this.consumer = consumer;
     }
 
     @Override
-    public void receive(NewsRemoteDTO news) throws RemoteException {
+    public void receive(NewsRemoteDTO news) {
         consumer.accept(news);
     }
 }

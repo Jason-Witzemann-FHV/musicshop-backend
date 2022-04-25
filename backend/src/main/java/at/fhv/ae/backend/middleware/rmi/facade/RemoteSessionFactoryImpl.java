@@ -6,22 +6,34 @@ import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.rmi.RemoteSession;
 import at.fhv.ae.shared.rmi.RemoteSessionFactory;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RemoteSessionFactoryImpl extends UnicastRemoteObject implements RemoteSessionFactory {
-    private final SessionFactory sessionFactory;
+@Stateless
+public class RemoteSessionFactoryImpl implements RemoteSessionFactory {
 
-    public RemoteSessionFactoryImpl(SessionFactory sessionFactory) throws RemoteException {
+    @EJB
+    private SessionFactory sessionFactory;
+
+    public RemoteSessionFactoryImpl(SessionFactory sessionFactory) {
         super();
         this.sessionFactory = sessionFactory;
     }
 
+    public RemoteSessionFactoryImpl() {
+
+    }
+
     @Override
-    public RemoteSession logIn(String username, String password) throws RemoteException, AuthorizationException {
+    public RemoteSession logIn(String username, String password) throws AuthorizationException {
 
         Session session = sessionFactory.logIn(username, password);
 
-        return new RemoteSessionImpl(session);
+        RemoteSessionImpl remote = new RemoteSessionImpl();
+        remote.setSession(session);
+        return remote;
     }
 }

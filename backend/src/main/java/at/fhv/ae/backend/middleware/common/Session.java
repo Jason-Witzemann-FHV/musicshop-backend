@@ -4,6 +4,9 @@ import at.fhv.ae.backend.application.*;
 import at.fhv.ae.shared.AuthorizationException;
 import at.fhv.ae.shared.repository.CustomerRepository;
 
+import javax.ejb.Local;
+
+@Local
 public interface Session {
 
     BasketService basketService() throws AuthorizationException;

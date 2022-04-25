@@ -13,10 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Properties;
 
 public class LoginController {
 
@@ -47,9 +52,21 @@ public class LoginController {
         ownServer.setVisible(true);
     }
 
-    public void connectToServer(String server) throws IllegalArgumentException, MalformedURLException, NotBoundException, RemoteException {
+    public void connectToServer(String server) throws IllegalArgumentException, MalformedURLException, NotBoundException, RemoteException, NamingException {
         System.out.println("Connect to: '" + server + "'");
-        sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://" + server + "/music-shop");
+
+
+
+        Properties props = new Properties();
+        props.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
+        props.put(Context.PROVIDER_URL, "http-remoting://localhost:8080"); // todo choose server
+        Context ctx = new InitialContext(props);
+
+        //ejb:/[DeployedName]/Implementierungsname![packages + Interface of Bean]
+        sessionFactory= (RemoteSessionFactory) ctx.lookup("ejb:/backend-1.0-SNAPSHOT/RemoteSessionFactoryImpl!at.fhv.ae.shared.rmi.RemoteSessionFactory");
+
+
+       // sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://" + server + "/music-shop");
     }
 
     public void login(ActionEvent event) {

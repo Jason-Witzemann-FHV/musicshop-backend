@@ -27,17 +27,8 @@ public class Main {
         try {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 
-            RemoteSessionFactory factory =  new RemoteSessionFactoryImpl(
-                    new SessionFactoryImpl(
-                            new LdapCredentialsService(ldap, usernameToDistinguishedName),
-                            ServiceRegistry.userRepository()
-                    )
-            );
 
-            Naming.rebind("rmi://localhost/music-shop", factory);
-
-
-        } catch (RemoteException | MalformedURLException e) {
+        } catch (RemoteException  e) {
             e.printStackTrace();
         }
 

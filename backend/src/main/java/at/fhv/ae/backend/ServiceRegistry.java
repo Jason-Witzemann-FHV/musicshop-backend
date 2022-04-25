@@ -82,28 +82,28 @@ public class ServiceRegistry {
 
     public static ReleaseRepository releaseRepository() {
         if(releaseRepository == null) {
-            releaseRepository = new HibernateReleaseRepository(entityManager());
+            releaseRepository = new HibernateReleaseRepository();
         }
         return releaseRepository;
     }
 
     public static SaleRepository saleRepository() {
         if (saleRepository == null) {
-            saleRepository = new HibernateSaleRepository(entityManager());
+            saleRepository = new HibernateSaleRepository();
         }
         return saleRepository;
     }
 
     public static WorkRepository workRepository() {
         if(workRepository == null) {
-            workRepository = new HibernateWorkRepository(entityManager());
+            workRepository = new HibernateWorkRepository();
         }
         return workRepository;
     }
 
     public static UserRepository userRepository() {
         if(userRepository == null) {
-            userRepository = new HibernateUserRepository(entityManager());
+            userRepository = new HibernateUserRepository();
         }
         return userRepository;
     }
@@ -125,7 +125,7 @@ public class ServiceRegistry {
 
     public static SellService sellService() {
         if(sellService == null) {
-            sellService = new SellServiceImpl(saleRepository(), basketRepository(), releaseRepository(), userRepository(), entityManager());
+            sellService = new SellServiceImpl(saleRepository(), basketRepository(), releaseRepository(), userRepository());
         }
         return sellService;
     }

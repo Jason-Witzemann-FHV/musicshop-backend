@@ -516,7 +516,7 @@ public class MusicShopController {
                 success = true;
             }
 
-        } catch (RemoteException | RuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 

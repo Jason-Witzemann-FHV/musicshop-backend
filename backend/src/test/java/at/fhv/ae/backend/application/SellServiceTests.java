@@ -39,7 +39,7 @@ class SellServiceTests {
         sellRepository = mock(SaleRepository.class);
         userRepository = mock(UserRepository.class);
         releaseRepository = mock(ReleaseRepository.class);
-        sellService = new SellServiceImpl(sellRepository, basketRepository, releaseRepository, userRepository, ServiceRegistry.entityManager());
+        sellService = new SellServiceImpl(sellRepository, basketRepository, releaseRepository, userRepository);
     }
 
     @Test
