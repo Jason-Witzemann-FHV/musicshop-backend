@@ -132,7 +132,7 @@ public class ServiceRegistry {
 
     public static NewsPublisherService newsPublisherService() {
         if(newsPublisherService == null) {
-            newsPublisherService = new NewsPublisherServiceImpl(newsRepository());
+            newsPublisherService = new NewsPublisherServiceImpl(newsRepository(), userRepository());
         }
         return newsPublisherService;
     }
