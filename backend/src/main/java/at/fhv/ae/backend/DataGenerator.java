@@ -1,10 +1,7 @@
 package at.fhv.ae.backend;
 
 import at.fhv.ae.backend.domain.model.release.*;
-import at.fhv.ae.backend.domain.model.user.Permission;
-import at.fhv.ae.backend.domain.model.user.Role;
-import at.fhv.ae.backend.domain.model.user.User;
-import at.fhv.ae.backend.domain.model.user.UserId;
+import at.fhv.ae.backend.domain.model.user.*;
 import at.fhv.ae.backend.domain.model.work.*;
 
 import javax.persistence.Persistence;
@@ -34,14 +31,14 @@ public class DataGenerator {
     private static void prepareUsers() {
 
         var adminRoles = Set.of(new Role("admin", Set.of(Permission.values())));
-
+        var adminTopics = Set.of(SubscriptionTopics.values());
         var admins = Stream.of(
                 "ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test")
-                .map(id -> new User(new UserId(id), adminRoles));
+                .map(id -> new User(new UserId(id), adminRoles, adminTopics));
 
         var customerRoles = Set.of(new Role("customer", Set.of(Permission.SEARCH_RELEASES)));
 
-        var customers = Stream.of(new User(new UserId("max"), customerRoles));
+        var customers = Stream.of(new User(new UserId("max"), customerRoles, Set.of(SubscriptionTopics.POP_TOPIC)));
 
         users = Stream.concat(admins, customers).collect(Collectors.toList());
     }
@@ -380,7 +377,10 @@ public class DataGenerator {
         em.createNativeQuery("DROP TABLE IF EXISTS supplier").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS work").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS label").executeUpdate();
-
+        em.createNativeQuery("DROP TABLE IF EXISTS User_subscriptionTopics").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS role_permissions").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS \"role\"").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS User_Role").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS \"user\" CASCADE").executeUpdate();
         transaction.commit();
     }
