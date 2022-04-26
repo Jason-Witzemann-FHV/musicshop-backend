@@ -3,7 +3,6 @@ package at.fhv.ae.backend.application.dto;
 import at.fhv.ae.backend.domain.model.release.Release;
 import lombok.Value;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Value

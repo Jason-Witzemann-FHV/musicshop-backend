@@ -52,7 +52,7 @@ class BasketIntegrationTests {
     @AfterEach
     void tearDown() {
         // clear basket repository since it is not handled by transactions
-        ServiceRegistry.basketRepository().clearBasket(new UserId("nsu3146"));
+        //ServiceRegistry.basketRepository().clearBasket(new UserId("nsu3146"));
 
         // remove test data of test from database
         var transaction = entityManager.getTransaction();

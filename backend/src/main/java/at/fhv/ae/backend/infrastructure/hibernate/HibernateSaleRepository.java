@@ -5,6 +5,8 @@ import at.fhv.ae.backend.domain.model.sale.Sale;
 import at.fhv.ae.backend.domain.model.sale.SaleId;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Stateless
+@AllArgsConstructor
+@NoArgsConstructor
 public class HibernateSaleRepository implements SaleRepository {
 
     private EntityManager em = ServiceRegistry.entityManager();

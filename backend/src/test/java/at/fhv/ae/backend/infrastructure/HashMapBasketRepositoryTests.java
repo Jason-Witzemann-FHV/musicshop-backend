@@ -1,10 +1,10 @@
 package at.fhv.ae.backend.infrastructure;
 
-import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
+import at.fhv.ae.backend.infrastructure.inmemory.HashMapBasketRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,13 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HashMapBasketRepositoryTests {
 
-    private BasketRepository basketRepository;
+    private BasketRepository basketRepository = new HashMapBasketRepository();
 
 
 
     @BeforeEach
     void cleanBefore() {
-        basketRepository = ServiceRegistry.basketRepository();
         basketRepository.clearBasket(new UserId("nsu3146"));
     }
 

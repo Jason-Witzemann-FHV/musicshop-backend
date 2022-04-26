@@ -4,12 +4,16 @@ import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import java.util.Optional;
 
 @Stateless
+@NoArgsConstructor
+@AllArgsConstructor
 public class HibernateUserRepository implements UserRepository {
 
     private EntityManager em = ServiceRegistry.entityManager();

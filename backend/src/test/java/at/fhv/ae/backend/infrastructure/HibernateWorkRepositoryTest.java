@@ -3,6 +3,7 @@ package at.fhv.ae.backend.infrastructure;
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.work.*;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateWorkRepository;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
@@ -14,9 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HibernateWorkRepositoryTest {
 
-    private final WorkRepository workRepository = ServiceRegistry.workRepository();
-
-    private final EntityManager em = ServiceRegistry.entityManager();
+    private EntityManager em = ServiceRegistry.entityManager();
+    private WorkRepository workRepository = new HibernateWorkRepository(em);
 
     @Test
     void given_many_recordings_when_getting_some_then_get_correct_recordings() {

@@ -5,6 +5,7 @@ import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateSaleRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HibernateSaleRepositoryTests {
 
     private final EntityManager em = ServiceRegistry.entityManager();
-    private final SaleRepository saleRepository = ServiceRegistry.saleRepository();
+    private final SaleRepository saleRepository = new HibernateSaleRepository(em);
 
     @Test
     void given_sale_when_added_then_find_by_id_returns_sale() {
