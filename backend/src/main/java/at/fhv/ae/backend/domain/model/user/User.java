@@ -8,7 +8,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Entity
@@ -48,13 +47,7 @@ public class User {
     }
 
     public boolean subscribedTo(String topic) {
-        AtomicBoolean found = new AtomicBoolean(false);
-        subscriptionTopics.forEach(t -> {
-            if (t.friendlyName().equals(topic)) {
-                found.set(true);
-            }
-        });
-        return found.get();
+        return subscriptionTopics.stream().anyMatch(t ->  t.friendlyName().equalsIgnoreCase(topic));
     }
 
     public String name() {

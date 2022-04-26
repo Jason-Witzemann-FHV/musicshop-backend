@@ -1,23 +1,16 @@
 package at.fhv.ae.backend;
 
-import at.fhv.ae.backend.application.*;
-import at.fhv.ae.backend.application.impl.*;
 import at.fhv.ae.backend.domain.repository.*;
-import at.fhv.ae.backend.infrastructure.*;
-import at.fhv.ae.backend.middleware.common.CredentialsService;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateReleaseRepository;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateSaleRepository;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateUserRepository;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateWorkRepository;
+import at.fhv.ae.backend.infrastructure.inmemory.HashMapBasketRepository;
 import at.fhv.ae.shared.repository.CustomerRepository;
-import lombok.SneakyThrows;
-import org.apache.activemq.ActiveMQConnectionFactory;
 
-import javax.jms.ConnectionFactory;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import java.rmi.Naming;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
 
 public class ServiceRegistry {
 
@@ -40,29 +33,8 @@ public class ServiceRegistry {
     private static UserRepository userRepository;
 
 
-    // application services
-
-    private static ReleaseSearchService releaseService;
-
-    private static BasketService basketService;
-
-    private static SellService sellService;
-
-    private static CredentialsService credentialsService;
-
-    private static NewsPublisherService newsPublisherService;
-
     // remote customer db services
-
     private static CustomerRepository customerRepository;
-
-    // messaging
-
-    private static BroadcastService broadcastService;
-
-    private static ConnectionFactory jmsConnectionFactory;
-
-    private static NewsRepository newsRepository;
 
 
 

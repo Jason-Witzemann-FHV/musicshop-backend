@@ -1,15 +1,17 @@
-package at.fhv.ae.backend.middleware.rmi.services;
+package at.fhv.ae.backend.middleware.remoteservices;
 
 import at.fhv.ae.backend.application.BroadcastService;
-import at.fhv.ae.shared.rmi.RemoteBroadcastService;
+import at.fhv.ae.shared.services.RemoteBroadcastService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 
 @Stateful
+@AllArgsConstructor
+@NoArgsConstructor
 public class RemoteBroadcastServiceImpl implements RemoteBroadcastService {
 
     @EJB
@@ -17,17 +19,11 @@ public class RemoteBroadcastServiceImpl implements RemoteBroadcastService {
 
     private String userId;
 
-    public RemoteBroadcastServiceImpl(BroadcastService broadcastService, String userId) {
-        this.broadcastService = broadcastService;
-        this.userId = userId;
-    }
-
-    public RemoteBroadcastServiceImpl() {
-
-    }
-
     @Override
-    public void setUserId(String userId) {
+    public void init(String userId) {
+        if (this.userId != null) {
+            throw new IllegalStateException("Instance already initialized!");
+        }
         this.userId = userId;
     }
 

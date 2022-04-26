@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.middleware.common;
+package at.fhv.ae.backend.middleware;
 
 import javax.ejb.Local;
 

@@ -4,7 +4,6 @@ import at.fhv.ae.backend.domain.model.work.Recording;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
 
 import javax.ejb.Local;
-import javax.ejb.Stateless;
 import java.util.List;
 
 @Local

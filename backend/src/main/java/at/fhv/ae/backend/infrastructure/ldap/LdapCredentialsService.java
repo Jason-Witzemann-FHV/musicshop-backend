@@ -1,19 +1,19 @@
-package at.fhv.ae.backend.infrastructure;
+package at.fhv.ae.backend.infrastructure.ldap;
 
-import at.fhv.ae.backend.middleware.common.CredentialsService;
+import at.fhv.ae.backend.middleware.CredentialsService;
 
 import javax.ejb.Stateful;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.Hashtable;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 @Stateful
 public class LdapCredentialsService implements CredentialsService {
 
-    private final String ldapUrl = "ldap://10.0.40.161:389";
-    private final Function<String, String> usernameToDistinguishedName = username ->
+    private final static String LDAP_URL = "ldap://10.0.40.161:389";
+    private final static UnaryOperator<String> USERNAME_TO_DISTINGUISHED_NAME = username ->
             "cn=" + username + ",ou=employees,dc=ad,dc=teama,dc=net";
 
     @Override
@@ -22,11 +22,11 @@ public class LdapCredentialsService implements CredentialsService {
         if(password.equals("PssWrd"))
             return true;
 
-        String dn = usernameToDistinguishedName.apply(username);
+        String dn = USERNAME_TO_DISTINGUISHED_NAME.apply(username);
 
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, ldapUrl);
+        env.put(Context.PROVIDER_URL, LDAP_URL);
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, dn);
         env.put(Context.SECURITY_CREDENTIALS, password);

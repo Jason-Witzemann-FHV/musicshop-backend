@@ -11,14 +11,18 @@ import at.fhv.ae.backend.domain.model.work.Recording;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Stateless
 public class ReleaseServiceImpl implements ReleaseSearchService {
 
@@ -27,10 +31,6 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
 
     @EJB
     private WorkRepository workRepository;
-
-    public ReleaseServiceImpl() {
-
-    }
 
     @Override
     public List<ReleaseDTO> query(String title, String artist,String genre) {
@@ -42,7 +42,6 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
 
     @Override
     public DetailedReleaseDTO detailedInformation(UUID releaseId) throws IllegalArgumentException  {
-        // Getting domain objects
         Release release = releaseRepository.findById(new ReleaseId(releaseId)).orElseThrow(IllegalArgumentException::new);
         List<Recording> recordings = workRepository.findRecordings(release.recordingIds());
 

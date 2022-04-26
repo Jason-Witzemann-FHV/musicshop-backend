@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.infrastructure;
+package at.fhv.ae.backend.infrastructure.inmemory;
 
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.user.UserId;

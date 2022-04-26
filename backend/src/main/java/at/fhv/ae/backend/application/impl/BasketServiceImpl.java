@@ -10,6 +10,7 @@ import at.fhv.ae.backend.domain.repository.BasketRepository;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Stateless
 public class BasketServiceImpl implements BasketService {
 
@@ -29,10 +31,6 @@ public class BasketServiceImpl implements BasketService {
 
     @EJB
     private UserRepository userRepository;
-
-    public BasketServiceImpl() {
-
-    }
 
     @Override
     public void addItemToBasket(String userId, UUID releaseId, int quantity) {

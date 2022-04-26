@@ -1,7 +1,6 @@
 package at.fhv.ae.shared.dto.basket;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.UUID;

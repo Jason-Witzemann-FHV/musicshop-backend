@@ -1,25 +1,21 @@
-package at.fhv.ae.backend.middleware.rmi.services;
+package at.fhv.ae.backend.middleware.remoteservices;
 
 import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
-import at.fhv.ae.shared.rmi.RemoteBasketService;
+import at.fhv.ae.shared.services.RemoteBasketService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
-import javax.inject.Inject;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateful
+@NoArgsConstructor
+@AllArgsConstructor
 public class RemoteBasketServiceImpl implements RemoteBasketService {
-
-    @Resource
-    private SessionContext context;
 
     @EJB
     private BasketService basketService;
@@ -27,20 +23,12 @@ public class RemoteBasketServiceImpl implements RemoteBasketService {
     private String userId;
 
     @Override
-    public void setUserId(String userId) {
+    public void init(String userId) {
+        if (this.userId != null) {
+            throw new IllegalStateException("Instance already initialized!");
+        }
         this.userId = userId;
     }
-
-    public RemoteBasketServiceImpl() {
-
-    }
-
-    public RemoteBasketServiceImpl(String userId, BasketService basketService)  {
-        super();
-        this.basketService = basketService;
-        this.userId = userId;
-    }
-
 
     @Override
     public void addItemToBasket(UUID releaseId, int quantity) {

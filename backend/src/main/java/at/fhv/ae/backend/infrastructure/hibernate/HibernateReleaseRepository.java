@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.infrastructure;
+package at.fhv.ae.backend.infrastructure.hibernate;
 
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.Release;
@@ -7,10 +7,8 @@ import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import lombok.AllArgsConstructor;
 
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 

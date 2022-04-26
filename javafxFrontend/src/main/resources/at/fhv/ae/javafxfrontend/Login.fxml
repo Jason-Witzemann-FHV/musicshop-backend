@@ -1,11 +1,5 @@
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <AnchorPane
         stylesheets="/css/MusicShop.css" fx:controller="at.fhv.ae.javafxfrontend.LoginController"
         xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" prefHeight="350" prefWidth="350">

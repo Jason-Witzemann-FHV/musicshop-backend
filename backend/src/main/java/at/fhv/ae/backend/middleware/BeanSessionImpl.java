@@ -1,12 +1,11 @@
-package at.fhv.ae.backend.middleware.beans;
+package at.fhv.ae.backend.middleware;
 
-import at.fhv.ae.backend.ServiceRegistry;
+import at.fhv.ae.backend.domain.model.user.Permission;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
-import at.fhv.ae.backend.middleware.common.CredentialsService;
 import at.fhv.ae.shared.AuthorizationException;
-import at.fhv.ae.shared.rmi.*;
+import at.fhv.ae.shared.services.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -31,7 +30,7 @@ public class BeanSessionImpl implements BeanSession {
     private RemoteBroadcastService remoteBroadcastService;
 
     @EJB
-    private RemoteNewsPublisherService remoteNewsPublisherService;
+    private RemoteNewsPollingService remoteNewsPublisherService;
 
     @EJB
     private CredentialsService credentialsService;
@@ -50,11 +49,10 @@ public class BeanSessionImpl implements BeanSession {
         userRepository.userById(new UserId(username)).ifPresent( u -> {
             user = u;
             var id = u.userId().toString();
-            remoteSellService.setUserId(id);
-            remoteBasketService.setUserId(id);
-            remoteBroadcastService.setUserId(id);
-            remoteNewsPublisherService.setUserId(id);
-            remoteCustomerSearchService.setCustomerRepository(ServiceRegistry.customerRepository());
+            remoteSellService.init(id);
+            remoteBasketService.init(id);
+            remoteBroadcastService.init(id);
+            remoteNewsPublisherService.init(id);
         });
         return user != null;
     }
@@ -63,7 +61,7 @@ public class BeanSessionImpl implements BeanSession {
     public RemoteBasketService remoteBasketService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-          //      .filter(u -> u.hasPermission(Permission.SELL_RELEASES))
+                .filter(u -> u.hasPermission(Permission.SELL_RELEASES))
                 .map(u -> remoteBasketService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);
@@ -73,7 +71,7 @@ public class BeanSessionImpl implements BeanSession {
     public RemoteSellService remoteSellService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-            //    .filter(u -> u.hasPermission(Permission.SELL_RELEASES))
+                .filter(u -> u.hasPermission(Permission.SELL_RELEASES))
                 .map(u -> remoteSellService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);
@@ -84,7 +82,7 @@ public class BeanSessionImpl implements BeanSession {
     public RemoteReleaseSearchService remoteReleaseService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-              //  .filter(u -> u.hasPermission(Permission.SEARCH_RELEASES))
+                .filter(u -> u.hasPermission(Permission.SEARCH_RELEASES))
                 .map(u -> remoteReleaseSearchService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);
@@ -94,7 +92,7 @@ public class BeanSessionImpl implements BeanSession {
     public RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-                //.filter(u -> u.hasPermission(Permission.SEARCH_RELEASES))
+                .filter(u -> u.hasPermission(Permission.SEARCH_RELEASES))
                 .map(u -> remoteCustomerSearchService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);
@@ -104,17 +102,17 @@ public class BeanSessionImpl implements BeanSession {
     public RemoteBroadcastService remoteBroadcastService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-                //.filter(u -> u.hasPermission(Permission.PUBLISH_WEBFEED))
+                .filter(u -> u.hasPermission(Permission.PUBLISH_WEBFEED))
                 .map(u -> remoteBroadcastService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);
     }
 
     @Override
-    public RemoteNewsPublisherService remoteNewsPublisherService() throws AuthorizationException {
+    public RemoteNewsPollingService remoteNewsPublisherService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-               // .filter(u -> u.hasPermission(Permission.PUBLISH_WEBFEED)) todo add perm
+                .filter(u -> u.hasPermission(Permission.PUBLISH_WEBFEED))
                 .map(u -> remoteNewsPublisherService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);

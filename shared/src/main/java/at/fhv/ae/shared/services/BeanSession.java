@@ -1,4 +1,4 @@
-package at.fhv.ae.shared.rmi;
+package at.fhv.ae.shared.services;
 
 
 import at.fhv.ae.shared.AuthorizationException;
@@ -20,6 +20,6 @@ public interface BeanSession {
 
     RemoteBroadcastService remoteBroadcastService() throws AuthorizationException;
 
-    RemoteNewsPublisherService remoteNewsPublisherService() throws AuthorizationException;
+    RemoteNewsPollingService remoteNewsPublisherService() throws AuthorizationException;
 
 }

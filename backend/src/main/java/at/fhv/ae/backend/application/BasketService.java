@@ -4,7 +4,6 @@ package at.fhv.ae.backend.application;
 import at.fhv.ae.backend.application.dto.BasketItemDisplayDTO;
 
 import javax.ejb.Local;
-import javax.ejb.Stateless;
 import java.util.List;
 import java.util.UUID;
 

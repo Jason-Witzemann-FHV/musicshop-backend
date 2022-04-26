@@ -1,6 +1,6 @@
 package at.fhv.ae.javafxfrontend;
 
-import at.fhv.ae.shared.rmi.BeanSession;
+import at.fhv.ae.shared.services.BeanSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,10 +15,6 @@ import javafx.stage.Stage;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.util.Properties;
 
 public class LoginController {
@@ -48,23 +44,16 @@ public class LoginController {
         ownServer.setVisible(true);
     }
 
-    public void connectToServer(String server) throws IllegalArgumentException, MalformedURLException, NotBoundException, RemoteException, NamingException {
-        System.out.println("Connect to: '" + server + "'");
-    }
-
     public void login(ActionEvent event) {
         try {
-            if (local.isSelected()) {
-                connectToServer("localhost");
-            } else {
-                connectToServer(ownServer.getText());
-            }
+
+            String ip = local.isSelected() ? "localhost" : ownServer.getText();
 
             Properties props = new Properties();
             props.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
-            props.put(Context.PROVIDER_URL, "http-remoting://localhost:8080"); // todo choose server
+            props.put(Context.PROVIDER_URL, "http-remoting://" + ip + ":8080");
             Context ctx = new InitialContext(props);
-            BeanSession session = (BeanSession) ctx.lookup("ejb:/backend-1.0-SNAPSHOT/BeanSessionImpl!at.fhv.ae.shared.rmi.BeanSession?stateful");
+            BeanSession session = (BeanSession) ctx.lookup("ejb:/backend-1.0-SNAPSHOT/BeanSessionImpl!at.fhv.ae.shared.services.BeanSession?stateful");
             session.authenticate(userName.getText(), password.getText());
 
 

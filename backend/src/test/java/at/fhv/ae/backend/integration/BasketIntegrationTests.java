@@ -7,16 +7,15 @@ import at.fhv.ae.backend.domain.model.user.Role;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
-import at.fhv.ae.shared.rmi.RemoteBasketService;
-import org.junit.jupiter.api.*;
+import at.fhv.ae.shared.services.RemoteBasketService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +23,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BasketIntegrationTests {
 

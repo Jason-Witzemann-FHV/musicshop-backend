@@ -1,10 +1,12 @@
-package at.fhv.ae.backend.middleware.rmi.services;
+package at.fhv.ae.backend.middleware.remoteservices;
 
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
-import at.fhv.ae.shared.rmi.RemoteSellService;
+import at.fhv.ae.shared.services.RemoteSellService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
 import javax.ejb.EJB;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateful
+@NoArgsConstructor
+@AllArgsConstructor
 public class RemoteSellServiceImpl implements RemoteSellService {
 
     @EJB
@@ -20,17 +24,11 @@ public class RemoteSellServiceImpl implements RemoteSellService {
 
     private String userId;
 
-    public RemoteSellServiceImpl() {
-
-    }
-
-    public RemoteSellServiceImpl(String userId, SellService sellService) {
-        this.sellService = sellService;
-        this.userId = userId;
-    }
-
     @Override
-    public void setUserId(String userId) {
+    public void init(String userId) {
+        if (this.userId != null) {
+            throw new IllegalStateException("Instance already initialized!");
+        }
         this.userId = userId;
     }
 

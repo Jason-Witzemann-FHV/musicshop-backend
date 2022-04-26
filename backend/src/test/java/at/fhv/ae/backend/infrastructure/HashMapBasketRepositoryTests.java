@@ -2,12 +2,9 @@ package at.fhv.ae.backend.infrastructure;
 
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.*;
-import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
-
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

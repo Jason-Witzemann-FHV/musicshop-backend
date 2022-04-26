@@ -1,10 +1,9 @@
-package at.fhv.ae.backend.infrastructure;
+package at.fhv.ae.backend.infrastructure.hibernate;
 
 import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
-import lombok.AllArgsConstructor;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

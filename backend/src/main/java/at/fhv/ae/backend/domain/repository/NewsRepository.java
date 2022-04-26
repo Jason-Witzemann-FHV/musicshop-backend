@@ -4,13 +4,13 @@ import at.fhv.ae.backend.domain.model.news.News;
 import at.fhv.ae.backend.domain.model.user.User;
 
 import javax.ejb.Local;
-import javax.ejb.Stateless;
-import java.util.function.Consumer;
+import java.util.List;
 
 @Local
 public interface NewsRepository {
 
+    List<News> pollNews(User user, long lastReceivedTimeStamp);
+
     void put(String id, News news);
 
-    void addConsumer(User user, Consumer<News> consumer);
 }

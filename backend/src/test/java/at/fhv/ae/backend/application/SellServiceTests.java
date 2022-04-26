@@ -22,24 +22,25 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class SellServiceTests {
 
     private SellService sellService;
     private BasketRepository basketRepository;
-    private SaleRepository sellRepository;
+    private SaleRepository saleRepository;
     private UserRepository userRepository;
     private ReleaseRepository releaseRepository;
 
     @BeforeEach
     void setup() {
         basketRepository = mock(BasketRepository.class);
-        sellRepository = mock(SaleRepository.class);
+        saleRepository = mock(SaleRepository.class);
         userRepository = mock(UserRepository.class);
         releaseRepository = mock(ReleaseRepository.class);
-        sellService = new SellServiceImpl(sellRepository, basketRepository, releaseRepository, userRepository);
+        sellService = new SellServiceImpl(saleRepository, basketRepository, releaseRepository, userRepository, ServiceRegistry.entityManager());
     }
 
     @Test
@@ -64,7 +65,7 @@ class SellServiceTests {
         when(basketRepository.itemsInBasket(userId)).thenReturn(basket);
         assertDoesNotThrow(() -> sellService.sellItemsInBasket(userId.name(), null));
 
-        verify(sellRepository).addSale(any());
+        verify(saleRepository).addSale(any());
         verify(basketRepository).clearBasket(userId);
 
     }
@@ -107,7 +108,7 @@ class SellServiceTests {
         );
 
 
-        when(sellRepository.salesOfUser(userId)).thenReturn(List.of(sale));
+        when(saleRepository.salesOfUser(userId)).thenReturn(List.of(sale));
         for (int i = 0; i < saleItems.size(); i++) {
             when(releaseRepository.findById(saleItems.get(i).releaseId())).thenReturn(Optional.of(releases.get(i)));
         }

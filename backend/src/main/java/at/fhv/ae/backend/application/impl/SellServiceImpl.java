@@ -1,10 +1,10 @@
 package at.fhv.ae.backend.application.impl;
 
 import at.fhv.ae.backend.ServiceRegistry;
+import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.dto.ItemDTO;
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
-import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.user.UserId;
@@ -13,14 +13,13 @@ import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 import at.fhv.ae.backend.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,6 +28,8 @@ import java.util.stream.Collectors;
 
 
 @Stateless
+@NoArgsConstructor
+@AllArgsConstructor
 public class SellServiceImpl implements SellService {
 
     @EJB
@@ -44,17 +45,6 @@ public class SellServiceImpl implements SellService {
     private UserRepository userRepository;
 
     private EntityManager entityManager = ServiceRegistry.entityManager();
-
-    public SellServiceImpl() {
-
-    }
-
-    public SellServiceImpl(SaleRepository saleRepository, BasketRepository basketRepository, ReleaseRepository releaseRepository, UserRepository userRepository) {
-        this.saleRepository = saleRepository;
-        this.basketRepository = basketRepository;
-        this.releaseRepository = releaseRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {

@@ -1,7 +1,6 @@
-package at.fhv.ae.shared.rmi;
+package at.fhv.ae.shared.services;
 
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
-
 
 import javax.ejb.Remote;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.UUID;
 @Remote
 public interface RemoteBasketService {
 
-    void setUserId(String userId);
+    void init(String userId);
 
     void addItemToBasket(UUID releaseId, int quantity);
 

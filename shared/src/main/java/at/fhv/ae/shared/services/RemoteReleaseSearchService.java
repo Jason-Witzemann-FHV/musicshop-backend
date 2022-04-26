@@ -1,9 +1,8 @@
-package at.fhv.ae.shared.rmi;
+package at.fhv.ae.shared.services;
 
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 
-import javax.ejb.Local;
 import javax.ejb.Remote;
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package at.fhv.ae.backend.middleware.rmi.services;
+package at.fhv.ae.backend.middleware.remoteservices;
 
 import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
@@ -6,31 +6,24 @@ import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.shared.dto.release.DetailedReleaseRemoteDTO;
 import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
-import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
+import at.fhv.ae.shared.services.RemoteReleaseSearchService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless
+@NoArgsConstructor
+@AllArgsConstructor
 public class RemoteReleaseSearchServiceImpl implements RemoteReleaseSearchService {
 
     @EJB
     private ReleaseSearchService releaseSearchService;
-
-    public RemoteReleaseSearchServiceImpl() {
-
-    }
-
-    public RemoteReleaseSearchServiceImpl(ReleaseSearchService releaseSearchService) {
-        super();
-        this.releaseSearchService = releaseSearchService;
-    }
 
     @Override
     public List<ReleaseSearchResultDTO> query(String title, String artist, String genre) {

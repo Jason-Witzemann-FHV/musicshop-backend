@@ -1,4 +1,4 @@
-package at.fhv.ae.shared.rmi;
+package at.fhv.ae.shared.services;
 
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
 import org.bson.types.ObjectId;
@@ -10,7 +10,7 @@ import java.util.List;
 public interface RemoteSellService {
 
 
-    void setUserId(String userId);
+    void init(String userId);
 
     /**
      * @param customerId can be null if sale is anonymous
