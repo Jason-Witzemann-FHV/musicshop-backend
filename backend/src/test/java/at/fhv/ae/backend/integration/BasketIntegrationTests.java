@@ -69,7 +69,7 @@ class BasketIntegrationTests {
         //prepare Testdata
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role));
+        var user = new User(userId, Set.of(role), null);
 
         var label = new Label("Test-Label", "TST");
         var supplier = new Supplier("Test-Supplier", "Teststraße 44, 3231 Testhausen, Österreich");
@@ -113,7 +113,7 @@ class BasketIntegrationTests {
         //prepare Testdata
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role));
+        var user = new User(userId, Set.of(role), null);
 
         var label = new Label("Test-Label", "TST");
         var supplier = new Supplier("Test-Supplier", "Teststraße 44, 3231 Testhausen, Österreich");
@@ -149,7 +149,7 @@ class BasketIntegrationTests {
         //prepare Testdata
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role));
+        var user = new User(userId, Set.of(role), null);
 
         var label = new Label("Test-Label", "TST");
         var supplier = new Supplier("Test-Supplier", "Teststraße 44, 3231 Testhausen, Österreich");
@@ -186,7 +186,7 @@ class BasketIntegrationTests {
         //prepare Testdata
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role));
+        var user = new User(userId, Set.of(role), null);
 
         var label = new Label("Test-Label", "TST");
         var supplier = new Supplier("Test-Supplier", "Teststraße 44, 3231 Testhausen, Österreich");

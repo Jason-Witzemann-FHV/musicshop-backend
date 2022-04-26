@@ -8,6 +8,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Entity
@@ -28,9 +29,14 @@ public class User {
     @ManyToMany(cascade = {CascadeType.PERSIST})
     private Set<Role> roles;
 
-    public User(UserId userId, Set<Role> roles) {
+    @ElementCollection()
+    @Enumerated(EnumType.STRING)
+    private Set<SubscriptionTopics> subscriptionTopics;
+
+    public User(UserId userId, Set<Role> roles, Set<SubscriptionTopics> subscriptionTopics) {
         this.userId = userId;
         this.roles = roles;
+        this.subscriptionTopics = subscriptionTopics;
     }
 
     public Set<Permission> permissions() {
@@ -41,6 +47,16 @@ public class User {
         return permissions().stream().anyMatch(permissionToCheck::equals);
     }
 
+    public boolean subscribedTo(String topic) {
+        AtomicBoolean found = new AtomicBoolean(false);
+        subscriptionTopics.forEach(t -> {
+            if (t.friendlyName().equals(topic)) {
+                found.set(true);
+            }
+        });
+        return found.get();
+    }
+
     public String name() {
         return userId.name();
     }
@@ -48,4 +64,6 @@ public class User {
     public Set<Role> roles() {
         return Collections.unmodifiableSet(roles);
     }
+
+    public Set<SubscriptionTopics> subscriptionTopics() { return Collections.unmodifiableSet(subscriptionTopics);}
 }
