@@ -12,6 +12,7 @@ import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
 import at.fhv.ae.shared.rmi.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +34,7 @@ import java.util.*;
 
 public class MusicShopController {
 
-    private RemoteSession session;
+    private BeanSession session;
     private RemoteReleaseSearchService releaseSearchService;
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
@@ -42,6 +43,8 @@ public class MusicShopController {
     private RemoteNewsPublisherService newsPublisherService;
 
     private static final double TAX_RATE = 0.2;
+
+    static ObservableList<NewsRemoteDTO> newsList;
 
     @FXML TableView<NewsRemoteDTO> newsView;
     @FXML TableColumn<NewsRemoteDTO, LocalDateTime> newsDateColumn;
@@ -113,7 +116,7 @@ public class MusicShopController {
 
 
 
-    public void setSession(RemoteSession session) throws RemoteException {
+    public void setSession(BeanSession session) throws RemoteException {
         this.session = session;
 
         try {
@@ -167,14 +170,12 @@ public class MusicShopController {
 
         try {
             newsPublisherService = session.remoteNewsPublisherService();
-            newsPublisherService.addReceiver(new RemoteNewsRecieverImpl(news -> {
-                newsView.getItems().add(news);
-                newsTab.setStyle("-fx-background-color: #FA7878");
-                    })
-
-            );
 
 
+           // newsPublisherService.addReceiver(new RemoteNewsRecieverImpl(news -> { todo does not wörk
+           //         newsView.getItems().add(news);
+           //         newsTab.setStyle("-fx-background-color: #FA7878");
+           // }));
         } catch (AuthorizationException e) {
             tabPane.getTabs().remove(newsTab);
         }
@@ -373,7 +374,7 @@ public class MusicShopController {
             }
         });
 
-        newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
+        //newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
 
         // newsTab opened - change color to default color
         newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));

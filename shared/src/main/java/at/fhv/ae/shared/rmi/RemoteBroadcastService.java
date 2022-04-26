@@ -9,4 +9,6 @@ import java.time.LocalDateTime;
 public interface RemoteBroadcastService {
 
     void broadcast(String topic, String title, String message, LocalDateTime expiration);
+
+    void setUserId(String id);
 }

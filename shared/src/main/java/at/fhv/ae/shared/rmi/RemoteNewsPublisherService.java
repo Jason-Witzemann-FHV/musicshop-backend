@@ -7,4 +7,6 @@ import javax.ejb.Remote;
 public interface RemoteNewsPublisherService {
 
     void addReceiver(RemoteNewsReceiver receiver);
+
+    void setUserId(String id);
 }

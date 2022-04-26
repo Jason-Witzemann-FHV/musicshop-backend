@@ -21,6 +21,7 @@ public class RemoteNewsPublisherServiceImpl implements RemoteNewsPublisherServic
 
     }
 
+    @Override
     public void setUserId(String userId) {
         this.userId = userId;
     }

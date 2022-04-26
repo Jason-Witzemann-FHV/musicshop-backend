@@ -1,14 +1,18 @@
 package at.fhv.ae.shared.rmi;
 
 import at.fhv.ae.shared.dto.basket.CustomerSearchResponseDTO;
+import at.fhv.ae.shared.repository.CustomerRepository;
 
 import javax.ejb.Local;
-import java.rmi.Remote;
+import javax.ejb.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public interface RemoteCustomerSearchService extends Remote {
+@Remote
+public interface RemoteCustomerSearchService {
 
-    List<CustomerSearchResponseDTO> findCustomerByName(String firstName, String lastName) throws RemoteException;
+    void setCustomerRepository(CustomerRepository customerRepository);
+
+    List<CustomerSearchResponseDTO> findCustomerByName(String firstName, String lastName);
 
 }

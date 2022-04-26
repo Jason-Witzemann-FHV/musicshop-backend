@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
-@Stateless
+@Stateful
 public class RemoteCustomerSearchServiceImpl implements RemoteCustomerSearchService {
 
     private CustomerRepository customerRepository;
@@ -25,6 +25,7 @@ public class RemoteCustomerSearchServiceImpl implements RemoteCustomerSearchServ
 
     }
 
+    @Override
     public void setCustomerRepository(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }

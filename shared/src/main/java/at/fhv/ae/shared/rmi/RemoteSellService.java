@@ -9,6 +9,9 @@ import java.util.List;
 @Remote
 public interface RemoteSellService {
 
+
+    void setUserId(String userId);
+
     /**
      * @param customerId can be null if sale is anonymous
      * @return true on sell success; otherwise false
@@ -16,5 +19,4 @@ public interface RemoteSellService {
     boolean sellItemsInBasket(ObjectId customerId);
 
     List<SaleItemsRemoteDTO> salesOfUser();
-
 }

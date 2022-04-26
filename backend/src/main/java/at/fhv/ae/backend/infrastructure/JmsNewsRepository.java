@@ -3,10 +3,13 @@ package at.fhv.ae.backend.infrastructure;
 import at.fhv.ae.backend.domain.model.news.News;
 import at.fhv.ae.backend.domain.repository.NewsRepository;
 import lombok.SneakyThrows;
+import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.ejb.Stateful;
 import javax.jms.*;
 import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
@@ -24,24 +27,26 @@ public class JmsNewsRepository implements NewsRepository {
     private Connection connection;
     private Map<String, Map<Topic, TopicSubscriber>> subscribers;
 
+
     public JmsNewsRepository() {
+        try {
+            var env = new Hashtable<>(Map.of(
+                    Context.INITIAL_CONTEXT_FACTORY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory",
+                    Context.PROVIDER_URL, "vm://10.0.40.160",
+                    "topic.SystemTopic", "SystemTopic",
+                    "topic.PopTopic", "PopTopic",
+                    "topic.RockTopic", "RockTopic"
+            ));
 
-    }
+            this.context = new InitialContext(env);
+            this.connection = new ActiveMQConnectionFactory("tcp://10.0.40.160:61616").createConnection();
+            this.subscribers = new HashMap<>();
+            this.topics = Set.of("SystemTopic", "PopTopic", "RockTopic").stream().collect(Collectors.toMap(t -> t, this::lookupTopic));
 
-    public JmsNewsRepository(Context context, ConnectionFactory cf, Set<String> topics) throws JMSException {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        this.context = context;
-
-        this.connection = cf.createConnection();
-
-        // durable subscribers are created on a per-client basis, they can't be shared.
-        // this uses one client-id globally:
-
-        this.connection.setClientID("client");
-        this.connection.start();
-
-        this.topics = topics.stream().collect(Collectors.toMap(t -> t, this::lookupTopic));
-        this.subscribers = new HashMap<>();
     }
 
     @SneakyThrows

@@ -10,6 +10,8 @@ import java.util.UUID;
 @Remote
 public interface RemoteBasketService {
 
+    void setUserId(String userId);
+
     void addItemToBasket(UUID releaseId, int quantity);
 
     void changeQuantityOfItem(UUID releaseId, int newQuantity);

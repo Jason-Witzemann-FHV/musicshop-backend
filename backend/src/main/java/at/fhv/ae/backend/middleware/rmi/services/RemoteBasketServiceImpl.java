@@ -26,6 +26,7 @@ public class RemoteBasketServiceImpl implements RemoteBasketService {
 
     private String userId;
 
+    @Override
     public void setUserId(String userId) {
         this.userId = userId;
     }

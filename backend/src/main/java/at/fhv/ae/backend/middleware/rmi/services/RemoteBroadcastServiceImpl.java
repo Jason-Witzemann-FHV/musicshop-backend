@@ -26,6 +26,7 @@ public class RemoteBroadcastServiceImpl implements RemoteBroadcastService {
 
     }
 
+    @Override
     public void setUserId(String userId) {
         this.userId = userId;
     }

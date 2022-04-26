@@ -109,35 +109,6 @@ public class ServiceRegistry {
     }
 
 
-    public static ReleaseSearchService releaseService() {
-        if(releaseService == null) {
-            releaseService = new ReleaseServiceImpl(releaseRepository(), workRepository());
-        }
-        return releaseService;
-    }
-
-    public static BasketService basketService() {
-        if(basketService == null) {
-            basketService = new BasketServiceImpl(basketRepository(), releaseRepository(), userRepository());
-        }
-        return basketService;
-    }
-
-    public static SellService sellService() {
-        if(sellService == null) {
-            sellService = new SellServiceImpl(saleRepository(), basketRepository(), releaseRepository(), userRepository());
-        }
-        return sellService;
-    }
-
-    public static NewsPublisherService newsPublisherService() {
-        if(newsPublisherService == null) {
-            newsPublisherService = new NewsPublisherServiceImpl(newsRepository());
-        }
-        return newsPublisherService;
-    }
-
-
     public static CustomerRepository customerRepository() {
         if (customerRepository == null) {
             try {
@@ -150,41 +121,6 @@ public class ServiceRegistry {
         return customerRepository;
     }
 
-    public static BroadcastService broadcastService() {
-        if(broadcastService == null) {
-            broadcastService = new BroadcastServiceImpl(newsRepository());
-        }
-        return broadcastService;
-    }
 
-    public static ConnectionFactory jmsConnectionFactory() {
-
-        if(jmsConnectionFactory == null) {
-            jmsConnectionFactory = new ActiveMQConnectionFactory("tcp://10.0.40.160:61616");
-        }
-
-        return jmsConnectionFactory;
-    }
-
-
-    @SneakyThrows
-    public static NewsRepository newsRepository() {
-        if(newsRepository == null) {
-
-            var env = new Hashtable<>(Map.of(
-                    Context.INITIAL_CONTEXT_FACTORY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory",
-                    Context.PROVIDER_URL, "vm://10.0.40.160",
-                    "topic.SystemTopic", "SystemTopic",
-                    "topic.PopTopic", "PopTopic",
-                    "topic.RockTopic", "RockTopic"
-            ));
-
-            var topics = Set.of("SystemTopic", "PopTopic", "RockTopic");
-
-            newsRepository = new JmsNewsRepository(new InitialContext(env), jmsConnectionFactory(), topics);
-        }
-
-        return newsRepository;
-    }
 
 }

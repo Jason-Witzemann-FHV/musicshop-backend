@@ -29,6 +29,7 @@ public class RemoteSellServiceImpl implements RemoteSellService {
         this.userId = userId;
     }
 
+    @Override
     public void setUserId(String userId) {
         this.userId = userId;
     }
