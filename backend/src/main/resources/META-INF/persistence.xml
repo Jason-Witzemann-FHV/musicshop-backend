@@ -16,6 +16,7 @@
     <class>at.fhv.ae.backend.domain.model.work.Genre</class>
     <class>at.fhv.ae.backend.domain.model.user.User</class>
     <class>at.fhv.ae.backend.domain.model.user.Role</class>
+    <class>at.fhv.ae.backend.domain.model.user.SubscriptionTopics</class>
     <class>at.fhv.ae.backend.domain.model.user.Permission</class>
 
     <exclude-unlisted-classes>true</exclude-unlisted-classes>

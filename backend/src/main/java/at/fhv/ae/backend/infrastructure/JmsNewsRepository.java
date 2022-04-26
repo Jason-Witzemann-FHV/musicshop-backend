@@ -1,6 +1,8 @@
 package at.fhv.ae.backend.infrastructure;
 
 import at.fhv.ae.backend.domain.model.news.News;
+import at.fhv.ae.backend.domain.model.user.SubscriptionTopics;
+import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.repository.NewsRepository;
 import lombok.SneakyThrows;
 
@@ -43,10 +45,13 @@ public class JmsNewsRepository implements NewsRepository {
         return (Topic) context.lookup(topic);
     }
 
+
+    // id = userId
     @Override
     @SneakyThrows
-    public void addConsumer(String id, Consumer<News> handler) {
+    public void addConsumer(User user, Consumer<News> handler) {
 
+        String id = user.userId().name();
         Session sess = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
         // get the subscribers, or initialize as empty map
@@ -61,10 +66,15 @@ public class JmsNewsRepository implements NewsRepository {
             TopicSubscriber sub = subs.get(topic);
             if(sub != null) {
                 sub.close();
+                subs.values().remove(sub);
             }
-            sub = sess.createDurableSubscriber(topic, id + "-" + topicName);
-            subs.put(t.getValue(), sub);
-            sub.setMessageListener(m -> parseMessage(m).ifPresent(handler));
+
+            // check users subscriptions and add if subscribed
+            if(user.subscribedTo(topicName)) {
+                sub = sess.createDurableSubscriber(topic, id + "-" + topicName);
+                subs.put(t.getValue(), sub);
+                sub.setMessageListener(m -> parseMessage(m).ifPresent(handler));
+            }
         }
     }
 
