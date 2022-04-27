@@ -1,7 +1,6 @@
 package at.fhv.ae.backend.infrastructure;
 
 import at.fhv.ae.backend.domain.model.news.News;
-import at.fhv.ae.backend.domain.model.user.SubscriptionTopics;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.repository.NewsRepository;
 import lombok.SneakyThrows;
@@ -104,7 +103,7 @@ public class JmsNewsRepository implements NewsRepository {
 
         TextMessage message = session.createTextMessage(news.body());
         message.setStringProperty(TITLE_PROP, news.title());
-        message.setStringProperty(EXPIRATION_PROP, news.expiration().toString());
+        message.setStringProperty(EXPIRATION_PROP, news.dateOfEvent().toString());
 
         producer.send(message);
     }
