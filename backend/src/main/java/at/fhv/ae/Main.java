@@ -1,9 +1,9 @@
 package at.fhv.ae;
 
-public class Main {
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
-    public static void main(String[] args) {
-
-    }
+@ApplicationPath("/soundkraut")
+public class Main extends Application {
 
 }
