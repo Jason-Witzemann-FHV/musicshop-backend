@@ -1,5 +1,9 @@
 package at.fhv.ae.backend.middleware.rest.auth;
 
+import at.fhv.ae.backend.domain.model.user.Permission;
+import at.fhv.ae.backend.domain.model.user.User;
+import at.fhv.ae.backend.domain.model.user.UserId;
+import at.fhv.ae.backend.domain.repository.UserRepository;
 import at.fhv.ae.backend.middleware.TokenRepository;
 
 import javax.annotation.Priority;
@@ -9,10 +13,13 @@ import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 @Secured
 @Provider
@@ -26,8 +33,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     @AuthenticatedUser
     private Event<String> userAuthenticatedEvent;
 
+    @Context
+    private ResourceInfo resourceInfo;
+
     @EJB
     private TokenRepository tokenRepository;
+
+    @EJB
+    private UserRepository userRepository;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -45,13 +58,20 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         // Extract the token from the Authorization header
         String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
 
-        try {
-            // Validate the token, throws error if mot authenticated
-            validateToken(token);
+        // Get the Permission to authorize against
+        Method method = resourceInfo.getResourceMethod();
+        Permission permission = method.getAnnotation(Secured.class).value();
 
+        try {
+            // Validate the token, throws error if not authenticated
+            validateToken(token);
 
             // Fire UserAuthenticatedEvent to enable Injection of User
             String username = tokenRepository.userIdOfToken(token).orElseThrow(() -> new IllegalStateException("At that point, token must have been already validated."));
+
+            // authorize the user
+            authorize(username, permission);
+
             userAuthenticatedEvent.fire(username);
         } catch (Exception e) {
             abortWithUnauthorized(requestContext);
@@ -79,5 +99,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
         tokenRepository.userIdOfToken(token).orElseThrow();
+    }
+
+    private void authorize(String username, Permission permission) throws Exception {
+        User user = userRepository.userById(new UserId(username)).orElseThrow();
+
+        if(!user.hasPermission(permission)) {
+            throw new IllegalStateException("authorization rejected");
+        }
     }
 }
