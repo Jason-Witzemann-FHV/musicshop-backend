@@ -377,11 +377,11 @@ public class DataGenerator {
         em.createNativeQuery("DROP TABLE IF EXISTS supplier").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS work").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS label").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS User_subscriptionTopics").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS role_permissions").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS \"role\"").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS User_Role").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS User_subscriptionTopics CASCADE").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS role_permissions CASCADE").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS \"role\" CASCADE").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS \"user\" CASCADE").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS \"User_Role\" CASCADE").executeUpdate();
         transaction.commit();
     }
 
