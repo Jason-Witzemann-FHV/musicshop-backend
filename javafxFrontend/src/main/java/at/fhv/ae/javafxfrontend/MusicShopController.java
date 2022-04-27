@@ -474,7 +474,12 @@ public class MusicShopController {
                 .map(CustomerSearchResponseDTO::getId)
                 .orElse(null);
 
-        boolean success = sellService.sellItemsInBasket(customerId); // todo assign customer
+        boolean success = false;
+        try {
+            success = sellService.sellItemsInBasket(customerId); // todo assign customer
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(success ? "Items sold" : "Error confirming Sale");
