@@ -373,8 +373,6 @@ public class MusicShopController {
             }
         });
 
-        newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
-
         // newsTab opened - change color to default color
         newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));
     }
