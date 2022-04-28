@@ -108,12 +108,12 @@ class SellServiceTests {
         );
 
 
-        when(saleRepository.salesOfUser(userId)).thenReturn(List.of(sale));
+        when(saleRepository.allSales()).thenReturn(List.of(sale));
         for (int i = 0; i < saleItems.size(); i++) {
             when(releaseRepository.findById(saleItems.get(i).releaseId())).thenReturn(Optional.of(releases.get(i)));
         }
 
-        var actual = sellService.salesOfUser(userId.toString());
+        var actual = sellService.allSales();
 
         assertEquals(List.of(saleItemsDTO), actual);
 

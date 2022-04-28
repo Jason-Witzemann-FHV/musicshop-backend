@@ -35,9 +35,8 @@ public class HibernateSaleRepository implements SaleRepository {
     }
 
     @Override
-    public List<Sale> salesOfUser(UserId userId) {
-        return em.createQuery("select s from Sale s where s.employeeId = :userId", Sale.class)
-                .setParameter("userId", userId)
+    public List<Sale> allSales() {
+        return em.createQuery("select s from Sale s", Sale.class)
                 .getResultList();
     }
 

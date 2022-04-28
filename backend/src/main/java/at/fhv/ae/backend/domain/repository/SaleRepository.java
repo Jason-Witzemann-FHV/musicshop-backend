@@ -15,5 +15,5 @@ public interface SaleRepository {
 
     void addSale(Sale sale);
 
-    List<Sale> salesOfUser(UserId userId);
+    List<Sale> allSales();
 }
