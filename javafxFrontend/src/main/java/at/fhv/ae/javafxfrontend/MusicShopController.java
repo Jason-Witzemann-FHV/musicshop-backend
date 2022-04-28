@@ -9,10 +9,9 @@ import at.fhv.ae.shared.dto.release.RecordingRemoteDTO;
 import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
-import at.fhv.ae.shared.services.*;
-import javafx.beans.property.ReadOnlyStringWrapper;
+import at.fhv.ae.shared.rmi.*;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +25,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import org.bson.types.ObjectId;
-
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
@@ -35,17 +33,15 @@ import java.util.*;
 
 public class MusicShopController {
 
-    private BeanSession session;
+    private RemoteSession session;
     private RemoteReleaseSearchService releaseSearchService;
     private RemoteBasketService basketService;
     private RemoteSellService sellService;
     private RemoteCustomerSearchService customerSearchService;
     private RemoteBroadcastService broadcastService;
-    private RemoteNewsPollingService newsPublisherService;
+    private RemoteNewsPublisherService newsPublisherService;
 
     private static final double TAX_RATE = 0.2;
-
-    static ObservableList<NewsRemoteDTO> newsList;
 
     @FXML TableView<NewsRemoteDTO> newsView;
     @FXML TableColumn<NewsRemoteDTO, LocalDateTime> newsDateColumn;
@@ -110,14 +106,14 @@ public class MusicShopController {
 
     // fields and button - broadcast
     @FXML ComboBox<String> topicCombobox;
-    @FXML DatePicker expirationDate;
+    @FXML DatePicker dateOfEvent;
     @FXML TextField messageTitle;
     @FXML TextArea message;
     @FXML Tab newsTab;
 
 
 
-    public void setSession(BeanSession session) throws RemoteException {
+    public void setSession(RemoteSession session) throws RemoteException {
         this.session = session;
 
         try {
@@ -171,26 +167,13 @@ public class MusicShopController {
 
         try {
             newsPublisherService = session.remoteNewsPublisherService();
+            newsPublisherService.addReceiver(new RemoteNewsRecieverImpl(news -> {
+                newsView.getItems().add(news);
+                newsTab.setStyle("-fx-background-color: #FA7878");
+                    })
 
-            var startNews = newsPublisherService.pollForNewNews(Long.MIN_VALUE);
-            newsView.getItems().setAll(startNews);
+            );
 
-            new Timer().scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    var pollTime = newsView.getItems()
-                            .stream()
-                            .mapToLong(NewsRemoteDTO::getPublishedTimeStamp)
-                            .max()
-                            .orElse(Long.MIN_VALUE);
-                    var newNews = newsPublisherService.pollForNewNews(pollTime);
-
-                    if (!newNews.isEmpty()) {
-                        newsView.getItems().addAll(newNews);
-                        newsTab.setStyle("-fx-background-color: #FA7878");
-                    }
-                }
-            }, 5000, 5000);
 
         } catch (AuthorizationException e) {
             tabPane.getTabs().remove(newsTab);
@@ -390,7 +373,6 @@ public class MusicShopController {
             }
         });
 
-        //newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
 
         // newsTab opened - change color to default color
         newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));
@@ -491,7 +473,12 @@ public class MusicShopController {
                 .map(CustomerSearchResponseDTO::getId)
                 .orElse(null);
 
-        boolean success = sellService.sellItemsInBasket(customerId); // todo assign customer
+        boolean success = false;
+        try {
+            success = sellService.sellItemsInBasket(customerId); // todo assign customer
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(success ? "Items sold" : "Error confirming Sale");
@@ -513,7 +500,7 @@ public class MusicShopController {
         boolean success = false;
 
         try {
-            if( topicCombobox.getValue() == null || expirationDate.getValue() == null ||
+            if( topicCombobox.getValue() == null || dateOfEvent.getValue() == null ||
                 topicCombobox.getValue().equals("") || messageTitle.getText().isEmpty() ||
                     message.getText().isEmpty()) {
 
@@ -523,17 +510,17 @@ public class MusicShopController {
                 broadcastService.broadcast(topicCombobox.getValue(),
                         messageTitle.getText(),
                         message.getText(),
-                        expirationDate.getValue().atStartOfDay());
+                        dateOfEvent.getValue().atStartOfDay());
 
                 topicCombobox.setValue("");
                 messageTitle.clear();
                 message.clear();
-                expirationDate.getEditor().clear();
+                dateOfEvent.getEditor().clear();
 
                 success = true;
             }
 
-        } catch (RuntimeException e) {
+        } catch (RemoteException | RuntimeException e) {
             e.printStackTrace();
         }
 

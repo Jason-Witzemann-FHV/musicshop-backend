@@ -405,8 +405,8 @@
                         <Label text="Topic" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                         <ComboBox fx:id="topicCombobox" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 
-                        <Label text="Expiration Date" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                        <DatePicker fx:id="expirationDate" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <Label text="Date of Event" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <DatePicker fx:id="dateOfEvent" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                         <Label text="Title" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
                         <TextField fx:id="messageTitle" GridPane.rowIndex="1" GridPane.columnIndex="2"

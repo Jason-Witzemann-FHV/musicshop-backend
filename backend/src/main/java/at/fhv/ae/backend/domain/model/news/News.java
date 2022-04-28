@@ -9,6 +9,5 @@ public class News {
     String topic;
     String title;
     String body;
-    LocalDateTime expiration;
-    long publishedTimeStamp;
+    LocalDateTime dateOfEvent;
 }
