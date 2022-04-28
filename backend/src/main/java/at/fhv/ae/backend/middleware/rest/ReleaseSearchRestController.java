@@ -25,5 +25,18 @@ public class ReleaseSearchRestController {
     }
 
 
+    @GET
+    @Path("/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response query(
+            @QueryParam("title") String title,
+            @QueryParam("artist") String artist,
+            @QueryParam("genre") String genre) {
+
+        var results = releaseSearchService.query(title, artist, genre);
+
+        return Response.ok(results).build();
+    }
+
 
 }
