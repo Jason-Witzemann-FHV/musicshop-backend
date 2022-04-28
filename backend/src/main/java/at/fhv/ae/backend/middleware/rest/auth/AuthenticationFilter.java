@@ -4,7 +4,7 @@ import at.fhv.ae.backend.domain.model.user.Permission;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
-import at.fhv.ae.backend.middleware.TokenRepository;
+import io.jsonwebtoken.Jwts;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
@@ -37,14 +37,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private ResourceInfo resourceInfo;
 
     @EJB
-    private TokenRepository tokenRepository;
-
-    @EJB
     private UserRepository userRepository;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-
 
         // Get the Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
@@ -66,8 +62,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             // Validate the token, throws error if not authenticated
             validateToken(token);
 
+
             // Fire UserAuthenticatedEvent to enable Injection of User
-            String username = tokenRepository.userIdOfToken(token).orElseThrow(() -> new IllegalStateException("At that point, token must have been already validated."));
+            String username = Jwts.parserBuilder()
+                    .setSigningKey(AuthenticationEndpoint.KEY)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
 
             // authorize the user
             authorize(username, permission);
@@ -96,9 +98,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private void validateToken(String token) throws Exception {
-        // Check if the token was issued by the server and if it's not expired
-        // Throw an Exception if the token is invalid
-        tokenRepository.userIdOfToken(token).orElseThrow();
+        Jwts.parserBuilder()
+                .setSigningKey(AuthenticationEndpoint.KEY)
+                .build()
+                .parseClaimsJws(token);
     }
 
     private void authorize(String username, Permission permission) throws Exception {
