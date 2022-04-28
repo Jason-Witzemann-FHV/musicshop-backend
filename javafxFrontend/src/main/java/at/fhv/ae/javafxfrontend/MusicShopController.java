@@ -379,7 +379,7 @@ public class MusicShopController {
     }
 
     public void saleSearch() throws RemoteException {
-        var sales = sellService.salesOfUser();
+        var sales = sellService.allSales();
         saleResultsView.getItems().setAll(sales);
     }
 

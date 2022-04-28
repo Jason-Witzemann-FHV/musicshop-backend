@@ -15,6 +15,6 @@ public interface SellService {
      */
     void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException;
 
-    List<SaleItemsDTO> salesOfUser(String userId);
+    List<SaleItemsDTO> allSales();
 
 }
