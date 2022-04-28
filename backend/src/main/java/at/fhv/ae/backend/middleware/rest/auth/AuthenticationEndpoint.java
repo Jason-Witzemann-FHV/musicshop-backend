@@ -1,24 +1,26 @@
 package at.fhv.ae.backend.middleware.rest.auth;
 
 import at.fhv.ae.backend.middleware.CredentialsService;
-import at.fhv.ae.backend.middleware.TokenRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.Random;
+import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 
 @Path("/authentication")
 public class AuthenticationEndpoint {
 
-    @EJB
-    private CredentialsService credentialsService;
+    public static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @EJB
-    private TokenRepository tokenRepository;
+    private CredentialsService credentialsService;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,14 +59,12 @@ public class AuthenticationEndpoint {
 
     private String issueToken(String username) {
         // Issue a token (can be a random String persisted to a database or a JWT token)
-        Random random = new SecureRandom();
-        String token = new BigInteger(130, random).toString(32);
 
-        // The issued token must be associated to a user
-        tokenRepository.setToken(username, token);
-
-        // Return the issued token
-        return token;
-
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuer("my_little_server")
+                .setExpiration(Date.from(LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.UTC))) // utc offest = +2 hours => token is 5 hours valid
+                .signWith(KEY)
+                .compact();
     }
 }
