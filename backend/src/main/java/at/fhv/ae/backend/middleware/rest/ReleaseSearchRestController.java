@@ -18,10 +18,10 @@ public class ReleaseSearchRestController {
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response detailedInformation(@PathParam("id") UUID releaseId) {
-
-        var release = releaseSearchService.detailedInformation(releaseId);
-
-        return Response.ok().entity(release).build();
+        return releaseSearchService.detailedInformation(releaseId)
+                .map(Response::ok)
+                .orElse(Response.status(Response.Status.NOT_FOUND))
+                .build();
     }
 
 
