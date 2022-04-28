@@ -106,7 +106,7 @@ public class MusicShopController {
 
     // fields and button - broadcast
     @FXML ComboBox<String> topicCombobox;
-    @FXML DatePicker expirationDate;
+    @FXML DatePicker dateOfEvent;
     @FXML TextField messageTitle;
     @FXML TextArea message;
     @FXML Tab newsTab;
@@ -495,7 +495,7 @@ public class MusicShopController {
         boolean success = false;
 
         try {
-            if( topicCombobox.getValue() == null || expirationDate.getValue() == null ||
+            if( topicCombobox.getValue() == null || dateOfEvent.getValue() == null ||
                 topicCombobox.getValue().equals("") || messageTitle.getText().isEmpty() ||
                     message.getText().isEmpty()) {
 
@@ -505,12 +505,12 @@ public class MusicShopController {
                 broadcastService.broadcast(topicCombobox.getValue(),
                         messageTitle.getText(),
                         message.getText(),
-                        expirationDate.getValue().atStartOfDay());
+                        dateOfEvent.getValue().atStartOfDay());
 
                 topicCombobox.setValue("");
                 messageTitle.clear();
                 message.clear();
-                expirationDate.getEditor().clear();
+                dateOfEvent.getEditor().clear();
 
                 success = true;
             }

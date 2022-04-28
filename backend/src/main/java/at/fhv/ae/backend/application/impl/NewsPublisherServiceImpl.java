@@ -21,6 +21,6 @@ public class NewsPublisherServiceImpl implements NewsPublisherService {
     public void addReceiver(String id, Consumer<NewsDTO> receiver) {
         User user = userRepository.userById(new UserId(id)).orElseThrow(() -> new IllegalArgumentException("user with id " + id + " was not found!"));
 
-        newsRepository.addConsumer(user, n -> receiver.accept(new NewsDTO(n.title(), n.body(), n.expiration(), n.topic())));
+        newsRepository.addConsumer(user, n -> receiver.accept(new NewsDTO(n.title(), n.body(), n.dateOfEvent(), n.topic())));
     }
 }
