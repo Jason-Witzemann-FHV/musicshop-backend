@@ -18,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sale {
 
+    private static final double TAX_RATE = 0.2;
+
     @Id
     @GeneratedValue()
     @Getter(AccessLevel.NONE)
@@ -66,7 +68,7 @@ public class Sale {
                 LocalDateTime.now(),
                 paymentType,
                 saleType,
-                items.stream().mapToDouble(Item::price).sum(),
+                items.stream().mapToDouble(i -> i.price() * i.amount()).sum() * (TAX_RATE + 1),
                 items
         );
     }
