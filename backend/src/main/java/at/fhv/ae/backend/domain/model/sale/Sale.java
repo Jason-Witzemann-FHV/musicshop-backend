@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.domain.model.sale;
 
+import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -71,6 +72,15 @@ public class Sale {
                 items.stream().mapToDouble(i -> i.price() * i.amount()).sum() * (TAX_RATE + 1),
                 items
         );
+    }
+
+    public void returnItems(ReleaseId releaseId, int amount) {
+        for (Item i: items) {
+          if (i.releaseId().equals(releaseId)) {
+              i.returnItems(amount);
+              break;
+          }
+        }
     }
 
     @Override
