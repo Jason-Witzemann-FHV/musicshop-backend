@@ -29,9 +29,24 @@ public class Item {
 
     private double price;
 
+    private int nrOfReturnedItems;
+
     public Item(ReleaseId releaseId, int amount, double price) {
         this.releaseId = releaseId;
         this.amount = amount;
         this.price = price;
     }
+
+    public void returnItems(int itemsToReturn) {
+        if(itemsToReturn <= 0)
+            throw new IllegalArgumentException("cannot return a number of items <= 0");
+
+        int numberOfItemsRemaining = amount - nrOfReturnedItems;
+
+        if (itemsToReturn > numberOfItemsRemaining)
+            throw new IllegalArgumentException("cannot return this many items");
+
+        nrOfReturnedItems += itemsToReturn;
+    }
+
 }
