@@ -10,6 +10,7 @@ import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
 import at.fhv.ae.shared.services.*;
+import com.mongodb.ReflectionDBObject;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -20,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -75,12 +77,15 @@ public class MusicShopController {
     // sales table
     @FXML TableView<SaleItemsRemoteDTO> saleResultsView;
     @FXML TableColumn<SaleItemsRemoteDTO, Double> saleColPrice;
+    @FXML TextField searchSalesNo;
 
     // sale detail
     @FXML Label saleNumber;
     @FXML TableView <Pair<String, String>> saleGeneralInfo;
     @FXML TableView<ItemRemoteDTO> saleItems;
     @FXML TableColumn<ItemRemoteDTO, Double> itemColPrice;
+    //hier anpassen
+    @FXML TableColumn<String, String> returnedAmount;
 
 
     // basket
@@ -146,7 +151,7 @@ public class MusicShopController {
 
         try {
             sellService = session.remoteSellService();
-            saleSearch();
+            //saleSearch();
 
         } catch (AuthorizationException ignored) {
             // Hide unauthorized
@@ -394,6 +399,34 @@ public class MusicShopController {
 
         // newsTab opened - change color to default color
         newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));
+
+        searchReleaseResultsView.setOnMouseClicked(event -> {
+            if (event.getClickCount() >= 2)
+
+                returnDialog(saleItems.getId());
+
+                userActionOnSearchResults.run();
+        });
+    }
+
+    public void returnDialog(String id){
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle("Return");
+        dialog.setHeaderText(id);
+        dialog.setContentText("Amount:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(amount -> {
+
+            if(Integer.parseInt(amount) > 0) {
+                //Methode implementieren
+                System.out.println(amount);
+            } else {
+                System.out.println("Not possible!");
+            }
+        });
     }
 
     public void saleSearch() throws RemoteException {
@@ -439,6 +472,7 @@ public class MusicShopController {
                 new Pair<>("Customer", details.getCustomerId()),
                 new Pair<>("Total price", formatCurrency(details.getTotalPrice()))));
         saleItems.getItems().setAll(details.getItems());
+
         switchSaleView();
     }
 
@@ -500,13 +534,28 @@ public class MusicShopController {
 
         customerSearchView.getItems().clear();
         fetchBasket();
-        saleSearch();
+        //saleSearch();
     }
 
     public void searchCustomer() throws RemoteException {
 
         List<CustomerSearchResponseDTO> customers = customerSearchService.findCustomerByName(customerSearchFirstName.getText(), customerSearchSurname.getText());
         customerSearchView.getItems().setAll(customers);
+    }
+
+
+    public void searchSaleNumber() throws RemoteException {
+        System.out.println("Insert here the new query");
+        /* searchReleaseResultsView.getItems().setAll(
+                releaseSearchService.query(
+                        searchTitle.getText(),
+                        searchArtist.getText(),
+                        searchGenre.getValue())); */
+    }
+
+    public void searchSaleReset() {
+        searchSalesNo.clear();
+        saleResultsView.getItems().clear();
     }
 
     public void sendMessage() {

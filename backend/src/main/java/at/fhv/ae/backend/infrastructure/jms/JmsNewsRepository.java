@@ -43,7 +43,7 @@ public class JmsNewsRepository implements NewsRepository {
 
         this.context = new InitialContext(env);
         this.connection = new ActiveMQConnectionFactory("tcp://10.0.40.160:61616").createConnection();
-        this.connection.setClientID("my_little_server");
+        this.connection.setClientID("my_little_server2");
         this.connection.start();
         this.topics = Arrays.stream(SubscriptionTopics.values())
                 .map(SubscriptionTopics::friendlyName)
