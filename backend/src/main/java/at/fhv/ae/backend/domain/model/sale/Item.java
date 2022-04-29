@@ -48,6 +48,4 @@ public class Item {
 
         nrOfReturnedItems += itemsToReturn;
     }
-
-
 }
