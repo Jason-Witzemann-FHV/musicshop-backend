@@ -23,7 +23,7 @@ class RemoteReleaseServiceTest {
 
 
     @BeforeEach
-    void setupMocksAndTestClass() throws RemoteException {
+    void setupMocksAndTestClass() {
         releaseService = mock(ReleaseSearchService.class);
         remoteReleaseService = new RemoteReleaseSearchServiceImpl(releaseService);
     }
@@ -31,13 +31,12 @@ class RemoteReleaseServiceTest {
     @Test
     void given_nothing_when_searched_for_release_then_call_application_service_and_finds_nothing() throws IllegalArgumentException {
         UUID testId = UUID.randomUUID();
-        // Nullpointer, because Application layer throws error, but Application layer is mocked, therefore it returned null and caused NullPointerException
-        Assertions.assertThrows(NullPointerException.class, () -> remoteReleaseService.getDetails(testId));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> remoteReleaseService.getDetails(testId));
     }
 
 
     @Test
-    void given_nothing_when_getting_result_then_confirm_call_on_application_layer() throws RemoteException, IllegalArgumentException {
+    void given_nothing_when_getting_result_then_confirm_call_on_application_layer() throws IllegalArgumentException {
         // Arrange
         UUID testId = UUID.randomUUID();
         ArrayList<String> artists = new ArrayList<>();
