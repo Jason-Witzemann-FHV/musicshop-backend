@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.domain.model.sale;
 
+import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class Item {
             throw new IllegalArgumentException("cannot return this many items");
 
         nrOfReturnedItems += itemsToReturn;
+
     }
 
 
