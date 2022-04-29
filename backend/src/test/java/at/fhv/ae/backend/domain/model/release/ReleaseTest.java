@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.domain.model.release;
 
-import at.fhv.ae.backend.domain.model.sale.Item;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
