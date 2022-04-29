@@ -3,9 +3,11 @@ package at.fhv.ae.backend.application;
 
 import at.fhv.ae.backend.application.dto.BasketItemDisplayDTO;
 
+import javax.ejb.Local;
 import java.util.List;
 import java.util.UUID;
 
+@Local
 public interface BasketService {
 
     void addItemToBasket(String userId, UUID releaseId, int quantity);

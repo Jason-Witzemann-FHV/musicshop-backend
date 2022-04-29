@@ -1,26 +1,23 @@
 package at.fhv.ae.backend.application.dto;
 
 import at.fhv.ae.backend.domain.model.release.Release;
-import at.fhv.ae.backend.domain.model.work.Artist;
-import at.fhv.ae.backend.domain.model.work.Genre;
-import at.fhv.ae.backend.domain.model.work.Recording;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Value;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Value
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DetailedReleaseDTO {
 
     String title;
     double price;
     int stock;
     String medium;
-    ArrayList<RecordingDTO> recordings;
+    List<RecordingDTO> recordings;
 
-    public static DetailedReleaseDTO fromDomain(Release release, ArrayList<RecordingDTO> recordings) {
+    public static DetailedReleaseDTO fromDomain(Release release, List<RecordingDTO> recordings) {
         return new DetailedReleaseDTO(
                 release.title(),
                 release.price(),

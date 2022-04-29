@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.application;
 
-import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.application.impl.BasketServiceImpl;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.user.Permission;

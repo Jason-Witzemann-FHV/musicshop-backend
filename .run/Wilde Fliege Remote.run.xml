@@ -1,0 +1,47 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Wilde Fliege Remote" type="JBossConfiguration" factoryName="Remote" APPLICATION_SERVER_NAME="JBoss/WildFly 26.1.0.Final" ALTERNATIVE_JRE_ENABLED="false">
+    <option name="LOCAL" value="false" />
+    <option name="OPEN_IN_BROWSER" value="false" />
+    <option name="UPDATING_POLICY" value="hot-swap-classes" />
+    <deployment>
+      <artifact name="Gradle : at.fhv : backend-1.0-SNAPSHOT.war">
+        <settings DEPLOYMENT_METHOD="Staging" />
+      </artifact>
+    </deployment>
+    <server-settings>
+      <data>
+        <option name="credentialAlias" value="e8f616c8-8f91-4744-807d-6e058a7de043" />
+        <option name="managementPort" value="9990" />
+        <option name="stagingRemotePath" value="" />
+        <option name="transportStagingTarget">
+          <TransportTarget>
+            <option name="id" value="c74722d2-6279-429f-b9d1-3e51ad0b0eec" />
+            <id>c74722d2-6279-429f-b9d1-3e51ad0b0eec</id>
+          </TransportTarget>
+        </option>
+        <option name="username" value="admin" />
+        <username>admin</username>
+        <credential-alias>e8f616c8-8f91-4744-807d-6e058a7de043</credential-alias>
+        <management-port>9990</management-port>
+        <transport-target>
+          <TransportTarget>
+            <option name="id" value="c74722d2-6279-429f-b9d1-3e51ad0b0eec" />
+            <id>c74722d2-6279-429f-b9d1-3e51ad0b0eec</id>
+          </TransportTarget>
+        </transport-target>
+        <staging-path />
+      </data>
+    </server-settings>
+    <predefined_log_file enabled="true" id="JBoss" />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="8787" />
+      <option name="LOCAL" value="false" />
+    </RunnerSettings>
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="Gradle : at.fhv : backend-1.0-SNAPSHOT.war" />
+      </option>
+    </method>
+  </configuration>
+</component>

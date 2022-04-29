@@ -4,7 +4,7 @@
     <module name="musicshop-backend.javafxFrontend.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="at.fhv.ae.javafxfrontend.*" />
+        <option name="PATTERN" value="at.fhv.ae.shared.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

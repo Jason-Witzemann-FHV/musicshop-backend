@@ -10,4 +10,5 @@ public class News {
     String title;
     String body;
     LocalDateTime dateOfEvent;
+    long publishedTimeStamp;
 }

@@ -3,12 +3,15 @@ package at.fhv.ae.backend.application.dto;
 import at.fhv.ae.backend.domain.model.work.Artist;
 import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.backend.domain.model.work.Recording;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Value;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Value
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RecordingDTO {
 
     String title;
