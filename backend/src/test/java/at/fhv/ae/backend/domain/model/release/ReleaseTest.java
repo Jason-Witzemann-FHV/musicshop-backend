@@ -50,6 +50,8 @@ public class ReleaseTest {
 
         Assertions.assertEquals(15, release.stock());
 
+        Assertions.assertThrows(Throwable.class, () -> release.increaseStock(-4));
+
     }
 
 }

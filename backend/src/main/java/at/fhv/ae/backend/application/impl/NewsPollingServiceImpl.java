@@ -33,7 +33,7 @@ public class NewsPollingServiceImpl implements NewsPollingService {
                 .map(news -> new NewsDTO(
                         news.title(),
                         news.body(),
-                        news.expiration(),
+                        news.dateOfEvent(),
                         news.topic(),
                         news.publishedTimeStamp()
                 ))

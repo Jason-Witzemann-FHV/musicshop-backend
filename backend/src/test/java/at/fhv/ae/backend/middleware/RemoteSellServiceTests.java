@@ -33,8 +33,8 @@ class RemoteSellServiceTests {
 
     @Test
     void given_nothing_when_get_sales_of_user_then_application_service_executed() throws RemoteException {
-        remoteSellService.salesOfUser();
-        verify(sellService).salesOfUser(customerId);
+        remoteSellService.allSales();
+        verify(sellService).allSales();
     }
 
 }
