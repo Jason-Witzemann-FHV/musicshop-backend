@@ -32,6 +32,9 @@ dependencies {
     implementation group: 'org.jboss', name: 'jboss-ejb-client', version: '4.0.36.Final'
 
     compileOnly('javax.ejb:javax.ejb-api:3.2.2')
+
+    // https://mvnrepository.com/artifact/org.mongodb/bson
+    implementation 'org.mongodb:bson:3.12.10'
 }
 
 test {
