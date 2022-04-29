@@ -34,7 +34,6 @@ public class BasketRestController {
         } else {
             return Response.noContent().build();
         }
-
     }
 
     @DELETE
