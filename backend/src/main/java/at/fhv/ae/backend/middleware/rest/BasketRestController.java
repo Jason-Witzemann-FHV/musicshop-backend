@@ -23,6 +23,19 @@ public class BasketRestController {
     @EJB
     private BasketService basketService;
 
+    @GET
+    @Secured(Permission.SELL_RELEASES)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response displayBasket() {
+        var results = basketService.itemsInBasket(user.userId().toString());
+
+        if(!results.isEmpty()) {
+            return Response.ok(results).build();
+        } else {
+            return Response.noContent().build();
+        }
+    }
+
     @DELETE
     @Path("/remove/{id}")
     @Secured(Permission.SELL_RELEASES)
