@@ -367,21 +367,28 @@ public class DataGenerator {
         var em = Persistence.createEntityManagerFactory("Test").createEntityManager();
         var transaction = em.getTransaction();
         transaction.begin();
-        em.createNativeQuery("DROP TABLE IF EXISTS release_supplier").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS release_recordingids").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS recording_genres").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS recording_artist").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS artist").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS recording").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS release").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS supplier").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS work").executeUpdate();
-        em.createNativeQuery("DROP TABLE IF EXISTS label").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS sale cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS item cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS release_supplier cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS release_recordingids cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS recording_genres cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS recording_artist cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS artist cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS recording cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS release cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS supplier cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS work cascade").executeUpdate();
+        em.createNativeQuery("DROP TABLE IF EXISTS label cascade").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS User_subscriptionTopics CASCADE").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS role_permissions CASCADE").executeUpdate();
+
+        /*
+        TODO rename these tables, drop doesnt work:
         em.createNativeQuery("DROP TABLE IF EXISTS \"role\" CASCADE").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS \"user\" CASCADE").executeUpdate();
         em.createNativeQuery("DROP TABLE IF EXISTS \"User_Role\" CASCADE").executeUpdate();
+        */
+
         transaction.commit();
     }
 
