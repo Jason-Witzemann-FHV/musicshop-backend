@@ -36,6 +36,27 @@ public class BasketRestController {
         }
     }
 
+    // could be done with POST, but we use parameters --> POST is useless without body data
+    @GET
+    @Path("/add/{id}")
+    @Secured(Permission.BUY_RELEASES)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addItemOnceToBasket(@PathParam("id") UUID releaseId) {
+        basketService.addItemToBasket(user.userId().toString(), releaseId, 1);
+        // We should really add custom exceptions
+        return Response.ok("Release " + releaseId + " added once").build();
+    }
+
+    @GET
+    @Path("/add/{id}/{amount}")
+    @Secured(Permission.BUY_RELEASES)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addItemToBasket(@PathParam("id") UUID releaseId,
+                                    @PathParam("amount") int amount) {
+        basketService.addItemToBasket(user.userId().toString(), releaseId, amount);
+        return Response.ok("Release " + releaseId + " added " + amount +" times").build();
+    }
+
     @DELETE
     @Path("/remove/{id}")
     @Secured(Permission.SELL_RELEASES)
