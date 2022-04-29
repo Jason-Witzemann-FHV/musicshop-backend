@@ -1,11 +1,13 @@
 package at.fhv.ae.backend.application.dto;
 
 import at.fhv.ae.backend.domain.model.release.Release;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Value;
 
 import java.util.UUID;
 
 @Value
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class BasketItemDisplayDTO {
     UUID releaseId;
     String title;
