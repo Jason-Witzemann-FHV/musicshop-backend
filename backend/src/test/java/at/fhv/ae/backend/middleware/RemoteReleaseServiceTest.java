@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
@@ -63,7 +64,7 @@ class RemoteReleaseServiceTest {
         );
 
         // Act
-        when(releaseService.detailedInformation(testId)).thenReturn(testDTO);
+        when(releaseService.detailedInformation(testId)).thenReturn(Optional.of(testDTO));
         remoteReleaseService.getDetails(testId);
 
         // Assert
