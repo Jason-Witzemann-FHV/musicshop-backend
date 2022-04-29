@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'war'
+    id 'application'
 }
 
 
@@ -12,6 +12,10 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass.set('at.fhv.ae.CustomerApiMain')
+}
+
 dependencies {
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compileOnly 'org.projectlombok:lombok:1.18.22'
@@ -21,7 +25,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    providedCompile 'jakarta.platform:jakarta.jakartaee-api:8.0.0'
+    //providedCompile 'jakarta.platform:jakarta.jakartaee-api:8.0.0'
     implementation 'org.mongodb:mongodb-driver:3.12.10'
 }
 

@@ -14,7 +14,7 @@ public class CustomerApiMain {
         try {
             CustomerRepository customerRepo = new RemoteCustomerRepositoryImpl();
             LocateRegistry.createRegistry(10990);
-            Naming.rebind("rmi://localhost:10990/customer-repository", customerRepo); // todo change localhost back to 10.0.40.161
+            Naming.rebind("rmi://10.0.40.161:10990/customer-repository", customerRepo);
 
             System.out.println("customer repo bound");
         } catch (RemoteException | MalformedURLException e) {

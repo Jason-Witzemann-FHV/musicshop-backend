@@ -34,7 +34,7 @@ public class Main {
                     )
             );
 
-            Naming.rebind("rmi://localhost/music-shop", factory);
+            Naming.rebind("rmi://10.0.40.160/music-shop", factory);
 
 
         } catch (RemoteException | MalformedURLException e) {
