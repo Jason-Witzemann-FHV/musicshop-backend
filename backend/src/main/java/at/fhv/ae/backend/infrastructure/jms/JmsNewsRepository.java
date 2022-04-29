@@ -105,7 +105,6 @@ public class JmsNewsRepository implements NewsRepository {
         TextMessage message = session.createTextMessage(news.body());
         message.setStringProperty(TITLE_PROP, news.title());
         message.setStringProperty(EXPIRATION_PROP, news.dateOfEvent().toString());
-
         message.setJMSTimestamp(news.publishedTimeStamp());
 
         producer.send(message);

@@ -43,7 +43,6 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
 
     @Override
     public Optional<DetailedReleaseDTO> detailedInformation(UUID releaseId) {
-
         return releaseRepository.findById(new ReleaseId(releaseId))
                 .map(release -> {
                     List<Recording> recordings = workRepository.findRecordings(release.recordingIds());
@@ -55,7 +54,6 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
 
                     return DetailedReleaseDTO.fromDomain(release, recordingDTOs);
                 });
-
     }
 
     @Override

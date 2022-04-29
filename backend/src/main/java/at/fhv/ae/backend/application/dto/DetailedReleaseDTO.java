@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.application.dto;
 
 import at.fhv.ae.backend.domain.model.release.Release;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Value;
 

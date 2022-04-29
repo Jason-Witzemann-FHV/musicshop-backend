@@ -31,7 +31,6 @@ public class HibernateReleaseRepository implements ReleaseRepository {
 
     @Override
     public List<Release> query(String title, String artist, Genre genre) {
-
         var sqlBuilder = new StringBuilder()
                 .append("select distinct rel.* ")
                 .append("from Release rel ")
@@ -57,7 +56,6 @@ public class HibernateReleaseRepository implements ReleaseRepository {
             query.setParameter("artist", artist);
         if(genre != null)
             query.setParameter("genre", genre.toString());
-
 
         return query.getResultList();
     }

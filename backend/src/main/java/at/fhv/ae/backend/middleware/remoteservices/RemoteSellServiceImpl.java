@@ -45,6 +45,7 @@ public class RemoteSellServiceImpl implements RemoteSellService {
     @Override
     public List<SaleItemsRemoteDTO> allSales() {
         return sellService.allSales().stream()
+
                 .map(sale -> {
                     return new SaleItemsRemoteDTO(
                             sale.saleNumber(),

@@ -107,7 +107,6 @@ class SellServiceTests {
                 sellItemDTOs
         );
 
-
         when(saleRepository.allSales()).thenReturn(List.of(sale));
         for (int i = 0; i < saleItems.size(); i++) {
             when(releaseRepository.findById(saleItems.get(i).releaseId())).thenReturn(Optional.of(releases.get(i)));

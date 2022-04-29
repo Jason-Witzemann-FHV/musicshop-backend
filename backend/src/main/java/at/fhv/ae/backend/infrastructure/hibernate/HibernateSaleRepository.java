@@ -39,6 +39,4 @@ public class HibernateSaleRepository implements SaleRepository {
         return em.createQuery("select s from Sale s", Sale.class)
                 .getResultList();
     }
-
-
 }
