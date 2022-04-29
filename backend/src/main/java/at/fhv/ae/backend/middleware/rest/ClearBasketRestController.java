@@ -27,7 +27,7 @@ public class ClearBasketRestController {
 
 
     @DELETE
-    @Path("/remove/{UserId}")
+    @Path("/clearBasket/{UserId}")
     @Secured(Permission.SELL_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeItemFromBasket(@PathParam("UserId")UserId userId) {
