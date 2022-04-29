@@ -60,6 +60,14 @@ public class Release {
         this.stock -= amount;
     }
 
+    public void increaseStock(int amount){
+        if(amount < 0){
+            throw new IllegalArgumentException("amount cannot be negative");
+        }
+
+        this.stock+=amount;
+    }
+
     public List<Supplier> suppliers() {
         return Collections.unmodifiableList(suppliers);
     }
