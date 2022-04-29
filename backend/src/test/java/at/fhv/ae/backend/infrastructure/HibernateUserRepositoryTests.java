@@ -6,6 +6,7 @@ import at.fhv.ae.backend.domain.model.user.Role;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateUserRepository;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
@@ -17,8 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HibernateUserRepositoryTests {
 
     private final EntityManager em = ServiceRegistry.entityManager();
-
-    private final UserRepository userRepository = ServiceRegistry.userRepository();
+    private final UserRepository userRepository = new HibernateUserRepository(em);
 
 
     @Test

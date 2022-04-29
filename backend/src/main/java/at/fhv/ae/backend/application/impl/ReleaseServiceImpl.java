@@ -11,17 +11,27 @@ import at.fhv.ae.backend.domain.model.work.Recording;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.WorkRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.util.*;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
+@NoArgsConstructor
+@Stateless
 public class ReleaseServiceImpl implements ReleaseSearchService {
 
-    private final ReleaseRepository releaseRepository;
+    @EJB
+    private ReleaseRepository releaseRepository;
 
-    private final WorkRepository workRepository;
+    @EJB
+    private WorkRepository workRepository;
 
     @Override
     public List<ReleaseDTO> query(String title, String artist,String genre) {
@@ -32,16 +42,20 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
     }
 
     @Override
-    public DetailedReleaseDTO detailedInformation(UUID releaseId) throws IllegalArgumentException  {
-        // Getting domain objects
-        Release release = releaseRepository.findById(new ReleaseId(releaseId)).orElseThrow(IllegalArgumentException::new);
-        List<Recording> recordings = workRepository.findRecordings(release.recordingIds());
+    public Optional<DetailedReleaseDTO> detailedInformation(UUID releaseId) {
 
-        return DetailedReleaseDTO.fromDomain(
-                release,
-                recordings.stream()
-                        .map(RecordingDTO::fromDomain)
-                        .collect(Collectors.toCollection(ArrayList::new)));
+        return releaseRepository.findById(new ReleaseId(releaseId))
+                .map(release -> {
+                    List<Recording> recordings = workRepository.findRecordings(release.recordingIds());
+
+                    ArrayList<RecordingDTO> recordingDTOs = recordings
+                            .stream()
+                            .map(RecordingDTO::fromDomain)
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                    return DetailedReleaseDTO.fromDomain(release, recordingDTOs);
+                });
+
     }
 
     @Override

@@ -11,5 +11,5 @@ public class NewsRemoteDTO implements Serializable {
     String message;
     LocalDateTime dateOfEvent;
     String topic;
-
+    long publishedTimeStamp;
 }

@@ -7,16 +7,15 @@ import at.fhv.ae.backend.domain.model.user.Role;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
 import at.fhv.ae.shared.dto.basket.BasketItemRemoteDTO;
-import at.fhv.ae.shared.rmi.RemoteBasketService;
-import org.junit.jupiter.api.*;
+import at.fhv.ae.shared.services.RemoteBasketService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +23,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BasketIntegrationTests {
 
@@ -40,10 +39,11 @@ class BasketIntegrationTests {
     @BeforeAll
     static void setup() {
         try {
-            LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-            Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl("nsu3146", ServiceRegistry.basketService()));
-            remoteBasketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
-            ServiceRegistry.basketRepository().clearBasket(new UserId("nsu3146")); // basket might have data in it from other tests
+           // LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+          //  Naming.rebind("rmi://localhost/basket-service", new RemoteBasketServiceImpl("nsu3146", ServiceRegistry.basketService()));
+           // remoteBasketService = (RemoteBasketService) Naming.lookup("rmi://localhost/basket-service");
+           // ServiceRegistry.basketRepository().clearBasket(new UserId("nsu3146")); // basket might have data in it from other tests
+            throw new IllegalArgumentException("haha");
         } catch (Exception e) {
             Assumptions.assumeTrue(false, "Setup of Integration-Test failed, skipping Test!");
         }
@@ -52,7 +52,7 @@ class BasketIntegrationTests {
     @AfterEach
     void tearDown() {
         // clear basket repository since it is not handled by transactions
-        ServiceRegistry.basketRepository().clearBasket(new UserId("nsu3146"));
+        //ServiceRegistry.basketRepository().clearBasket(new UserId("nsu3146"));
 
         // remove test data of test from database
         var transaction = entityManager.getTransaction();

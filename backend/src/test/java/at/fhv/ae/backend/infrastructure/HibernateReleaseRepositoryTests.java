@@ -4,6 +4,7 @@ import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.work.*;
 import at.fhv.ae.backend.domain.repository.ReleaseRepository;
+import at.fhv.ae.backend.infrastructure.hibernate.HibernateReleaseRepository;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
@@ -14,9 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HibernateReleaseRepositoryTests {
 
-    private final ReleaseRepository releaseRepository = ServiceRegistry.releaseRepository();
-
-    private final EntityManager em = ServiceRegistry.entityManager();
+    private EntityManager em = ServiceRegistry.entityManager();
+    private final ReleaseRepository releaseRepository  = new HibernateReleaseRepository(em);
 
     @Test
     void given_many_releases_when_get_one_then_get_correct_release() {

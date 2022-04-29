@@ -1,7 +1,6 @@
 package at.fhv.ae.javafxfrontend;
 
-import at.fhv.ae.shared.rmi.RemoteSession;
-import at.fhv.ae.shared.rmi.RemoteSessionFactory;
+import at.fhv.ae.shared.services.BeanSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,14 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import java.util.Properties;
 
 public class LoginController {
-
-    private RemoteSessionFactory sessionFactory;
 
     @FXML
     TextField userName;
@@ -47,26 +44,26 @@ public class LoginController {
         ownServer.setVisible(true);
     }
 
-    public void connectToServer(String server) throws IllegalArgumentException, MalformedURLException, NotBoundException, RemoteException {
-        System.out.println("Connect to: '" + server + "'");
-        sessionFactory = (RemoteSessionFactory) Naming.lookup("rmi://" + server + "/music-shop");
-    }
-
     public void login(ActionEvent event) {
         try {
-            if (local.isSelected()) {
-                connectToServer("localhost");
-            } else {
-                connectToServer(ownServer.getText());
-            }
 
-            RemoteSession session = sessionFactory.logIn(userName.getText(),password.getText());
+            String ip = local.isSelected() ? "localhost" : ownServer.getText();
+
+            Properties props = new Properties();
+            props.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
+            props.put(Context.PROVIDER_URL, "http-remoting://" + ip + ":8080");
+            Context ctx = new InitialContext(props);
+            BeanSession session = (BeanSession) ctx.lookup("ejb:/backend-1.0-SNAPSHOT/BeanSessionImpl!at.fhv.ae.shared.services.BeanSession?stateful");
+            session.authenticate(userName.getText(), password.getText());
+
 
             final Node source = (Node) event.getSource();
             final Stage currentStage = (Stage) source.getScene().getWindow();
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MusicShop.fxml"));
             Parent root = fxmlLoader.load();
+
+
 
             MusicShopController controller = fxmlLoader.getController();
             controller.setSession(session);

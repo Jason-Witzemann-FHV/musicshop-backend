@@ -3,14 +3,15 @@ package at.fhv.ae.backend.middleware;
 import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
 import at.fhv.ae.backend.application.dto.RecordingDTO;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteReleaseSearchServiceImpl;
-import at.fhv.ae.shared.rmi.RemoteReleaseSearchService;
+import at.fhv.ae.backend.middleware.remoteservices.RemoteReleaseSearchServiceImpl;
+import at.fhv.ae.shared.services.RemoteReleaseSearchService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
@@ -63,7 +64,7 @@ class RemoteReleaseServiceTest {
         );
 
         // Act
-        when(releaseService.detailedInformation(testId)).thenReturn(testDTO);
+        when(releaseService.detailedInformation(testId)).thenReturn(Optional.of(testDTO));
         remoteReleaseService.getDetails(testId);
 
         // Assert

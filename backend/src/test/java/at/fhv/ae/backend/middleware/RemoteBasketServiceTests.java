@@ -3,8 +3,8 @@ package at.fhv.ae.backend.middleware;
 
 import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.backend.application.dto.BasketItemDisplayDTO;
-import at.fhv.ae.backend.middleware.rmi.services.RemoteBasketServiceImpl;
-import at.fhv.ae.shared.rmi.RemoteBasketService;
+import at.fhv.ae.backend.middleware.remoteservices.RemoteBasketServiceImpl;
+import at.fhv.ae.shared.services.RemoteBasketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,8 @@ class RemoteBasketServiceTests {
     void setupMocksAndTestClass() throws RemoteException {
         basketService = mock(BasketService.class);
         userId = "nsu3146";
-        remoteBasketService = new RemoteBasketServiceImpl(userId, basketService);
+        remoteBasketService = new RemoteBasketServiceImpl(basketService, userId);
+
     }
 
     @Test

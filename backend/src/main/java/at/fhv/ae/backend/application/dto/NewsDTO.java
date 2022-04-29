@@ -11,6 +11,7 @@ public class NewsDTO {
     String message;
     LocalDateTime dateOfEvent;
     String topic;
+    long publishedTimeStamp;
 
 
 }

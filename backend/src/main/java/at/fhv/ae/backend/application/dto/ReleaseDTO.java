@@ -1,9 +1,11 @@
 package at.fhv.ae.backend.application.dto;
 
 import at.fhv.ae.backend.domain.model.release.Release;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Value;
 
 @Value
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class ReleaseDTO {
 
     String id;

@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.application.dto;
 
-import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import lombok.Value;
 
 import java.util.List;
