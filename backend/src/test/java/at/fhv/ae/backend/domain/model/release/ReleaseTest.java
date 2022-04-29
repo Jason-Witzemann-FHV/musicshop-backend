@@ -52,4 +52,24 @@ public class ReleaseTest {
 
     }
 
+    @Test
+    public void increase_Stock_with_return_Items_false(){
+        var release = new Release(
+                new ReleaseId(UUID.randomUUID()),
+                10,
+                "Sphärenklänge",
+                Medium.VINYL,
+                66.6,
+                new Label("asdf", "jkl"),
+                List.of(new Supplier("Johannes", "Stra0e 10, Bregenz")),
+                List.of(new RecordingId(UUID.randomUUID())));
+
+        Assertions.assertEquals(10, release.stock());
+
+        release.increaseStock(-4);
+
+        Assertions.assertEquals(6, release.stock());
+
+    }
+
 }
