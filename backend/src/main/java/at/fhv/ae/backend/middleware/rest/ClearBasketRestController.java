@@ -30,7 +30,7 @@ public class ClearBasketRestController {
     @Path("/clearBasket/{UserId}")
     @Secured(Permission.SELL_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeItemFromBasket(@PathParam("UserId")UserId userId) {
+    public Response clearBasket(@PathParam("UserId")UserId userId) {
         try {
             basketService.clearBasket(user.userId().toString());
             return Response.ok().status(Response.Status.ACCEPTED).build();
