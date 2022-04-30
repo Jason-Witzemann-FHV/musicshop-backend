@@ -50,7 +50,7 @@ public class BasketRestController {
     }
 
     @DELETE
-    @Path("/clearBasket")
+    @Path("/clear")
     @Secured(Permission.SELL_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
     public Response clearBasket() {
