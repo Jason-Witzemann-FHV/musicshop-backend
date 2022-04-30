@@ -48,4 +48,17 @@ public class BasketRestController {
             return Response.notModified().build();
         }
     }
+
+    @DELETE
+    @Path("/clear")
+    @Secured(Permission.SELL_RELEASES)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response clearBasket() {
+        try {
+            basketService.clearBasket(user.userId().toString());
+            return Response.ok().status(Response.Status.ACCEPTED).build();
+        } catch(Exception e){
+            return Response.notModified().build();
+        }
+    }
 }
