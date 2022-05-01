@@ -115,7 +115,7 @@ public class MusicShopController {
 
     // fields and button - broadcast
     @FXML ComboBox<String> topicCombobox;
-    @FXML DatePicker expirationDate;
+    @FXML DatePicker dateOfEvent;
     @FXML TextField messageTitle;
     @FXML TextArea message;
     @FXML Tab newsTab;
@@ -395,8 +395,6 @@ public class MusicShopController {
             }
         });
 
-        //newsView.getItems().setAll(new NewsRemoteDTO("New Album leaked!!!", "I'm so hyped!", LocalDateTime.of(2022, 4, 16, 12, 0), "PopTopic"));
-
         // newsTab opened - change color to default color
         newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));
 
@@ -430,7 +428,7 @@ public class MusicShopController {
     }
 
     public void saleSearch() throws RemoteException {
-        var sales = sellService.salesOfUser();
+        var sales = sellService.allSales();
         saleResultsView.getItems().setAll(sales);
     }
 
@@ -525,7 +523,12 @@ public class MusicShopController {
                 .map(CustomerSearchResponseDTO::getId)
                 .orElse(null);
 
-        boolean success = sellService.sellItemsInBasket(customerId); // todo assign customer
+        boolean success = false;
+        try {
+            success = sellService.sellItemsInBasket(customerId); // todo assign customer
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(success ? "Items sold" : "Error confirming Sale");
@@ -562,7 +565,7 @@ public class MusicShopController {
         boolean success = false;
 
         try {
-            if( topicCombobox.getValue() == null || expirationDate.getValue() == null ||
+            if( topicCombobox.getValue() == null || dateOfEvent.getValue() == null ||
                 topicCombobox.getValue().equals("") || messageTitle.getText().isEmpty() ||
                     message.getText().isEmpty()) {
 
@@ -572,12 +575,12 @@ public class MusicShopController {
                 broadcastService.broadcast(topicCombobox.getValue(),
                         messageTitle.getText(),
                         message.getText(),
-                        expirationDate.getValue().atStartOfDay());
+                        dateOfEvent.getValue().atStartOfDay());
 
                 topicCombobox.setValue("");
                 messageTitle.clear();
                 message.clear();
-                expirationDate.getEditor().clear();
+                dateOfEvent.getEditor().clear();
 
                 success = true;
             }

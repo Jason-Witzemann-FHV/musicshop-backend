@@ -27,6 +27,8 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
 
+    // https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+    implementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
 
     // https://mvnrepository.com/artifact/org.wildfly/wildfly-ejb-client-bom
     implementation group: 'org.wildfly', name: 'wildfly-ejb-client-bom', version: '21.0.1.Final', ext: 'pom'
@@ -38,6 +40,13 @@ dependencies {
     implementation group: 'org.jboss', name: 'jboss-ejb-client', version: '4.0.36.Final'
 
     compileOnly('javax.ejb:javax.ejb-api:3.2.2')
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.4'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.4'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.4'
+
+    // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
+    //'org.bouncycastle:bcprov-jdk15on:1.70', 'io.jsonwebtoken:jjwt-jackson:0.11.4' // or 'io.jsonwebtoken:jjwt-gson:0.11.4' for gson
 
     implementation 'org.mongodb:mongodb-driver:3.12.10'
 

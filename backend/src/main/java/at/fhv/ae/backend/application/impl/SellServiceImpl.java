@@ -92,8 +92,8 @@ public class SellServiceImpl implements SellService {
     }
 
     @Override
-    public List<SaleItemsDTO> salesOfUser(String userId) {
-        return saleRepository.salesOfUser(new UserId(userId)).stream()
+    public List<SaleItemsDTO> allSales() {
+        return saleRepository.allSales().stream()
                 .map(sale -> {
                     return new SaleItemsDTO(
                             sale.saleId().toString(),

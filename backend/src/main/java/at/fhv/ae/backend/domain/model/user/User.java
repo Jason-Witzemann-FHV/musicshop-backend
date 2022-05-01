@@ -43,7 +43,7 @@ public class User {
     }
 
     public boolean hasPermission(Permission permissionToCheck) {
-        return permissions().stream().anyMatch(permissionToCheck::equals);
+        return permissions().stream().anyMatch(permissionToCheck::equals) || permissionToCheck == Permission.NONE;
     }
 
     public boolean subscribedTo(String topic) {

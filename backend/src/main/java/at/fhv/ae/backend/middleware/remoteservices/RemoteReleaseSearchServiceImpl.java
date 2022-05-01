@@ -35,7 +35,7 @@ public class RemoteReleaseSearchServiceImpl implements RemoteReleaseSearchServic
 
     @Override
     public DetailedReleaseRemoteDTO getDetails(UUID releaseId) {
-        DetailedReleaseDTO result = releaseSearchService.detailedInformation(releaseId);
+        DetailedReleaseDTO result = releaseSearchService.detailedInformation(releaseId).orElseThrow(IllegalArgumentException::new);
         return new DetailedReleaseRemoteDTO(
                 result.title(),
                 result.price(),

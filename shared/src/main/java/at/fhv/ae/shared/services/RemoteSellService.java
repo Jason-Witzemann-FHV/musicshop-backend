@@ -18,5 +18,5 @@ public interface RemoteSellService {
      */
     boolean sellItemsInBasket(ObjectId customerId);
 
-    List<SaleItemsRemoteDTO> salesOfUser();
+    List<SaleItemsRemoteDTO> allSales();
 }

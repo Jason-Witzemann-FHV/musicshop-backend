@@ -1,5 +1,6 @@
 package at.fhv.ae.backend.domain.model.sale;
 
+import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,6 +18,8 @@ import java.util.List;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sale {
+
+    private static final double TAX_RATE = 0.2;
 
     @Id
     @GeneratedValue()
@@ -66,9 +69,18 @@ public class Sale {
                 LocalDateTime.now(),
                 paymentType,
                 saleType,
-                items.stream().mapToDouble(Item::price).sum(),
+                items.stream().mapToDouble(i -> i.price() * i.amount()).sum() * (TAX_RATE + 1),
                 items
         );
+    }
+
+    public void returnItems(ReleaseId releaseId, int amount) {
+        for (Item i: items) {
+          if (i.releaseId().equals(releaseId)) {
+              i.returnItems(amount);
+              break;
+          }
+        }
     }
 
     @Override

@@ -14,6 +14,7 @@ import javax.ejb.Startup;
 import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ public class JmsNewsRepository implements NewsRepository {
 
         this.context = new InitialContext(env);
         this.connection = new ActiveMQConnectionFactory("tcp://10.0.40.160:61616").createConnection();
-        this.connection.setClientID("my_little_server2");
+        this.connection.setClientID(InetAddress.getLocalHost().getHostAddress());
         this.connection.start();
         this.topics = Arrays.stream(SubscriptionTopics.values())
                 .map(SubscriptionTopics::friendlyName)
@@ -103,8 +104,7 @@ public class JmsNewsRepository implements NewsRepository {
 
         TextMessage message = session.createTextMessage(news.body());
         message.setStringProperty(TITLE_PROP, news.title());
-        message.setStringProperty(EXPIRATION_PROP, news.expiration().toString());
-
+        message.setStringProperty(EXPIRATION_PROP, news.dateOfEvent().toString());
         message.setJMSTimestamp(news.publishedTimeStamp());
 
         producer.send(message);
