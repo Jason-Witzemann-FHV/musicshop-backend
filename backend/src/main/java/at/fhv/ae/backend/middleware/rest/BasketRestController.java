@@ -36,6 +36,27 @@ public class BasketRestController {
         }
     }
 
+    // body not needed here
+    @PUT
+    @Path("/add/{id}")
+    @Secured(Permission.BUY_RELEASES)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addItemOnceToBasket(@PathParam("id") UUID releaseId) {
+        basketService.addItemToBasket(user.userId().toString(), releaseId, 1);
+        // We should really add custom exceptions
+        return Response.ok("Release " + releaseId + " added once").build();
+    }
+
+    @PUT
+    @Path("/add/{id}/{amount}")
+    @Secured(Permission.BUY_RELEASES)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addItemToBasket(@PathParam("id") UUID releaseId,
+                                    @PathParam("amount") int amount) {
+        basketService.addItemToBasket(user.userId().toString(), releaseId, amount);
+        return Response.ok("Release " + releaseId + " added " + amount +" times").build();
+    }
+
     @DELETE
     @Path("/remove/{id}")
     @Secured(Permission.SELL_RELEASES)
