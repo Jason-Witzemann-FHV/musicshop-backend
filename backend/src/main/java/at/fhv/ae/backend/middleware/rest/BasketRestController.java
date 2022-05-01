@@ -36,8 +36,8 @@ public class BasketRestController {
         }
     }
 
-    // could be done with POST, but we use parameters --> POST is useless without body data
-    @GET
+    // body not needed here
+    @PUT
     @Path("/add/{id}")
     @Secured(Permission.BUY_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
@@ -47,7 +47,7 @@ public class BasketRestController {
         return Response.ok("Release " + releaseId + " added once").build();
     }
 
-    @GET
+    @PUT
     @Path("/add/{id}/{amount}")
     @Secured(Permission.BUY_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
