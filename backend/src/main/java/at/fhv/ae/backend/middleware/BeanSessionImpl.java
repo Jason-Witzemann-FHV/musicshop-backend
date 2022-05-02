@@ -112,7 +112,6 @@ public class BeanSessionImpl implements BeanSession {
     public RemoteNewsPollingService remoteNewsPublisherService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-                .filter(u -> u.hasPermission(Permission.PUBLISH_WEBFEED))
                 .map(u -> remoteNewsPublisherService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);
