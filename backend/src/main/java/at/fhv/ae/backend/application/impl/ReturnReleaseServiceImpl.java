@@ -9,10 +9,12 @@ import at.fhv.ae.backend.domain.repository.ReleaseRepository;
 import at.fhv.ae.backend.domain.repository.SaleRepository;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.UUID;
 
+@Stateless
 public class ReturnReleaseServiceImpl implements ReturnReleaseService {
 
     @EJB
