@@ -97,7 +97,7 @@ class SellServiceTests {
 
         // prepare expected result dto
         var sellItemDTOs = releases.stream()
-                .map(release -> new ItemDTO(release.title(), 3, release.price()))
+                .map(release -> new ItemDTO(release.releaseId(), release.title(), 3, release.price(),0))
                 .collect(Collectors.toList());
         var saleItemsDTO = new SaleItemsDTO( // expected value
                 sale.saleId().toString(),

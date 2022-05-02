@@ -44,6 +44,7 @@ public class MusicShopController {
     private RemoteCustomerSearchService customerSearchService;
     private RemoteBroadcastService broadcastService;
     private RemoteNewsPollingService newsPublisherService;
+    private RemoteReturnReleaseService returnReleaseService;
 
     private static final double TAX_RATE = 0.2;
 
@@ -151,7 +152,8 @@ public class MusicShopController {
 
         try {
             sellService = session.remoteSellService();
-            //saleSearch();
+            returnReleaseService = session.remoteReturnReleaseService();
+            saleSearch();
 
         } catch (AuthorizationException ignored) {
             // Hide unauthorized
@@ -398,27 +400,27 @@ public class MusicShopController {
         // newsTab opened - change color to default color
         newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));
 
-        searchReleaseResultsView.setOnMouseClicked(event -> {
+
+        saleItems.setOnMouseClicked(event -> {
             if (event.getClickCount() >= 2)
 
-                returnDialog(saleItems.getId());
-
+                returnDialog(UUID.fromString("0fc68a07-325c-4e68-a1ba-3c3dfbe2e699"),UUID.fromString("2144d9c2-ec5d-44b8-b222-645b31a21bb2"));
                 userActionOnSearchResults.run();
         });
     }
 
-    public void returnDialog(String id){
+    public void returnDialog(UUID saleNumber,  UUID itemId){
         TextInputDialog dialog = new TextInputDialog();
 
         dialog.setTitle("Return");
-        dialog.setHeaderText(id);
+        //dialog.setHeaderText(id.toString());
         dialog.setContentText("Amount:");
 
         Optional<String> result = dialog.showAndWait();
 
         result.ifPresent(amount -> {
-
             if(Integer.parseInt(amount) > 0) {
+                returnReleaseService.returnRelease(saleNumber,itemId, Integer.parseInt(amount));
                 //Methode implementieren
                 System.out.println(amount);
             } else {
@@ -537,7 +539,7 @@ public class MusicShopController {
 
         customerSearchView.getItems().clear();
         fetchBasket();
-        //saleSearch();
+        saleSearch();
     }
 
     public void searchCustomer() throws RemoteException {
@@ -549,11 +551,11 @@ public class MusicShopController {
 
     public void searchSaleNumber() throws RemoteException {
         System.out.println("Insert here the new query");
-        /* searchReleaseResultsView.getItems().setAll(
+         searchReleaseResultsView.getItems().setAll(
                 releaseSearchService.query(
                         searchTitle.getText(),
                         searchArtist.getText(),
-                        searchGenre.getValue())); */
+                        searchGenre.getValue()));
     }
 
     public void searchSaleReset() {

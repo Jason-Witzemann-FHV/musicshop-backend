@@ -53,8 +53,9 @@ public class RemoteSellServiceImpl implements RemoteSellService {
                             sale.customerId(),
                             sale.totalPrice(),
                             sale.items().stream().map(item -> {
-                                return new ItemRemoteDTO(item.title(), item.amount(), item.pricePerItem());
-                            }).collect(Collectors.toList())
+                                return new ItemRemoteDTO(item.itemId().id(), item.title(), item.amount(), item.pricePerItem(),item.numberOfReturnedItems());
+                            })
+                                    .collect(Collectors.toList())
                     );
                 }).collect(Collectors.toList());
     }

@@ -346,7 +346,7 @@
                             </TableColumn>
                             <TableColumn text="Returned amount" fx:id="returnedAmount" styleClass="center">
                                 <cellValueFactory>
-                                    <PropertyValueFactory property="returnedAmount2"/>
+                                    <PropertyValueFactory property="numberOfReturnedItems"/>
                                 </cellValueFactory>
                             </TableColumn>
                         </columns>
