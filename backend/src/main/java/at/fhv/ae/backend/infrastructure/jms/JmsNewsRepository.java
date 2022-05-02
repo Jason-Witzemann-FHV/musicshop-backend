@@ -15,7 +15,9 @@ import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.net.InetAddress;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,6 +74,7 @@ public class JmsNewsRepository implements NewsRepository {
     @Override
     public List<News> pollNews(User user, long lastReceivedTimeStamp) {
         return messageCache.stream()
+                .filter(n -> !n.dateOfEvent().isBefore(LocalDate.now().atTime(LocalTime.MIN)))
                 .filter(n -> n.publishedTimeStamp() > lastReceivedTimeStamp)
                 .filter(n -> user.subscribedTo(n.topic()))
                 .collect(Collectors.toList());
