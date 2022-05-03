@@ -10,7 +10,6 @@ import at.fhv.ae.shared.dto.release.ReleaseSearchResultDTO;
 import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
 import at.fhv.ae.shared.services.*;
-import com.mongodb.ReflectionDBObject;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -21,7 +20,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -85,7 +83,6 @@ public class MusicShopController {
     @FXML TableView <Pair<String, String>> saleGeneralInfo;
     @FXML TableView<ItemRemoteDTO> saleItems;
     @FXML TableColumn<ItemRemoteDTO, Double> itemColPrice;
-    //hier anpassen
     @FXML TableColumn<String, String> returnedAmount;
 
 
@@ -261,7 +258,7 @@ public class MusicShopController {
             ReleaseSearchResultDTO selectedResult = searchReleaseResultsView.getSelectionModel().getSelectedItem();
             if (selectedResult != null) {
                 try {
-                    showDetailsOf(selectedResult);
+                    loadDetailsOf(selectedResult);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -273,7 +270,8 @@ public class MusicShopController {
             SaleItemsRemoteDTO selectedResult = saleResultsView.getSelectionModel().getSelectedItem();
             if (selectedResult != null) {
                 try {
-                    showDetailsOf(selectedResult);
+                    loadDetailsOf(selectedResult);
+                    switchSaleView();
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -404,8 +402,8 @@ public class MusicShopController {
         saleItems.setOnMouseClicked(event -> {
             if (event.getClickCount() >= 2)
 
-                returnDialog(UUID.fromString("0fc68a07-325c-4e68-a1ba-3c3dfbe2e699"),UUID.fromString("2144d9c2-ec5d-44b8-b222-645b31a21bb2"));
-                userActionOnSearchResults.run();
+                returnDialog(UUID.fromString(saleGeneralInfo.getItems().get(0).getValue()),saleItems.getSelectionModel().getSelectedItem().getItemId());
+                //showSelectedSale();
         });
     }
 
@@ -413,28 +411,49 @@ public class MusicShopController {
         TextInputDialog dialog = new TextInputDialog();
 
         dialog.setTitle("Return");
-        //dialog.setHeaderText(id.toString());
+        dialog.setHeaderText(saleItems.getSelectionModel().getSelectedItem().getTitle());
         dialog.setContentText("Amount:");
 
         Optional<String> result = dialog.showAndWait();
 
         result.ifPresent(amount -> {
             if(Integer.parseInt(amount) > 0) {
-                returnReleaseService.returnRelease(saleNumber,itemId, Integer.parseInt(amount));
-                //Methode implementieren
-                System.out.println(amount);
-            } else {
-                System.out.println("Not possible!");
+
+                try {
+                    returnReleaseService.returnRelease(saleNumber,itemId, Integer.parseInt(amount));
+                    //TODO: searchfunction
+                    saleSearch();
+                    showSelectedSale();
+
+
+
+                }catch (Exception e){
+                    dialog.close();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Amount");
+                    alert.setContentText("Returning due to amount not possible");
+                    alert.showAndWait();
             }
-        });
+        }});
     }
 
-    public void saleSearch() throws RemoteException {
+    public void saleSearch() {
         var sales = sellService.allSales();
         saleResultsView.getItems().setAll(sales);
     }
 
-    public void releaseSearch() throws RemoteException {
+    public void showSelectedSale() {
+        SaleItemsRemoteDTO selectedResult = saleResultsView.getSelectionModel().getSelectedItem();
+        if (selectedResult != null) {
+            try {
+                loadDetailsOf(selectedResult);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void releaseSearch() {
         searchReleaseResultsView.getItems().setAll(
                 releaseSearchService.query(
                         searchTitle.getText(),
@@ -449,7 +468,7 @@ public class MusicShopController {
         searchReleaseResultsView.getItems().clear();
     }
 
-    public void showDetailsOf(ReleaseSearchResultDTO result) throws RemoteException {
+    public void loadDetailsOf(ReleaseSearchResultDTO result) throws RemoteException {
 
         DetailedReleaseRemoteDTO details = releaseSearchService.getDetails(UUID.fromString(result.getId()));
 
@@ -463,7 +482,7 @@ public class MusicShopController {
     }
 
     // overloading Methodname
-    public void showDetailsOf(SaleItemsRemoteDTO details) throws RemoteException {
+    public void loadDetailsOf(SaleItemsRemoteDTO details) throws RemoteException {
 
         saleNumber.setText(details.getSaleNumber());
         saleGeneralInfo.getItems().setAll(List.of(
@@ -472,8 +491,6 @@ public class MusicShopController {
                 new Pair<>("Customer", details.getCustomerId()),
                 new Pair<>("Total price", formatCurrency(details.getTotalPrice()))));
         saleItems.getItems().setAll(details.getItems());
-
-        switchSaleView();
     }
 
     public void switchSearchView() {
