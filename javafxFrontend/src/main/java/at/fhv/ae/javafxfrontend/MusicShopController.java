@@ -186,7 +186,7 @@ public class MusicShopController {
                     var newNews = newsPublisherService.pollForNewNews(pollTime);
 
                     if (!newNews.isEmpty()) {
-                        newsView.getItems().addAll(newNews);
+                        newNews.forEach(n -> newsView.getItems().add(0, n));
                         newsTab.setStyle("-fx-background-color: #FA7878");
                     }
                 }
