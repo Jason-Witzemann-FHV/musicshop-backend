@@ -31,7 +31,7 @@ class HibernateSaleRepositoryTests {
                 new Item(new ReleaseId(UUID.randomUUID()), 1, 29.99)
         );
 
-        var sale = Sale.create(new SaleId(UUID.randomUUID()),
+        var sale = Sale.create(
                 new UserId("nsu3146"),
                 ObjectId.get(),
                 PaymentType.CASH, // First sprint only supports cash sale
@@ -73,7 +73,7 @@ class HibernateSaleRepositoryTests {
                 new Item(new ReleaseId(UUID.randomUUID()), 1, 29.99)
         );
 
-        var sale = Sale.create(new SaleId(UUID.randomUUID()),
+        var sale = Sale.create(
                 new UserId("nsu3146"),
                 ObjectId.get(),
                 PaymentType.CASH, // First sprint only supports cash sale

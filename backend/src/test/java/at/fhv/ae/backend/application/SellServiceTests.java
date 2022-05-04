@@ -87,7 +87,7 @@ class SellServiceTests {
         var saleItems = releases.stream()
                 .map(release -> new Item(release.releaseId(), 3, release.price()))
                 .collect(Collectors.toList());
-        var sale = Sale.create(new SaleId(UUID.randomUUID()),
+        var sale = Sale.create(
                 userId,
                 ObjectId.get(),
                 PaymentType.CASH, // First sprint only supports cash sale
@@ -100,7 +100,7 @@ class SellServiceTests {
                 .map(release -> new ItemDTO(release.releaseId(), release.title(), 3, release.price(),0))
                 .collect(Collectors.toList());
         var saleItemsDTO = new SaleItemsDTO( // expected value
-                sale.saleId().toString(),
+                sale.saleId().id(),
                 sale.sellTimestamp().toString(),
                 sale.customerId().toString(),
                 sale.totalPrice(),
