@@ -14,6 +14,8 @@ public interface BeanSession {
 
     RemoteSellService remoteSellService() throws AuthorizationException;
 
+    RemoteReturnReleaseService remoteReturnReleaseService() throws AuthorizationException;
+
     RemoteReleaseSearchService remoteReleaseService() throws AuthorizationException;
 
     RemoteCustomerSearchService remoteCustomerSearchService() throws AuthorizationException;

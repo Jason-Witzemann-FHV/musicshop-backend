@@ -42,6 +42,7 @@ public class MusicShopController {
     private RemoteCustomerSearchService customerSearchService;
     private RemoteBroadcastService broadcastService;
     private RemoteNewsPollingService newsPublisherService;
+    private RemoteReturnReleaseService returnReleaseService;
 
     private static final double TAX_RATE = 0.2;
 
@@ -75,12 +76,14 @@ public class MusicShopController {
     // sales table
     @FXML TableView<SaleItemsRemoteDTO> saleResultsView;
     @FXML TableColumn<SaleItemsRemoteDTO, Double> saleColPrice;
+    @FXML TextField searchSalesNo;
 
     // sale detail
     @FXML Label saleNumber;
     @FXML TableView <Pair<String, String>> saleGeneralInfo;
     @FXML TableView<ItemRemoteDTO> saleItems;
     @FXML TableColumn<ItemRemoteDTO, Double> itemColPrice;
+    @FXML TableColumn<String, String> returnedAmount;
 
 
     // basket
@@ -146,6 +149,7 @@ public class MusicShopController {
 
         try {
             sellService = session.remoteSellService();
+            returnReleaseService = session.remoteReturnReleaseService();
             saleSearch();
 
         } catch (AuthorizationException ignored) {
@@ -254,7 +258,7 @@ public class MusicShopController {
             ReleaseSearchResultDTO selectedResult = searchReleaseResultsView.getSelectionModel().getSelectedItem();
             if (selectedResult != null) {
                 try {
-                    showDetailsOf(selectedResult);
+                    loadDetailsOf(selectedResult);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -266,7 +270,8 @@ public class MusicShopController {
             SaleItemsRemoteDTO selectedResult = saleResultsView.getSelectionModel().getSelectedItem();
             if (selectedResult != null) {
                 try {
-                    showDetailsOf(selectedResult);
+                    loadDetailsOf(selectedResult);
+                    switchSaleView();
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -392,14 +397,63 @@ public class MusicShopController {
 
         // newsTab opened - change color to default color
         newsTab.setOnSelectionChanged(event -> newsTab.setStyle(null));
+
+
+        saleItems.setOnMouseClicked(event -> {
+            if (event.getClickCount() >= 2)
+
+                returnDialog(UUID.fromString(saleGeneralInfo.getItems().get(0).getValue()),saleItems.getSelectionModel().getSelectedItem().getItemId());
+                //showSelectedSale();
+        });
     }
 
-    public void saleSearch() throws RemoteException {
+    public void returnDialog(UUID saleNumber,  UUID itemId){
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle("Return");
+        dialog.setHeaderText(saleItems.getSelectionModel().getSelectedItem().getTitle());
+        dialog.setContentText("Amount:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(amount -> {
+            if(Integer.parseInt(amount) > 0) {
+
+                try {
+                    returnReleaseService.returnRelease(saleNumber,itemId, Integer.parseInt(amount));
+                    //TODO: searchfunction
+                    saleSearch();
+                    showSelectedSale();
+
+
+
+                }catch (Exception e){
+                    dialog.close();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Amount");
+                    alert.setContentText("Returning due to amount not possible");
+                    alert.showAndWait();
+            }
+        }});
+    }
+
+    public void saleSearch() {
         var sales = sellService.allSales();
         saleResultsView.getItems().setAll(sales);
     }
 
-    public void releaseSearch() throws RemoteException {
+    public void showSelectedSale() {
+        SaleItemsRemoteDTO selectedResult = saleResultsView.getSelectionModel().getSelectedItem();
+        if (selectedResult != null) {
+            try {
+                loadDetailsOf(selectedResult);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void releaseSearch() {
         searchReleaseResultsView.getItems().setAll(
                 releaseSearchService.query(
                         searchTitle.getText(),
@@ -414,7 +468,7 @@ public class MusicShopController {
         searchReleaseResultsView.getItems().clear();
     }
 
-    public void showDetailsOf(ReleaseSearchResultDTO result) throws RemoteException {
+    public void loadDetailsOf(ReleaseSearchResultDTO result) throws RemoteException {
 
         DetailedReleaseRemoteDTO details = releaseSearchService.getDetails(UUID.fromString(result.getId()));
 
@@ -428,7 +482,7 @@ public class MusicShopController {
     }
 
     // overloading Methodname
-    public void showDetailsOf(SaleItemsRemoteDTO details) throws RemoteException {
+    public void loadDetailsOf(SaleItemsRemoteDTO details) throws RemoteException {
 
         saleNumber.setText(details.getSaleNumber());
         saleGeneralInfo.getItems().setAll(List.of(
@@ -437,7 +491,6 @@ public class MusicShopController {
                 new Pair<>("Customer", details.getCustomerId()),
                 new Pair<>("Total price", formatCurrency(details.getTotalPrice()))));
         saleItems.getItems().setAll(details.getItems());
-        switchSaleView();
     }
 
     public void switchSearchView() {
@@ -510,6 +563,21 @@ public class MusicShopController {
 
         List<CustomerSearchResponseDTO> customers = customerSearchService.findCustomerByName(customerSearchFirstName.getText(), customerSearchSurname.getText());
         customerSearchView.getItems().setAll(customers);
+    }
+
+
+    public void searchSaleNumber() throws RemoteException {
+        System.out.println("Insert here the new query");
+         searchReleaseResultsView.getItems().setAll(
+                releaseSearchService.query(
+                        searchTitle.getText(),
+                        searchArtist.getText(),
+                        searchGenre.getValue()));
+    }
+
+    public void searchSaleReset() {
+        searchSalesNo.clear();
+        saleResultsView.getItems().clear();
     }
 
     public void sendMessage() {

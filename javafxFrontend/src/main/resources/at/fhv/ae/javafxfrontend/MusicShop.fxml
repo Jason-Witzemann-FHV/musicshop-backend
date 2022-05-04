@@ -38,7 +38,7 @@
             <AnchorPane styleClass="big-padding">
                 <TableView fx:id="newsView"
                            AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-                           AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" >
+                           AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
 
                     <columns>
                         <TableColumn text="Title">
@@ -304,6 +304,7 @@
 
             <StackPane fx:id="saleStackPane" styleClass="stack-pane-opaque-items, big-padding" minWidth="0">
 
+
                 <!-- search result details -->
                 <AnchorPane>
                     <Label fx:id="saleNumber" style="-fx-font-size: 24pt"/>
@@ -330,7 +331,7 @@
                         <columns>
                             <TableColumn text="Release title">
                                 <cellValueFactory>
-                                    <PropertyValueFactory property="title"/>
+                                    <PropertyValueFactory property="title" fx:id="releaseTitle"/>
                                 </cellValueFactory>
                             </TableColumn>
                             <TableColumn text="Amount" styleClass="center">
@@ -343,6 +344,11 @@
                                     <PropertyValueFactory property="pricePerItem"/>
                                 </cellValueFactory>
                             </TableColumn>
+                            <TableColumn text="Returned amount" fx:id="returnedAmount" styleClass="center">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="numberOfReturnedItems"/>
+                                </cellValueFactory>
+                            </TableColumn>
                         </columns>
                     </TableView>
 
@@ -352,10 +358,32 @@
 
                 <!-- search form & result table -->
                 <AnchorPane>
+                    <VBox styleClass="border"
+                          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+
+
+                        <GridPane styleClass="padding" hgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                            </columnConstraints>
+
+                            <Label text="Sale no" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="searchSalesNo" prefHeight="26.0" prefWidth="250.0"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Button GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2"
+                                    GridPane.fillWidth="true" GridPane.fillHeight="true"
+                                    text="Search" onAction="#searchSaleNumber"/>
+                            <Button GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="2"
+                                    GridPane.fillWidth="true" GridPane.fillHeight="true"
+                                    text="Reset" onAction="#searchSaleReset"/>
+                        </GridPane>
+                    </VBox>
 
                     <TableView fx:id="saleResultsView"
                                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-                               AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+                               AnchorPane.topAnchor="80" AnchorPane.bottomAnchor="0">
                         <columns>
                             <TableColumn text="Sale No">
                                 <cellValueFactory>
@@ -416,7 +444,8 @@
 
                 <center>
                     <VBox AnchorPane.topAnchor="70" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-                        <Label text="Message" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-padding: 10 0 0 0"/>
+                        <Label text="Message" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                               style="-fx-padding: 10 0 0 0"/>
                         <TextArea fx:id="message" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
 
                         <HBox alignment="BASELINE_RIGHT" style="-fx-padding: 10 0 0 0">

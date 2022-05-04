@@ -102,7 +102,7 @@ public class SellServiceImpl implements SellService {
                             sale.totalPrice(),
                             sale.items().stream().map(item -> {
                                 var release = releaseRepository.findById(item.releaseId()).get();
-                                return new ItemDTO(release.title(), item.amount(), item.price());
+                                return new ItemDTO(release.releaseId(), release.title(), item.amount(), item.price(), item.nrOfReturnedItems());
                             }).collect(Collectors.toList())
                     );
                 }).collect(Collectors.toList());

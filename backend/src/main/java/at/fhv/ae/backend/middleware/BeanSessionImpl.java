@@ -24,6 +24,9 @@ public class BeanSessionImpl implements BeanSession {
     private RemoteSellService remoteSellService;
 
     @EJB
+    private RemoteReturnReleaseService remoteReturnReleaseService;
+
+    @EJB
     private RemoteCustomerSearchService remoteCustomerSearchService;
 
     @EJB
@@ -113,6 +116,16 @@ public class BeanSessionImpl implements BeanSession {
         return Optional.ofNullable(user)
                 .stream()
                 .map(u -> remoteNewsPublisherService)
+                .findFirst()
+                .orElseThrow(AuthorizationException::new);
+    }
+
+    @Override
+    public RemoteReturnReleaseService remoteReturnReleaseService() throws AuthorizationException {
+        return Optional.ofNullable(user)
+                .stream()
+                .filter(u -> u.hasPermission(Permission.SELL_RELEASES))
+                .map(u -> remoteReturnReleaseService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);
     }
