@@ -7,7 +7,7 @@ import java.util.List;
 
 @Value
 public class SaleItemsRemoteDTO implements Serializable {
-    String saleNumber;
+    int saleNumber;
     String dateOfSale;
     String customerId;
     double totalPrice;

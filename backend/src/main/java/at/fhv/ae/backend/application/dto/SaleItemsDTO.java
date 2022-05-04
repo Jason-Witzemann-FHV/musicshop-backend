@@ -6,7 +6,7 @@ import java.util.List;
 
 @Value
 public class SaleItemsDTO {
-    String saleNumber;
+    int saleNumber;
     String dateOfSale;
     String customerId;
     double totalPrice;
