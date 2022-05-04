@@ -7,7 +7,7 @@ import at.fhv.ae.backend.domain.model.user.Permission;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.middleware.rest.auth.AuthenticatedUser;
 import at.fhv.ae.backend.middleware.rest.auth.Secured;
-import at.fhv.ae.shared.dto.customer.Customer;
+import org.bson.types.ObjectId;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -22,10 +22,6 @@ public class BasketRestController {
     @Inject
     @AuthenticatedUser
     private User user;
-
-    @Inject
-    @AuthenticatedUser
-    private Customer customer;
 
     @EJB
     private BasketService basketService;
@@ -72,13 +68,13 @@ public class BasketRestController {
         }
     }
 
-    @GET
+    @POST
     @Path("/sell")
     @Secured(Permission.SELL_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response sellBasket(){
+    public Response sellBasket(@QueryParam("customer")ObjectId customerId){
         try {
-            sellService.sellItemsInBasket(user.userId().toString(),customer.getId());
+            sellService.sellItemsInBasket(user.userId().toString(),customerId);
             return Response.ok().status(Response.Status.ACCEPTED).build();
         } catch (OutOfStockException e) {
             return Response.notModified().build();
