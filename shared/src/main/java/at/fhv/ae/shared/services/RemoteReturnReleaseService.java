@@ -6,5 +6,5 @@ import java.util.UUID;
 @Remote
 public interface RemoteReturnReleaseService {
 
-    void returnRelease(UUID saleNumber, UUID releaseId, int amount);
+    void returnRelease(int saleNumber, UUID releaseId, int amount);
 }
