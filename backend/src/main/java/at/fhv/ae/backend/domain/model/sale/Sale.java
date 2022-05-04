@@ -19,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sale {
 
+    private static int SEQUENCE_NUMBER = 0;
     private static final double TAX_RATE = 0.2;
 
     @Id
@@ -57,13 +58,19 @@ public class Sale {
         this.items = items;
     }
 
+    private static SaleId nextSequenceNo() {
+        SaleId saleNo = new SaleId(SEQUENCE_NUMBER);
+        SEQUENCE_NUMBER++;
+        return saleNo;
+    }
+
     public List<Item> items() {
         return Collections.unmodifiableList(this.items);
     }
 
-    public static Sale create(SaleId saleId, UserId employeeId, ObjectId customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
+    public static Sale create(UserId employeeId, ObjectId customerId, PaymentType paymentType, SaleType saleType, List<Item> items) {
        return new Sale(
-                saleId,
+                nextSequenceNo(),
                 employeeId,
                 customerId,
                 LocalDateTime.now(),
