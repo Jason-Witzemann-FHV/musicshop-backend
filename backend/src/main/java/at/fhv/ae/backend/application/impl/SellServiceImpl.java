@@ -68,7 +68,9 @@ public class SellServiceImpl implements SellService {
                 .map(entry -> new Item(entry.getKey().releaseId(), entry.getValue(), entry.getKey().price()))
                 .collect(Collectors.toList());
 
+        SaleId saleId = new SaleId(saleRepository.next_sequenceNumber());
         Sale sale = Sale.create(
+                saleId,
                 user.userId(),
                 customerId,
                 PaymentType.CASH, // First sprint only supports cash sale

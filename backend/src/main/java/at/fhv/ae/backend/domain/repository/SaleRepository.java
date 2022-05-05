@@ -11,6 +11,8 @@ import java.util.Optional;
 @Local
 public interface SaleRepository {
 
+    int next_sequenceNumber();
+
     Optional<Sale> findById(SaleId id);
 
     void addSale(Sale sale);

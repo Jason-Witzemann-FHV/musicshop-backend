@@ -20,6 +20,12 @@ public class HibernateSaleRepository implements SaleRepository {
 
     private EntityManager em = ServiceRegistry.entityManager();
 
+    public int next_sequenceNumber() {
+        return em.createQuery("Select coalesce(max(s.saleId), 0) from Sale s", SaleId.class)
+                .getSingleResult()
+                .id() + 1;
+    }
+
     @Override
     public Optional<Sale> findById(SaleId id) {
         return em.createQuery("select s from Sale s where s.saleId = :saleId", Sale.class)
