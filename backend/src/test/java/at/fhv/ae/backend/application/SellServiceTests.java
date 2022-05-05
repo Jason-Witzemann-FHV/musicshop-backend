@@ -88,6 +88,7 @@ class SellServiceTests {
                 .map(release -> new Item(release.releaseId(), 3, release.price()))
                 .collect(Collectors.toList());
         var sale = Sale.create(
+                new SaleId(1),
                 userId,
                 ObjectId.get(),
                 PaymentType.CASH, // First sprint only supports cash sale

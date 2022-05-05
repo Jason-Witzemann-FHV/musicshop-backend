@@ -15,6 +15,7 @@ public class SaleTest {
     public void given_some_sale_when_returning_some_items_update_returned_items() {
 
         var sale = Sale.create(
+                new SaleId(1),
                 new UserId("tf-test"),
                 new ObjectId(),
                 PaymentType.CREDIT_CARD,
@@ -31,6 +32,7 @@ public class SaleTest {
     public void given_some_sale_when_returning_too_many_items_throw_Exception() {
 
         var sale = Sale.create(
+                new SaleId(1),
                 new UserId("tf-test"),
                 new ObjectId(),
                 PaymentType.CREDIT_CARD,

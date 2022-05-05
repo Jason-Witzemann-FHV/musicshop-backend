@@ -32,6 +32,7 @@ class HibernateSaleRepositoryTests {
         );
 
         var sale = Sale.create(
+                new SaleId(1),
                 new UserId("nsu3146"),
                 ObjectId.get(),
                 PaymentType.CASH, // First sprint only supports cash sale
@@ -51,7 +52,6 @@ class HibernateSaleRepositoryTests {
     }
 
     // no sales
-
     @Test
     void given_no_sale_when_get_sales_of_employee_return_empty_list() {
 
@@ -74,6 +74,7 @@ class HibernateSaleRepositoryTests {
         );
 
         var sale = Sale.create(
+                new SaleId(1),
                 new UserId("nsu3146"),
                 ObjectId.get(),
                 PaymentType.CASH, // First sprint only supports cash sale
@@ -91,5 +92,36 @@ class HibernateSaleRepositoryTests {
         assertEquals(1, actual.size());
     }
 
+    @Test
+    void given_no_sales_when_getting_next_number_return_zero() {
+        // no sales yet, start with 1
+        assertEquals(1, saleRepository.next_sequenceNumber());
+    }
 
+    @Test
+    void given_one_sales_when_getting_next_number_return_right_one() {
+        var saleItems = List.of(
+                new Item(new ReleaseId(UUID.randomUUID()), 2, 9.99),
+                new Item(new ReleaseId(UUID.randomUUID()), 3, 19.99),
+                new Item(new ReleaseId(UUID.randomUUID()), 1, 29.99)
+        );
+
+        var sale = Sale.create(
+                new SaleId(3),
+                new UserId("nsu3146"),
+                ObjectId.get(),
+                PaymentType.CASH, // First sprint only supports cash sale
+                SaleType.IN_PERSON,
+                saleItems
+        );
+
+        var transaction = em.getTransaction();
+        transaction.begin();
+        saleRepository.addSale(sale);
+        em.flush();
+        var next_sequence = saleRepository.next_sequenceNumber();
+        transaction.rollback();
+
+        assertEquals(4, next_sequence);
+    }
 }
