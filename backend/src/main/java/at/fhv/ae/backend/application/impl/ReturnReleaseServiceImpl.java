@@ -25,7 +25,7 @@ public class ReturnReleaseServiceImpl implements ReturnReleaseService {
     private EntityManager entityManager = ServiceRegistry.entityManager();
 
     @Override
-    public void returnRelease(UUID saleNumb, UUID releaseId, int amount) {
+    public void returnRelease(int saleNumb, UUID releaseId, int amount) {
 
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

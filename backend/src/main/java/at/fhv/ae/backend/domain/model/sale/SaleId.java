@@ -11,21 +11,17 @@ import java.util.UUID;
 @Embeddable
 public class SaleId implements Serializable {
 
-    @Type(type = "uuid-char")
-    UUID id;
+    int id;
 
     // called by Hibernate
     @SuppressWarnings("ProtectedMemberInFinalClass")
     protected SaleId() {
-        this.id = null;
+        this.id = -1;
     }
 
-    public SaleId(UUID id) {
+    public SaleId(int id) {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return id.toString();
-    }
+
 }

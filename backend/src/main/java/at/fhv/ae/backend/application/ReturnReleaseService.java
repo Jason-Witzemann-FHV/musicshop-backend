@@ -6,5 +6,5 @@ import java.util.UUID;
 @Local
 public interface ReturnReleaseService {
 
-    void returnRelease(UUID saleNumb, UUID releaseId, int amount);
+    void returnRelease(int saleNumb, UUID releaseId, int amount);
 }

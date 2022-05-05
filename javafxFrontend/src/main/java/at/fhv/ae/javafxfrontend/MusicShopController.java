@@ -402,12 +402,12 @@ public class MusicShopController {
         saleItems.setOnMouseClicked(event -> {
             if (event.getClickCount() >= 2)
 
-                returnDialog(UUID.fromString(saleGeneralInfo.getItems().get(0).getValue()),saleItems.getSelectionModel().getSelectedItem().getItemId());
+                returnDialog(Integer.parseInt(saleNumber.getText()),saleItems.getSelectionModel().getSelectedItem().getItemId());
                 //showSelectedSale();
         });
     }
 
-    public void returnDialog(UUID saleNumber,  UUID itemId){
+    public void returnDialog(int saleNumber,  UUID itemId){
         TextInputDialog dialog = new TextInputDialog();
 
         dialog.setTitle("Return");
@@ -484,9 +484,11 @@ public class MusicShopController {
     // overloading Methodname
     public void loadDetailsOf(SaleItemsRemoteDTO details) throws RemoteException {
 
-        saleNumber.setText(details.getSaleNumber());
+        // textfield can only be string, therefore cast int to String
+        saleNumber.setText(Integer.toString(details.getSaleNumber()));
         saleGeneralInfo.getItems().setAll(List.of(
-                new Pair<>("Sale number",details.getSaleNumber()),
+                // is Pair<String, String>, therefore cast int to String
+                new Pair<>("Sale number",Integer.toString(details.getSaleNumber())),
                 new Pair<>("Date of Sale", details.getDateOfSale()),
                 new Pair<>("Customer", details.getCustomerId()),
                 new Pair<>("Total price", formatCurrency(details.getTotalPrice()))));

@@ -68,7 +68,9 @@ public class SellServiceImpl implements SellService {
                 .map(entry -> new Item(entry.getKey().releaseId(), entry.getValue(), entry.getKey().price()))
                 .collect(Collectors.toList());
 
-        Sale sale = Sale.create(new SaleId(UUID.randomUUID()),
+        SaleId saleId = new SaleId(saleRepository.next_sequenceNumber());
+        Sale sale = Sale.create(
+                saleId,
                 user.userId(),
                 customerId,
                 PaymentType.CASH, // First sprint only supports cash sale
@@ -96,7 +98,7 @@ public class SellServiceImpl implements SellService {
         return saleRepository.allSales().stream()
                 .map(sale -> {
                     return new SaleItemsDTO(
-                            sale.saleId().toString(),
+                            sale.saleId().id(),
                             sale.sellTimestamp().toString(),
                             Optional.ofNullable(sale.customerId()).map(ObjectId::toString).orElse("anonymous"),
                             sale.totalPrice(),

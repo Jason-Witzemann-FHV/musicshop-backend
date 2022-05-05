@@ -18,7 +18,7 @@ public class RemoteReturnReleaseServiceImpl implements RemoteReturnReleaseServic
     private ReturnReleaseService returnReleaseService;
 
     @Override
-    public void returnRelease(UUID saleNumber, UUID releaseId, int amount) {
+    public void returnRelease(int saleNumber, UUID releaseId, int amount) {
         returnReleaseService.returnRelease(saleNumber, releaseId, amount);
     }
 

@@ -46,17 +46,15 @@ public class RemoteSellServiceImpl implements RemoteSellService {
     public List<SaleItemsRemoteDTO> allSales() {
         return sellService.allSales().stream()
 
-                .map(sale -> {
-                    return new SaleItemsRemoteDTO(
-                            sale.saleNumber(),
-                            sale.dateOfSale(),
-                            sale.customerId(),
-                            sale.totalPrice(),
-                            sale.items().stream().map(item -> {
-                                return new ItemRemoteDTO(item.itemId().id(), item.title(), item.amount(), item.pricePerItem(),item.numberOfReturnedItems());
-                            })
-                                    .collect(Collectors.toList())
-                    );
-                }).collect(Collectors.toList());
+                .map(sale -> new SaleItemsRemoteDTO(
+                        sale.saleNumber(),
+                        sale.dateOfSale(),
+                        sale.customerId(),
+                        sale.totalPrice(),
+                        sale.items().stream().map(item -> {
+                            return new ItemRemoteDTO(item.itemId().id(), item.title(), item.amount(), item.pricePerItem(),item.numberOfReturnedItems());
+                        })
+                                .collect(Collectors.toList())
+                )).collect(Collectors.toList());
     }
 }
