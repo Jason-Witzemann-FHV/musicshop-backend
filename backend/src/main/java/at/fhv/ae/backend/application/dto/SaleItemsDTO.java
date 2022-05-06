@@ -18,7 +18,7 @@ public class SaleItemsDTO {
         return new SaleItemsDTO(
                 sale.saleId().id(),
                 sale.sellTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                sale.customerId().toString(),
+                sale.customerId() == null ? "Anonymous" : sale.customerId().toString(),
                 sale.totalPrice(),
                 items
         );

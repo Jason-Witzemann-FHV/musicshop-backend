@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.middleware.remoteservices;
 
 import at.fhv.ae.backend.application.SellService;
+import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
@@ -45,7 +46,6 @@ public class RemoteSellServiceImpl implements RemoteSellService {
     @Override
     public List<SaleItemsRemoteDTO> allSales() {
         return sellService.allSales().stream()
-
                 .map(sale -> new SaleItemsRemoteDTO(
                         sale.saleNumber(),
                         sale.dateOfSale(),
@@ -58,8 +58,20 @@ public class RemoteSellServiceImpl implements RemoteSellService {
 
     @Override
     public SaleItemsRemoteDTO searchSale(int saleNum) {
-        var sale = sellService.searchSale(saleNum);
-        return null;
-        //TODO do
+        SaleItemsDTO sale = sellService.searchSale(saleNum).orElseThrow(IllegalArgumentException::new);
+        return new SaleItemsRemoteDTO(
+                sale.saleNumber(),
+                sale.dateOfSale(),
+                sale.customerId(),
+                sale.totalPrice(),
+                sale.items()
+                        .stream()
+                        .map(item -> new ItemRemoteDTO(item.itemId(),
+                                                        item.title(),
+                                                        item.amount(),
+                                                        item.pricePerItem(),
+                                                        item.numberOfReturnedItems()))
+                        .collect(Collectors.toList())
+        );
     }
 }
