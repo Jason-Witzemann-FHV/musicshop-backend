@@ -570,6 +570,7 @@ public class MusicShopController {
 
     public void searchSaleNumber() throws RemoteException {
         System.out.println("Insert here the new query");
+
          searchReleaseResultsView.getItems().setAll(
                 releaseSearchService.query(
                         searchTitle.getText(),
