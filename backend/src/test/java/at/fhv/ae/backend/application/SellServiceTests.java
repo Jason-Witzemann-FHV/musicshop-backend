@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.application;
 
-import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.application.dto.ItemDTO;
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.impl.SellServiceImpl;
@@ -40,7 +39,7 @@ class SellServiceTests {
         saleRepository = mock(SaleRepository.class);
         userRepository = mock(UserRepository.class);
         releaseRepository = mock(ReleaseRepository.class);
-        sellService = new SellServiceImpl(saleRepository, basketRepository, releaseRepository, userRepository, ServiceRegistry.entityManager());
+        sellService = new SellServiceImpl(saleRepository, basketRepository, releaseRepository, userRepository);
     }
 
     @Test

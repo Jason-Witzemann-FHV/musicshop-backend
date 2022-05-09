@@ -4,7 +4,6 @@ import at.fhv.ae.backend.application.ReleaseSearchService;
 import at.fhv.ae.backend.application.dto.DetailedReleaseDTO;
 import at.fhv.ae.backend.application.dto.RecordingDTO;
 import at.fhv.ae.backend.application.dto.ReleaseDTO;
-import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.work.Genre;
 import at.fhv.ae.backend.domain.model.work.Recording;
@@ -15,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +33,7 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
     @EJB
     private WorkRepository workRepository;
 
+    @Transactional
     @Override
     public List<ReleaseDTO> query(String title, String artist,String genre) {
         return this.releaseRepository.query(title, artist, Genre.byFriendlyName(genre))
@@ -41,6 +42,7 @@ public class ReleaseServiceImpl implements ReleaseSearchService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public Optional<DetailedReleaseDTO> detailedInformation(UUID releaseId) {
         return releaseRepository.findById(new ReleaseId(releaseId))

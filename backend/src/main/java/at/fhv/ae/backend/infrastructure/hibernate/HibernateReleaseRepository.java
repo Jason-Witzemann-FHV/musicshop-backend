@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.infrastructure.hibernate;
 
-import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.release.ReleaseId;
 import at.fhv.ae.backend.domain.model.work.Genre;
@@ -10,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +18,8 @@ import java.util.Optional;
 @Stateless
 public class HibernateReleaseRepository implements ReleaseRepository {
 
-    private EntityManager em = ServiceRegistry.entityManager();
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public Optional<Release> findById(ReleaseId id) {

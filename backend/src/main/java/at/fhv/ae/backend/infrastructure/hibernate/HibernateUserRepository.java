@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.infrastructure.hibernate;
 
-import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Stateless
@@ -16,7 +16,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HibernateUserRepository implements UserRepository {
 
-    private EntityManager em = ServiceRegistry.entityManager();
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public Optional<User> userById(UserId userId) {
