@@ -420,12 +420,10 @@ public class MusicShopController {
             if(Integer.parseInt(amount) > 0) {
 
                 try {
+                    //Here
                     returnReleaseService.returnRelease(saleNumber,itemId, Integer.parseInt(amount));
-                    //TODO: searchfunction
-                    saleSearch();
-                    showSelectedSale();
-
-
+                    var updatedSale = sellService.searchSale(saleNumber);
+                    loadDetailsOf(updatedSale);
 
                 }catch (Exception e){
                     dialog.close();
