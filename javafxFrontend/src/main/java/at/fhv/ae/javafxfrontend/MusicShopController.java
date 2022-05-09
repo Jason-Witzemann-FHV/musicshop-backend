@@ -572,7 +572,14 @@ public class MusicShopController {
         try {
             int saleNum = Integer.parseInt(searchSalesNo.getText());
             var sale = sellService.searchSale(saleNum);
-            saleResultsView.getItems().setAll(sale);
+            if (sale == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Could not find sale.");
+                alert.setContentText(alert.getTitle());
+                alert.showAndWait();
+            } else {
+                saleResultsView.getItems().setAll(sale);
+            }
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Search for a number!");

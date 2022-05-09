@@ -58,20 +58,25 @@ public class RemoteSellServiceImpl implements RemoteSellService {
 
     @Override
     public SaleItemsRemoteDTO searchSale(int saleNum) {
-        SaleItemsDTO sale = sellService.searchSale(saleNum).orElseThrow(IllegalArgumentException::new);
-        return new SaleItemsRemoteDTO(
-                sale.saleNumber(),
-                sale.dateOfSale(),
-                sale.customerId(),
-                sale.totalPrice(),
-                sale.items()
-                        .stream()
-                        .map(item -> new ItemRemoteDTO(item.itemId(),
-                                                        item.title(),
-                                                        item.amount(),
-                                                        item.pricePerItem(),
-                                                        item.numberOfReturnedItems()))
-                        .collect(Collectors.toList())
-        );
+        var result = sellService.searchSale(saleNum);
+        if(result.isPresent()) {
+            SaleItemsDTO sale = result.get();
+            return new SaleItemsRemoteDTO(
+                    sale.saleNumber(),
+                    sale.dateOfSale(),
+                    sale.customerId(),
+                    sale.totalPrice(),
+                    sale.items()
+                            .stream()
+                            .map(item -> new ItemRemoteDTO(item.itemId(),
+                                    item.title(),
+                                    item.amount(),
+                                    item.pricePerItem(),
+                                    item.numberOfReturnedItems()))
+                            .collect(Collectors.toList())
+            );
+        } else {
+            return null;
+        }
     }
 }
