@@ -71,4 +71,20 @@ public class Release {
     public List<Supplier> suppliers() {
         return Collections.unmodifiableList(suppliers);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Release release = (Release) o;
+
+        return releaseId.equals(release.releaseId);
+    }
+
+    @Override
+    public int hashCode() {
+        return releaseId.hashCode();
+    }
+
 }

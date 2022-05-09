@@ -4,15 +4,16 @@ import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.BasketRepository;
 
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-@Stateless
+@Singleton
 public class HashMapBasketRepository implements BasketRepository {
 
-    private static final Map<UserId, Map<Release, Integer>> releases = new HashMap<>();
+    private final Map<UserId, Map<Release, Integer>> releases = new HashMap<>();
+
 
     @Override
     public Map<Release, Integer> itemsInBasket(UserId userId) {

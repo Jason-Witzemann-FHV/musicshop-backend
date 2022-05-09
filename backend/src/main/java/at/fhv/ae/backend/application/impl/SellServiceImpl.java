@@ -1,6 +1,5 @@
 package at.fhv.ae.backend.application.impl;
 
-import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.dto.ItemDTO;
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
@@ -18,12 +17,10 @@ import org.bson.types.ObjectId;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -44,8 +41,7 @@ public class SellServiceImpl implements SellService {
     @EJB
     private UserRepository userRepository;
 
-    private EntityManager entityManager = ServiceRegistry.entityManager();
-
+    @Transactional(Transactional.TxType.MANDATORY)
     @Override
     public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {
 
@@ -78,9 +74,6 @@ public class SellServiceImpl implements SellService {
                 saleItems
         );
 
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-
         saleRepository.addSale(sale);
 
         for (var item : basket.entrySet()) {
@@ -90,9 +83,9 @@ public class SellServiceImpl implements SellService {
 
         basketRepository.clearBasket(user.userId());
 
-        transaction.commit();
     }
 
+    @Transactional
     @Override
     public List<SaleItemsDTO> allSales() {
         return saleRepository.allSales().stream()
@@ -108,6 +101,7 @@ public class SellServiceImpl implements SellService {
                 )).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public Optional<SaleItemsDTO> searchSale(int saleNum) {
         return saleRepository.findById(new SaleId(saleNum)).map(sale -> {

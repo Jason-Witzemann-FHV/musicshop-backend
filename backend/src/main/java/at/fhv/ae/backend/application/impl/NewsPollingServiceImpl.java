@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ public class NewsPollingServiceImpl implements NewsPollingService {
     @EJB
     private UserRepository userRepository;
 
+    @Transactional
     @Override
     public List<NewsDTO> pollForNewNews(String userId, long lastReceivedTimeStamp) {
         User user = userRepository.userById(new UserId(userId)).orElseThrow(() -> new IllegalArgumentException("user with id " + userId + " was not found!"));
