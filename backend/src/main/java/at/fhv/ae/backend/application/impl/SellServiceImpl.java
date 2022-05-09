@@ -96,17 +96,28 @@ public class SellServiceImpl implements SellService {
     @Override
     public List<SaleItemsDTO> allSales() {
         return saleRepository.allSales().stream()
-                .map(sale -> {
-                    return new SaleItemsDTO(
-                            sale.saleId().id(),
-                            sale.sellTimestamp().toString(),
-                            Optional.ofNullable(sale.customerId()).map(ObjectId::toString).orElse("anonymous"),
-                            sale.totalPrice(),
-                            sale.items().stream().map(item -> {
-                                var release = releaseRepository.findById(item.releaseId()).get();
-                                return new ItemDTO(release.releaseId(), release.title(), item.amount(), item.price(), item.nrOfReturnedItems());
-                            }).collect(Collectors.toList())
-                    );
-                }).collect(Collectors.toList());
+                .map(sale -> new SaleItemsDTO(
+                        sale.saleId().id(),
+                        sale.sellTimestamp().toString(),
+                        Optional.ofNullable(sale.customerId()).map(ObjectId::toString).orElse("anonymous"),
+                        sale.totalPrice(),
+                        sale.items().stream().map(item -> {
+                            var release = releaseRepository.findById(item.releaseId()).get();
+                            return ItemDTO.fromDomain(item, release);
+                        }).collect(Collectors.toList())
+                )).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<SaleItemsDTO> searchSale(int saleNum) {
+        return saleRepository.findById(new SaleId(saleNum)).map(sale -> {
+                var items = sale.items()
+                        .stream()
+                        .map(item -> {
+                            var release = releaseRepository.findById(item.releaseId()).get();
+                            return ItemDTO.fromDomain(item, release);
+                        }).collect(Collectors.toList());
+                return SaleItemsDTO.fromDomain(sale, items);
+        });
     }
 }

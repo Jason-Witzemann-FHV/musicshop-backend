@@ -561,25 +561,41 @@ public class MusicShopController {
         saleSearch();
     }
 
-    public void searchCustomer() throws RemoteException {
+    public void searchCustomer() {
 
         List<CustomerSearchResponseDTO> customers = customerSearchService.findCustomerByName(customerSearchFirstName.getText(), customerSearchSurname.getText());
         customerSearchView.getItems().setAll(customers);
     }
 
 
-    public void searchSaleNumber() throws RemoteException {
-        System.out.println("Insert here the new query");
-         searchReleaseResultsView.getItems().setAll(
-                releaseSearchService.query(
-                        searchTitle.getText(),
-                        searchArtist.getText(),
-                        searchGenre.getValue()));
+    public void searchSaleNumber() {
+        try {
+            int saleNum = Integer.parseInt(searchSalesNo.getText());
+            var sale = sellService.searchSale(saleNum);
+            if (sale == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Could not find sale.");
+                alert.setContentText(alert.getTitle());
+                alert.showAndWait();
+            } else {
+                saleResultsView.getItems().setAll(sale);
+            }
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Search for a number!");
+            alert.setContentText(alert.getTitle());
+            alert.showAndWait();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Could not find sale.");
+            alert.setContentText(alert.getTitle());
+            alert.showAndWait();
+        }
     }
 
     public void searchSaleReset() {
         searchSalesNo.clear();
-        saleResultsView.getItems().clear();
+        saleSearch();
     }
 
     public void sendMessage() {

@@ -1,6 +1,7 @@
 package at.fhv.ae.backend.middleware.remoteservices;
 
 import at.fhv.ae.backend.application.SellService;
+import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.shared.dto.sale.ItemRemoteDTO;
 import at.fhv.ae.shared.dto.sale.SaleItemsRemoteDTO;
@@ -45,16 +46,37 @@ public class RemoteSellServiceImpl implements RemoteSellService {
     @Override
     public List<SaleItemsRemoteDTO> allSales() {
         return sellService.allSales().stream()
-
                 .map(sale -> new SaleItemsRemoteDTO(
                         sale.saleNumber(),
                         sale.dateOfSale(),
                         sale.customerId(),
                         sale.totalPrice(),
-                        sale.items().stream().map(item -> {
-                            return new ItemRemoteDTO(item.itemId().id(), item.title(), item.amount(), item.pricePerItem(),item.numberOfReturnedItems());
-                        })
+                        sale.items().stream().map(item -> new ItemRemoteDTO(item.itemId(), item.title(), item.amount(), item.pricePerItem(),item.numberOfReturnedItems()))
                                 .collect(Collectors.toList())
                 )).collect(Collectors.toList());
+    }
+
+    @Override
+    public SaleItemsRemoteDTO searchSale(int saleNum) {
+        var result = sellService.searchSale(saleNum);
+        if(result.isPresent()) {
+            SaleItemsDTO sale = result.get();
+            return new SaleItemsRemoteDTO(
+                    sale.saleNumber(),
+                    sale.dateOfSale(),
+                    sale.customerId(),
+                    sale.totalPrice(),
+                    sale.items()
+                            .stream()
+                            .map(item -> new ItemRemoteDTO(item.itemId(),
+                                    item.title(),
+                                    item.amount(),
+                                    item.pricePerItem(),
+                                    item.numberOfReturnedItems()))
+                            .collect(Collectors.toList())
+            );
+        } else {
+            return null;
+        }
     }
 }
