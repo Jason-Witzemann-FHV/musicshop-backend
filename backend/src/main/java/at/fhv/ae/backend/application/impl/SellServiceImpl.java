@@ -41,7 +41,7 @@ public class SellServiceImpl implements SellService {
     @EJB
     private UserRepository userRepository;
 
-    @Transactional(Transactional.TxType.MANDATORY)
+    @Transactional
     @Override
     public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {
 
