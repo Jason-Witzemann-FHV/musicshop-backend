@@ -21,6 +21,11 @@ public class ReleaseSearchRestController {
         return releaseSearchService.detailedInformation(releaseId)
                 .map(Response::ok)
                 .orElse(Response.status(Response.Status.NOT_FOUND))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers", "*")
+                .header("Access-Control-Allow-Methods",
+                        "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .build();
     }
 
@@ -35,7 +40,15 @@ public class ReleaseSearchRestController {
 
         var results = releaseSearchService.query(title, artist, genre);
 
-        return Response.ok(results).build();
+        return Response.ok(results)
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers",
+                        "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods",
+                        "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .build();
     }
 
 
