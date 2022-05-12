@@ -1,9 +1,16 @@
 package at.fhv.ae.backend.middleware.rest.auth;
 
+import at.fhv.ae.backend.application.dto.ReleaseDTO;
 import at.fhv.ae.backend.middleware.CredentialsService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponseSchema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -13,6 +20,11 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+
+@OpenAPIDefinition(info = @Info(
+        title = "OpenAPIDefinition for Soundkraut",
+        version = "1",
+        description = "OpenAPI for our REST services"))
 
 @Path("/authentication")
 public class AuthenticationEndpoint {
@@ -25,6 +37,12 @@ public class AuthenticationEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary="Authenticate user")
+    @APIResponses({
+            @APIResponse(responseCode="200", description="User authenticated"),
+            @APIResponse(responseCode="403", description="Wrong credentials")
+    })
+    @APIResponseSchema(value = String.class, responseCode = "200")
     public Response authenticateUser(Credentials credentials) {
 
         String username = credentials.getUsername();
