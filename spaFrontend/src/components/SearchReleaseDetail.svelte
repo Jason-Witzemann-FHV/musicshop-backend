@@ -2,7 +2,6 @@
     import { isDetailActive, detailedSearchResult } from "../storage/ReleaseSearchStore.js";
     import { Field, Input, Modal } from "svelma";
 
-
     $: formattedPrice = `${parseFloat($detailedSearchResult.price).toFixed(2)} €`
 
 </script>

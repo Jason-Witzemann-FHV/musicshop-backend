@@ -8,7 +8,9 @@
 	import SearchReleaseDetail from "./SearchReleaseDetail.svelte";
 
 	import Fa from "svelte-fa";
-	import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+	import { faInfoCircle, faCartPlus } from "@fortawesome/free-solid-svg-icons";
+	import { token } from "../storage/SessionStorage.js"
+	import { addToBasket } from "../rest/BasketController.js"
 
     function resetSearch() {
 		$releaseSearchResult = [];
@@ -49,10 +51,10 @@
         </Field>
 	</div>	
 	<div class="column is-2">
-		<Field label="&#8203 ">
+		<Field label="&#8203 &zwnj;">
             <Button type="is-info" on:click={ searchReleases }>Check!</Button>
 			{#if $releaseSearchResult.length > 0 } 
-				<Button type="is-disabled has-text-centered" on:click={resetSearch}>Reset</Button>
+				<button class="button is-link is-outlined" on:click={resetSearch}>Reset</button>
 			{/if}
         </Field>
 	</div>
@@ -70,6 +72,9 @@
 				<th>Stock</th>
 				<th>Price</th>
 				<th></th>
+				{#if $token !== ""}
+					<th></th>
+				{/if}
 			</thead>
 
 			{#each $releaseSearchResult as { id, title, medium, stock, price }, i }
@@ -80,11 +85,19 @@
 						<td> {medium} </td>
 						<td> {stock} </td>
 						<td> {`${parseFloat(price).toFixed(2)} €`} </td>
-						<td> 
+						<td class="has-text-centered"> 
 							<a on:click={() => {isDetailActive.update(active => !active) ; searchDetails(id)} } >
 								<Fa icon={faInfoCircle} size="1.75x" />
 							</a>
 						</td>
+
+						{#if $token !== ""}
+							<td class="has-text-centered"> 
+								<a on:click={() => addToBasket(id)}>
+									<Fa icon={faCartPlus} size="1.75x" />
+								</a>
+							</td>
+						{/if}
 					</tr>
 				{/if}
 			{/each}
