@@ -16,6 +16,8 @@ public interface SellService {
      */
     void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException;
 
+    void selfSale(String userId) throws OutOfStockException ;
+
     List<SaleItemsDTO> allSales();
 
     Optional<SaleItemsDTO> searchSale(int saleNum);

@@ -101,4 +101,17 @@ public class BasketRestController {
             return Response.notModified().build();
         }
     }
+
+    @POST
+    @Path("/selfsell")
+    @Secured(Permission.SELL_RELEASES)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response selfSellBasket(){
+        try {
+            sellService.selfSale(user.userId().toString());
+            return Response.ok().status(Response.Status.ACCEPTED).build();
+        } catch (OutOfStockException e) {
+            return Response.notModified().build();
+        }
+    }
 }

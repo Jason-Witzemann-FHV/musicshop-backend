@@ -41,10 +41,19 @@ public class SellServiceImpl implements SellService {
     @EJB
     private UserRepository userRepository;
 
+
     @Transactional
     @Override
     public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {
+        sell(userId, customerId, SaleType.IN_PERSON);
+    }
 
+    @Override
+    public void selfSale(String userId) throws OutOfStockException  {
+        sell(userId, null, SaleType.SELF_PURCHASE);
+    }
+
+    private void sell(String userId, ObjectId customerId, SaleType saleType) throws OutOfStockException {
         var user = userRepository.userById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " was not found!"));
 
@@ -70,7 +79,7 @@ public class SellServiceImpl implements SellService {
                 user.userId(),
                 customerId,
                 PaymentType.CASH, // First sprint only supports cash sale
-                SaleType.IN_PERSON,
+                saleType,
                 saleItems
         );
 
@@ -81,7 +90,6 @@ public class SellServiceImpl implements SellService {
         }
 
         basketRepository.clearBasket(user.userId());
-
     }
 
     @Transactional

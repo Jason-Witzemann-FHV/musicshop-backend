@@ -35,7 +35,9 @@ public class ReleaseSearchRestController {
 
         var results = releaseSearchService.query(title, artist, genre);
 
-        return Response.ok(results).build();
+        return Response.ok(results)
+                .status(200)
+                .build();
     }
 
 
