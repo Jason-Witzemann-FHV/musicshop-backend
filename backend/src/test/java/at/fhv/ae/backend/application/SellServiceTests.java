@@ -62,6 +62,9 @@ class SellServiceTests {
 
         when(userRepository.userById(userId)).thenReturn(Optional.of(user));
         when(basketRepository.itemsInBasket(userId)).thenReturn(basket);
+        for (var r : basket.keySet()) {
+            when(releaseRepository.findById(r.releaseId())).thenReturn(Optional.of(r));
+        }
         assertDoesNotThrow(() -> sellService.sellItemsInBasket(userId.name(), null));
 
         verify(saleRepository).addSale(any());

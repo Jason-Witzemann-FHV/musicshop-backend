@@ -41,7 +41,8 @@ public class SellServiceImpl implements SellService {
     @EJB
     private UserRepository userRepository;
 
-    @Transactional()
+
+    @Transactional
     @Override
     public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {
         sell(userId, customerId, SaleType.IN_PERSON);
@@ -85,8 +86,7 @@ public class SellServiceImpl implements SellService {
         saleRepository.addSale(sale);
 
         for (var item : basket.entrySet()) {
-            int amount = item.getValue();
-            item.getKey().decreaseStock(amount);
+            releaseRepository.findById(item.getKey().releaseId()).get().decreaseStock(item.getValue());
         }
 
         basketRepository.clearBasket(user.userId());
