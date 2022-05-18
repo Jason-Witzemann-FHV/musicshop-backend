@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="FHV2-RMI-CustomerAPI" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="CustomerApiMain" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="at.fhv.ae.CustomerApiMain" />
     <module name="musicshop-backend.customer.main" />
     <extension name="coverage">
