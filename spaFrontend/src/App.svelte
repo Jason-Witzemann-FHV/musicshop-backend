@@ -2,6 +2,7 @@
 	import SearchReleases from "./components/SearchReleases.svelte"
 	import Login from "./components/Login.svelte"
 	import Basket from "./components/Basket.svelte"
+	import Playlist from "./components/Playlist.svelte"
 	import { Snackbar, Button } from "svelma"
 	import { currentView } from "./storage/DisplayStorage.js"
     import { userName, password, token } from "./storage/SessionStorage.js"
@@ -79,7 +80,7 @@
 		{:else if $currentView === "basket"}
 			<Basket />
 		{:else if $currentView === "playlist"}
-			<!-- todo playlist page -->
+			<Playlist />
 		{/if}
 	</div>
 </div>
