@@ -1,6 +1,18 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id "io.quarkus" version "2.9.0.Final"
+    }
+}
+
 rootProject.name = 'musicshop-backend'
 include ':frontend'
 include ':backend'
 include ':shared'
 include ':customer'
 include ':javafxFrontend'
+include ':playlistMicroservice'
