@@ -1,6 +1,7 @@
 package at.fhv.ae.playlist.infrastructure;
 
 import at.fhv.ae.playlist.application.PlaylistReleaseDTO;
+import at.fhv.ae.playlist.application.ReleaseId;
 import at.fhv.ae.playlist.domain.Playlist;
 import at.fhv.ae.playlist.domain.PlaylistRepository;
 import at.fhv.ae.playlist.domain.Release;
@@ -10,7 +11,7 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
 @ApplicationScoped
-public class DummyPlaylistRepository implements PanacheRepository<Playlist>, PlaylistRepository {
+public class PlaylistRepositoryImpl implements PanacheRepository<Playlist>, PlaylistRepository {
 
     List<PlaylistReleaseDTO> dummyData = List.of(
             new PlaylistReleaseDTO("Roar", "Katy Perry", 300),
@@ -19,9 +20,8 @@ public class DummyPlaylistRepository implements PanacheRepository<Playlist>, Pla
     );
 
     @Override
-    public Release findById(String releaseId) {
-       Release release = Release.findById(releaseId);
-       return release;
+    public Release findByReleaseId(ReleaseId releaseId) {
+       return Release.findById(releaseId);
     }
 
     @Override
@@ -31,17 +31,12 @@ public class DummyPlaylistRepository implements PanacheRepository<Playlist>, Pla
 
     @Override
     public void addToPlaylist(Playlist playlist, Release release) {
-        //unten 35 anderer Ort oder?
-        playlist.addRelease(release);
         release.persist();
     }
 
 
     @Override
-    public List<PlaylistReleaseDTO> playlist() {
-        return dummyData;
+    public List<Release> playlist(Playlist playlist) {
+        return playlist.allReleases();
     }
-
-
-
 }

@@ -1,6 +1,6 @@
 package at.fhv.ae.playlist.domain;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import at.fhv.ae.playlist.application.ReleaseId;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Release extends PanacheEntityBase {
 
     @Id
-    private String releaseId;
+    private ReleaseId releaseId;
 
     private String title;
 

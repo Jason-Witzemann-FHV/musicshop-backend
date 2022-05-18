@@ -16,15 +16,16 @@ public class PlaylistServiceImpl implements PlaylistService{
 
 
     @Override
-    public void addToPlaylist(String playlistId, String releaseId) {
-        Release release = playlistRepository.findById(releaseId);
+    public void addToPlaylist(String playlistId, ReleaseId releaseId) {
+        Release release = playlistRepository.findByReleaseId(releaseId);
         Playlist playlist = playlistRepository.findByPlaylistId(playlistId);
         playlistRepository.addToPlaylist(playlist, release);
     }
 
+    //DTO zurückgeben
     @Override
-    public List<PlaylistReleaseDTO> playlist() {
-
-        return playlistRepository.playlist();
+    public List<Release> playlist(String playlistId) {
+        Playlist playlist = playlistRepository.findByPlaylistId(playlistId);
+        return playlistRepository.playlist(playlist);
     }
 }

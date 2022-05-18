@@ -25,7 +25,10 @@ public class Playlist extends PanacheEntityBase {
 
     public void addRelease(Release release) {
         this.releases.add(release);
-        //b.getAuthors().add(this);
+    }
+
+    public List<Release> allReleases(){
+        return releases;
     }
 }
 
