@@ -18,12 +18,6 @@ public class PlaylistRestController {
     @Inject
     PlaylistService playlistService;
 
-    /*@GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<PlaylistReleaseDTO> playlist() {
-        return playlistService.playlist();
-    } */
-
     @PUT
     @Path("/add/{playlistId}/{releaseId}")
     @Transactional
@@ -36,7 +30,7 @@ public class PlaylistRestController {
     }
 
     @GET
-    @Path("/playlist/{playlistId}")
+    @Path("/{playlistId}")
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPlaylist(@PathParam("playlistId") String playlistId) {
@@ -49,7 +43,6 @@ public class PlaylistRestController {
             return Response.noContent().build();
         }
 
-        // fehlercode einfügen ??
     }
 
 }

@@ -1,6 +1,10 @@
 package at.fhv.ae.playlist.application;
 
-public class PlaylistReleaseDTO {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import java.io.Serializable;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class PlaylistReleaseDTO implements Serializable {
     String title;
     String artist;
     int duration;

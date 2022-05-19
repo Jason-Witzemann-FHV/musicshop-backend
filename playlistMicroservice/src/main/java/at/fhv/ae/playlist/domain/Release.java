@@ -25,4 +25,20 @@ public class Release extends PanacheEntityBase {
         this.artist = artist;
         this.duration = duration;
     }
+
+    public ReleaseId releaseId() {
+        return releaseId;
+    }
+
+    public String title() {
+        return title;
+    }
+
+    public String artist() {
+        return artist;
+    }
+
+    public int duration() {
+        return duration;
+    }
 }
