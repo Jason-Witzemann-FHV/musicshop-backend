@@ -12,16 +12,52 @@ import static org.hamcrest.CoreMatchers.is;
 public class addToPlaylistTest {
 
     @Test
-    public void given_playlistId_ReleaseId_when_PutMethod_then_receiveStatusCode200() {
-        String playlistId = "tobi123";
+    public void given_userId_releaseId_when_putMethod_then_receiveStatusCode200() {
+        String userId = "tobi123";
         String releaseId = "0f0956ec-c1d4-4258-b410-d2212a6d38cf";
         given()
-                .pathParam("playlistId", playlistId)
+                .pathParam("userId", userId)
                 .pathParam("releaseId", releaseId)
-                .when().put("/playlist/add/{playlistId}/{releaseId}")
+                .when().put("/playlist/add/{userId}/{releaseId}")
                 .then()
                 .statusCode(200)
-                .body(is("Release "+ releaseId + " added to " + playlistId));
+                .body(is("Release "+ releaseId + " added to " + userId));
+
+    }
+
+    @Test
+    public void given_userId_wrongReleaseId_when_putMethod_then_receiveStatusCode304() {
+        String userId = "tobi123";
+        String releaseId = "0f0956ec-c1d4-4258-b410-d2212a5d38cf";
+        given()
+                .pathParam("userId", userId)
+                .pathParam("releaseId", releaseId)
+                .when().put("/playlist/add/{userId}/{releaseId}")
+                .then()
+                .statusCode(304);
+    }
+
+
+    @Test
+    public void given_userId_when_releases_in_playlist_and_getMethod_then_receiveStatusCode200() {
+        String userId = "tobi123";
+        given()
+                .pathParam("userId", userId)
+                .when().get("/playlist/{userId}")
+                .then()
+                .statusCode(200);
+                //.body(is("[at.fhv.ae.playlist.domain.PlaylistReleaseDTO@4d576167, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@255d1f1f, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@6b5c5462]"));
+    }
+
+    @Test
+    public void given_userId_when_no_releases_in_playlist_and_getMethod_then_receiveStatusCode204() {
+        String userId = "userWithoutReleases";
+        given()
+                .pathParam("userId", userId)
+                .when().get("/playlist/{userId}")
+                .then()
+                .statusCode(204);
+        //.body(is("[at.fhv.ae.playlist.domain.PlaylistReleaseDTO@4d576167, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@255d1f1f, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@6b5c5462]"));
 
     }
 }

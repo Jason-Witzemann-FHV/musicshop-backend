@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Release extends PanacheEntityBase {
 
     @Id
-    private ReleaseId releaseId;
+    private String releaseId;
 
     private String title;
 
@@ -24,7 +24,7 @@ public class Release extends PanacheEntityBase {
         this.duration = duration;
     }
 
-    public ReleaseId releaseId() {
+    public String releaseId() {
         return releaseId;
     }
 

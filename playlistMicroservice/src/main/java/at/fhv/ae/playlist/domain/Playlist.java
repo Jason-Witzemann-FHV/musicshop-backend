@@ -24,7 +24,11 @@ public class Playlist extends PanacheEntityBase {
     }
 
     public void addRelease(Release release) {
-        this.releases.add(release);
+        if(release != null) {
+            this.releases.add(release);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public List<Release> allReleases(){

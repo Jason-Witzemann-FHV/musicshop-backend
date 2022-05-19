@@ -1,4 +1,4 @@
-package at.fhv.ae.playlist.application;
+package at.fhv.ae.playlist.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import java.io.Serializable;

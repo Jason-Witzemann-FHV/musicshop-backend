@@ -1,42 +1,55 @@
 package at.fhv.ae.playlist.presentation;
 
-import at.fhv.ae.playlist.application.PlaylistService;
-import at.fhv.ae.playlist.domain.ReleaseId;
+import at.fhv.ae.playlist.domain.Playlist;
+import at.fhv.ae.playlist.domain.PlaylistReleaseDTO;
+import at.fhv.ae.playlist.domain.Release;
 
-import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Path("/playlist")
 public class PlaylistRestController {
 
-    @Inject
-    PlaylistService playlistService;
-
     @PUT
-    @Path("/add/{playlistId}/{releaseId}")
+    @Path("/add/{userId}/{releaseId}")
     @Transactional
     @Produces(MediaType.TEXT_PLAIN)
-    public Response update(@PathParam("playlistId") String playlistId, @PathParam("releaseId") String releaseId) {
-        playlistService.addToPlaylist(playlistId, new ReleaseId(UUID.fromString(releaseId)));
-        return Response.ok("Release " + releaseId + " added to "+ playlistId).build();
+    public Response update(@PathParam("userId") String userId, @PathParam("releaseId") String releaseId) {
 
-        // fehlercode einfügen ??
+        try {
+            Release release = Release.findById(releaseId);
+            Playlist playlist = Playlist.findById(userId);
+
+            playlist.addRelease(release);
+            return Response.ok("Release " + releaseId + " added to "+  userId).build();
+        } catch(Exception e){
+            return Response.notModified().build();
+        }
+
     }
 
     @GET
-    @Path("/{playlistId}")
+    @Path("/{userId}")
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPlaylist(@PathParam("playlistId") String playlistId) {
+    public Response getPlaylist(@PathParam("userId") String userId) {
+        Playlist playlist = Playlist.findById(userId);
 
-        var playlist = playlistService.playlist(playlistId);
+        //serialisierung funktioniert nicht?
+        var results = playlist.allReleases().stream()
+                .map(release -> new PlaylistReleaseDTO(
+                        release.title(),
+                        release.artist(),
+                        release.duration()))
+                .collect(Collectors.toList());
 
-        if(!playlist.isEmpty()) {
-            return Response.ok(playlist).build();
+
+        if(!results.isEmpty()) {
+            return Response.ok(results).build();
         } else {
             return Response.noContent().build();
         }
