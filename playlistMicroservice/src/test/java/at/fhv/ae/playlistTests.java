@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class addToPlaylistTest {
+public class playlistTests {
 
     @Test
     public void given_userId_releaseId_when_putMethod_then_receiveStatusCode200() {

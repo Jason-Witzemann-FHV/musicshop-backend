@@ -18,7 +18,7 @@ public class PlaylistRestController {
     @Path("/add/{userId}/{releaseId}")
     @Transactional
     @Produces(MediaType.TEXT_PLAIN)
-    public Response update(@PathParam("userId") String userId, @PathParam("releaseId") String releaseId) {
+    public Response addRelease(@PathParam("userId") String userId, @PathParam("releaseId") String releaseId) {
 
         try {
             Release release = Release.findById(releaseId);
