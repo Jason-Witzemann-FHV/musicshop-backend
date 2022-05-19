@@ -3,6 +3,7 @@ package at.fhv.ae.playlist.application;
 import at.fhv.ae.playlist.domain.Playlist;
 import at.fhv.ae.playlist.domain.PlaylistRepository;
 import at.fhv.ae.playlist.domain.Release;
+import at.fhv.ae.playlist.domain.ReleaseId;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,22 +18,21 @@ public class PlaylistServiceImpl implements PlaylistService{
 
 
     @Override
-    public void addToPlaylist(String playlistId, ReleaseId releaseId) {
+    public void addToPlaylist(String userId, ReleaseId releaseId) {
         Release release = playlistRepository.findByReleaseId(releaseId);
-        Playlist playlist = playlistRepository.findByPlaylistId(playlistId);
+        Playlist playlist = playlistRepository.findByUserId(userId);
 
         playlist.addRelease(release);
 
-        //fraglich ob das überhaupt notwendig ist
-        playlistRepository.addToPlaylist(playlist, release);
+        //playlistRepository.addToPlaylist(playlist, release);
     }
 
 
     @Override
-    public List<PlaylistReleaseDTO> playlist(String playlistId) {
-        Playlist playlist = playlistRepository.findByPlaylistId(playlistId);
+    public List<PlaylistReleaseDTO> playlist(String userId) {
+        Playlist playlist = playlistRepository.findByUserId(userId);
 
-        return playlistRepository.playlist(playlist).stream()
+        return playlist.allReleases().stream()
                 .map(release -> new PlaylistReleaseDTO(
                         release.title(),
                         release.artist(),

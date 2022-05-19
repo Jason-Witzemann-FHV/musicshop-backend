@@ -1,8 +1,6 @@
 package at.fhv.ae.playlist.domain;
 
-import at.fhv.ae.playlist.application.ReleaseId;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-
 import javax.persistence.*;
 
 @Entity

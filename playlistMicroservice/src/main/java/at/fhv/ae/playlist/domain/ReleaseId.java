@@ -1,7 +1,6 @@
-package at.fhv.ae.playlist.application;
+package at.fhv.ae.playlist.domain;
 
 import org.hibernate.annotations.Type;
-
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.UUID;
