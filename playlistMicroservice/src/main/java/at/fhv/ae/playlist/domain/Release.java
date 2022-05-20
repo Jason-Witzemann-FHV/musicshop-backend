@@ -15,9 +15,6 @@ public class Release extends PanacheEntityBase {
 
     private int duration;
 
-    public Release() {
-    }
-
     public Release(String title, String artist, int duration) {
         this.title = title;
         this.artist = artist;
