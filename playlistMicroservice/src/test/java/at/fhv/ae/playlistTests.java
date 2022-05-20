@@ -20,9 +20,7 @@ public class playlistTests {
                 .pathParam("releaseId", releaseId)
                 .when().put("/playlist/add/{userId}/{releaseId}")
                 .then()
-                .statusCode(200)
-                .body(is("Release "+ releaseId + " added to " + userId));
-
+                .statusCode(200);
     }
 
     @Test
@@ -46,7 +44,6 @@ public class playlistTests {
                 .when().get("/playlist/{userId}")
                 .then()
                 .statusCode(200);
-                //.body(is("[at.fhv.ae.playlist.domain.PlaylistReleaseDTO@4d576167, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@255d1f1f, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@6b5c5462]"));
     }
 
     @Test
@@ -57,7 +54,6 @@ public class playlistTests {
                 .when().get("/playlist/{userId}")
                 .then()
                 .statusCode(204);
-        //.body(is("[at.fhv.ae.playlist.domain.PlaylistReleaseDTO@4d576167, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@255d1f1f, at.fhv.ae.playlist.domain.PlaylistReleaseDTO@6b5c5462]"));
 
     }
 }
