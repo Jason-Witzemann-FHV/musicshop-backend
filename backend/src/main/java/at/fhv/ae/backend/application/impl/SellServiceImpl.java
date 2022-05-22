@@ -4,13 +4,11 @@ import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.dto.ItemDTO;
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
+import at.fhv.ae.backend.domain.model.release.Medium;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.sale.*;
 import at.fhv.ae.backend.domain.model.user.UserId;
-import at.fhv.ae.backend.domain.repository.BasketRepository;
-import at.fhv.ae.backend.domain.repository.ReleaseRepository;
-import at.fhv.ae.backend.domain.repository.SaleRepository;
-import at.fhv.ae.backend.domain.repository.UserRepository;
+import at.fhv.ae.backend.domain.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -40,6 +38,9 @@ public class SellServiceImpl implements SellService {
 
     @EJB
     private UserRepository userRepository;
+
+    @EJB
+    private PlaylistRepository playlistRepository;
 
 
     @Transactional
@@ -86,7 +87,11 @@ public class SellServiceImpl implements SellService {
         saleRepository.addSale(sale);
 
         for (var item : basket.entrySet()) {
-            releaseRepository.findById(item.getKey().releaseId()).get().decreaseStock(item.getValue());
+            if (item.getKey().medium() != Medium.MP3) {
+                releaseRepository.findById(item.getKey().releaseId()).get().decreaseStock(item.getValue());
+            } else {
+                playlistRepository.notifyBoughtRelease(item.getKey(), user);
+            }
         }
 
         basketRepository.clearBasket(user.userId());

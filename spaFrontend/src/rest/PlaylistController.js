@@ -1,37 +1,15 @@
 
 import { playlist } from '../storage/PlaylistStorage.js';
+import { token } from '../storage/SessionStorage.js'
+import { get } from 'svelte/store';
+import axios from "axios";
 
 export function loadPlaylist() {
 
+    const config = {
+        headers: { Authorization: `Bearer ${get(token)}` }
+    }
 
-    // todo rest calls
-
-    let tempData = [
-        {
-            id: "adsf",
-            title: "Title 1",
-            artist: "Artist 1",
-            duration: 140
-        },
-        {
-            id: "fdsa",
-            title: "Title 2",
-            artist: "Artist 2",
-            duration: 222
-        },
-        {
-            id: "asde",
-            title: "Title 3",
-            artist: "Artist 3",
-            duration: 200
-        },
-        {
-            id: "hes",
-            title: "Title 4",
-            artist: "Artist 4",
-            duration: 123
-        },
-    ]
-
-    playlist.update(old => tempData)
+    axios.get(`http://localhost:8083/playlist`, config)
+        .then(response => playlist.update(old => response.data))
 }

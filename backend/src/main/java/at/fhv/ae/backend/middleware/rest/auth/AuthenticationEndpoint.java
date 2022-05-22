@@ -16,6 +16,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -29,7 +30,7 @@ import java.util.Date;
 @Path("/authentication")
 public class AuthenticationEndpoint {
 
-    public static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public static final Key KEY = Keys.hmacShaKeyFor("asdfaefasdascxaefaergdfbsasdfasdfcvydaeeafasdafewfasdfcvydaefsdadfdfscvdsfsdfasdfadsfafefwf".getBytes(StandardCharsets.UTF_8));
 
     @EJB
     private CredentialsService credentialsService;

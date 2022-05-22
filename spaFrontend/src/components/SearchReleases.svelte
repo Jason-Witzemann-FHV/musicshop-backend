@@ -27,7 +27,7 @@
 <h1 class="title">Explore our local sortiment!</h1>
 <p class="subtitle">
 	MicroSounds is a part of the well known SoundKraut Music Distribution Organization! <br>
-	SoundKraut mainly sells physical releases, which you can look up here.
+	SoundKraut mainly sells physical songs, which you can look up here.
 </p>
 <div class="columns">
 	<div class="column is-4">

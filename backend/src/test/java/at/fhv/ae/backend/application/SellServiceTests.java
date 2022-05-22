@@ -10,10 +10,7 @@ import at.fhv.ae.backend.domain.model.user.Role;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
-import at.fhv.ae.backend.domain.repository.BasketRepository;
-import at.fhv.ae.backend.domain.repository.ReleaseRepository;
-import at.fhv.ae.backend.domain.repository.SaleRepository;
-import at.fhv.ae.backend.domain.repository.UserRepository;
+import at.fhv.ae.backend.domain.repository.*;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +29,7 @@ class SellServiceTests {
     private SaleRepository saleRepository;
     private UserRepository userRepository;
     private ReleaseRepository releaseRepository;
+    private PlaylistRepository playlistRepository;
 
     @BeforeEach
     void setup() {
@@ -39,7 +37,8 @@ class SellServiceTests {
         saleRepository = mock(SaleRepository.class);
         userRepository = mock(UserRepository.class);
         releaseRepository = mock(ReleaseRepository.class);
-        sellService = new SellServiceImpl(saleRepository, basketRepository, releaseRepository, userRepository);
+        playlistRepository = mock(PlaylistRepository.class);
+        sellService = new SellServiceImpl(saleRepository, basketRepository, releaseRepository, userRepository, playlistRepository);
     }
 
     @Test

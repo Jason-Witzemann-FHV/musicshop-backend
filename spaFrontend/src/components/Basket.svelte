@@ -22,7 +22,7 @@
 <h1 class="title">Let's have a look in your basket!</h1>
 <p class="subtitle">
 	Manage your basket items here.<br>
-	If you are satisfied with your orders, then you can buy your releases. Digital mediums will be available in your playlist and the physical will be sent to your home.
+	If you are satisfied with your orders, then you can buy your songs. Digital mediums will be available in your playlist and the physical will be sent to your home.
 </p>
 
 {#if $basket.length !== 0}

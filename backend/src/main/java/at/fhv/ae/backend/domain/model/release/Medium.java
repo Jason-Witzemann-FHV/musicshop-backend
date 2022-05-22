@@ -3,7 +3,8 @@ package at.fhv.ae.backend.domain.model.release;
 public enum Medium {
     CD("CD"),
     VINYL("Vinyl"),
-    MC("Music Cassette");
+    MC("Music Cassette"),
+    MP3("MP3");
 
     private final String friendlyName;
 
