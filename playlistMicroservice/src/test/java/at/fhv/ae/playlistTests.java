@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.is;
 @QuarkusTest
 public class playlistTests {
 
-    @Test
+   /* @Test
     public void given_userId_releaseId_when_putMethod_then_receiveStatusCode200() {
         String userId = "tobi123";
         String releaseId = "0f0956ec-c1d4-4258-b410-d2212a6d38cf";
@@ -21,7 +21,7 @@ public class playlistTests {
                 .when().put("/playlist/add/{userId}/{releaseId}")
                 .then()
                 .statusCode(200);
-    }
+    } */
 
     @Test
     public void given_userId_wrongReleaseId_when_putMethod_then_receiveStatusCode304() {
