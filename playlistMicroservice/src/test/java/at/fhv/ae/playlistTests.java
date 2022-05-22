@@ -21,7 +21,7 @@ public class playlistTests {
                 .when().put("/playlist/add/{userId}/{releaseId}")
                 .then()
                 .statusCode(200);
-    } */
+    }
 
     @Test
     public void given_userId_wrongReleaseId_when_putMethod_then_receiveStatusCode304() {
@@ -55,5 +55,5 @@ public class playlistTests {
                 .then()
                 .statusCode(204);
 
-    }
+    } */
 }
