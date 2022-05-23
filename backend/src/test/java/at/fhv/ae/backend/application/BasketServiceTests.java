@@ -37,7 +37,7 @@ class BasketServiceTests {
     void given_one_item_in_basket_when_change_quantity_of_item_to_three_then_repo_calls_change_quantity_method() {
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role), null);
+        var user = new User(userId, Set.of(role), null, null);
 
         var releaseId = new ReleaseId(UUID.randomUUID());
         var label = new Label("Test-Label", "TST");
@@ -55,7 +55,7 @@ class BasketServiceTests {
     void given_one_item_in_basket_when_remove_that_item_then_repo_calls_remove() {
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role), null);
+        var user = new User(userId, Set.of(role), null, null);
 
         var releaseId = new ReleaseId(UUID.randomUUID());
         var label = new Label("Test-Label", "TST");
@@ -73,7 +73,7 @@ class BasketServiceTests {
     void given_item_when_item_added_to_basket_then_repo_calls_add_method() {
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role), null);
+        var user = new User(userId, Set.of(role), null, null);
 
         var releaseId = new ReleaseId(UUID.randomUUID());
         var label = new Label("Test-Label", "TST");
@@ -93,7 +93,7 @@ class BasketServiceTests {
     void given_empty_basket_when_add_item_to_basket_then_basket_has_size_of_one() {
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role), null);
+        var user = new User(userId, Set.of(role), null, null);
 
         var releaseId = new ReleaseId(UUID.randomUUID());
         var label = new Label("Test-Label", "TST");
@@ -122,7 +122,7 @@ class BasketServiceTests {
     void given_mock_when_amount_of_items_then_call_amount_of_items_method() {
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role), null);
+        var user = new User(userId, Set.of(role), null, null);
 
         when(userRepository.userById(userId)).thenReturn(Optional.of(user));
 

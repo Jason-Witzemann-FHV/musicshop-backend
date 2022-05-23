@@ -1,7 +1,8 @@
 import axios from "axios"
+import { number, type, cvc } from "../storage/CreditCardStorage.js";
 import { get } from 'svelte/store'
 import { token } from '../storage/SessionStorage.js'
-import { basket } from '../storage/BasketStorage.js'
+import { basket, showBuyDetails } from '../storage/BasketStorage.js'
 import { Snackbar } from "svelma"
 
 export function addToBasket(releaseId) {
@@ -74,20 +75,42 @@ export function clearBasket() {
 
 export function sellBasket() {
     const config = {
-        headers: { Authorization: `Bearer ${get(token)}` }
+        headers: { 
+            "Authorization": `Bearer ${get(token)}`,
+            "Content-type": "application/json",
+            "Accept": "*/*",
+        }
     }
 
-    axios.post(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/selfsell`, {}, config)
+    const creditCard = JSON.stringify({
+        number: get(number),
+        type: get(type),
+        cvc: get(cvc)
+    })
+
+    axios.post(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/selfsell`, creditCard, config)
         .then(response => {
             Snackbar.create({ 
                 message: 'Item bought all items!',
                 type: "is-link",
                 background: 'has-background-grey-lighter'
             })
+            showBuyDetails.update(old => false)
+            number.update(old => "")
+            type.update(old => "")
+            cvc.update(old => "")
             getBasket()
         }).catch(error => {
+
+            let errorMessage;
+            if (error.code === "ERR_BAD_REQUEST") {
+                errorMessage = "Error: Invalid credit card information!"
+            } else {
+                errorMessage = "Error: at least one item is out of stock!'"
+            }
+
             Snackbar.create({ 
-                message: 'Error: at least one item is out of stock!',
+                message: errorMessage,
                 type: "is-error",
                 background: 'has-background-grey-lighter'
             })

@@ -3,6 +3,7 @@ package at.fhv.ae.backend;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.user.*;
 import at.fhv.ae.backend.domain.model.work.*;
+import org.bson.types.ObjectId;
 
 import javax.persistence.Persistence;
 import java.util.*;
@@ -33,13 +34,12 @@ public class DataGenerator {
 
         var adminRoles = Set.of(new Role("admin", Set.of(Permission.values())));
         var adminTopics = Set.of(SubscriptionTopics.values());
-        var admins = Stream.of(
-                "ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test")
-                .map(id -> new User(new UserId(id), adminRoles, adminTopics));
+        var admins = Stream.of("ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test")
+                .map(id -> new User(new UserId(id), adminRoles, adminTopics, new ObjectId("6221173fe0db2b163e99dfae")));
 
         var customerRoles = Set.of(new Role("customer", Set.of(Permission.SEARCH_RELEASES)));
 
-        var customers = Stream.of(new User(new UserId("max"), customerRoles, Set.of(SubscriptionTopics.POP_TOPIC)));
+        var customers = Stream.of(new User(new UserId("max"), customerRoles, Set.of(SubscriptionTopics.POP_TOPIC),  new ObjectId("6221173fe0db2b163e99dfae")));
 
         users = Stream.concat(admins, customers).collect(Collectors.toList());
     }

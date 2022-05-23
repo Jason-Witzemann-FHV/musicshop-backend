@@ -4,13 +4,16 @@ import at.fhv.ae.backend.application.BasketService;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.dto.BasketItemDisplayDTO;
 import at.fhv.ae.backend.application.dto.ReleaseDTO;
+import at.fhv.ae.backend.application.exceptions.InvalidCreditCardException;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
 import at.fhv.ae.backend.domain.model.user.Permission;
 import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.middleware.rest.auth.AuthenticatedUser;
 import at.fhv.ae.backend.middleware.rest.auth.Secured;
+import at.fhv.ae.shared.dto.customer.CreditCard;
 import org.bson.types.ObjectId;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponseSchema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
@@ -20,6 +23,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.awt.image.MemoryImageSource;
 import java.util.UUID;
 
 @Path("/basket")
@@ -147,12 +151,15 @@ public class BasketRestController {
     @Path("/selfsell")
     @Secured(Permission.SELL_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response selfSellBasket(){
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response selfSellBasket(CreditCard creditCard) {
         try {
-            sellService.selfSale(user.userId().toString());
+            sellService.selfSale(user.userId().toString(), creditCard);
             return Response.ok().status(Response.Status.ACCEPTED).build();
         } catch (OutOfStockException e) {
             return Response.notModified().build();
+        } catch (InvalidCreditCardException e) {
+            return Response.status(400, "Invalid Credit Card Information").build();
         }
     }
 }

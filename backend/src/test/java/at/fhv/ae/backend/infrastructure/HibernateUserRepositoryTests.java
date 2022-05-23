@@ -26,7 +26,7 @@ class HibernateUserRepositoryTests {
         var roleOperator = new Role("operator", Set.of(Permission.ORDER_RELEASES, Permission.PUBLISH_WEBFEED));
         var roleEmployee = new Role("employee", Set.of(Permission.SEARCH_RELEASES, Permission.SELL_RELEASES));
         var roles = Set.of(roleEmployee, roleOperator);
-        var user = new User(new UserId("Jason"), roles, null);
+        var user = new User(new UserId("Jason"), roles, null, null);
 
         var transaction = em.getTransaction();
         transaction.begin();

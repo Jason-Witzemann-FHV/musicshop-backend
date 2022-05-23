@@ -1,10 +1,11 @@
 <script>
-    import { basket } from "../storage/BasketStorage.js"
+    import { basket, showBuyDetails } from "../storage/BasketStorage.js"
     import { getBasket, removeFromBasket, changeQuantity, sellBasket, clearBasket } from "../rest/BasketController.js"
     import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
     import { faTrashCan }  from "@fortawesome/free-solid-svg-icons"
     import { Input, Button } from "svelma"
+    import BuyBasketDetail from "./BuyBasketDetail.svelte";
     import Fa from "svelte-fa";
 
     onMount(async () => {
@@ -86,12 +87,13 @@
         {:else}
             <div class="has-text-right">
                 <button class="button is-link is-outlined" on:click={() => clearBasket() }>Reset</button>
-                <Button type="is-link" on:click={() =>sellBasket()}>Buy All</Button>
+                <!-- <Button type="is-link" on:click={() =>sellBasket()}>Buy All</Button> -->
+                <Button type="is-link" on:click={() => $showBuyDetails = !$showBuyDetails }>Buy All</Button>
+                <BuyBasketDetail/>
             </div>
 
         {/if}
 
-        
     </div>
 {:else}
     <p>Looks like your basket is empty.</p>

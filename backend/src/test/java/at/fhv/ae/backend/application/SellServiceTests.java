@@ -11,6 +11,7 @@ import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.model.work.RecordingId;
 import at.fhv.ae.backend.domain.repository.*;
+import at.fhv.ae.shared.repository.CustomerRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ class SellServiceTests {
     private UserRepository userRepository;
     private ReleaseRepository releaseRepository;
     private PlaylistRepository playlistRepository;
+    private CustomerRepository customerRepository;
 
     @BeforeEach
     void setup() {
@@ -38,14 +40,16 @@ class SellServiceTests {
         userRepository = mock(UserRepository.class);
         releaseRepository = mock(ReleaseRepository.class);
         playlistRepository = mock(PlaylistRepository.class);
-        sellService = new SellServiceImpl(saleRepository, basketRepository, releaseRepository, userRepository, playlistRepository);
+        customerRepository = mock(CustomerRepository.class);
+
+        sellService = new SellServiceImpl(saleRepository, basketRepository, releaseRepository, userRepository, playlistRepository, customerRepository);
     }
 
     @Test
     void given_basket_with_items_when_create_sale_then_sale_repo_adds_sale() {
         var userId = new UserId("nsu3146");
         var role = new Role("Seller", Set.of(Permission.SELL_RELEASES, Permission.SEARCH_RELEASES));
-        var user = new User(userId, Set.of(role), null);
+        var user = new User(userId, Set.of(role), null, null);
 
         var label = new Label("Test-Label", "TST");
         var supplier = new Supplier("Test-Supplier", "Teststraße 44, 3231 Testhausen, Österreich");
