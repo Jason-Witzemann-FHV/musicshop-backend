@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 public class playlistTests {
-
+/*
     @Test
     public void given_userId_releaseId_when_putMethod_then_receiveStatusCode200() {
         String userId = "tobi123";
@@ -55,5 +55,5 @@ public class playlistTests {
                 .then()
                 .statusCode(204);
 
-    }
+    } */
 }
