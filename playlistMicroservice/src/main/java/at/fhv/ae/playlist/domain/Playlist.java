@@ -3,7 +3,9 @@ package at.fhv.ae.playlist.domain;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Playlist extends PanacheEntityBase {
@@ -12,26 +14,23 @@ public class Playlist extends PanacheEntityBase {
     String userId;
 
     @ManyToMany(cascade = {CascadeType.PERSIST})
-    private List<Release> releases;
+    private List<Song> songs;
 
     public Playlist() {
     }
 
-    public Playlist(String userId, List<Release> releases) {
+    public Playlist(String userId) {
         this.userId = userId;
-        this.releases = releases;
+        this.songs = new ArrayList<>();
     }
 
-    public void addRelease(Release release) {
-        if(release != null) {
-            this.releases.add(release);
-        } else {
-            throw new IllegalArgumentException();
-        }
+    public void addSong(Song song) {
+        Objects.requireNonNull(song);
+        this.songs.add(song);
     }
 
-    public List<Release> allReleases(){
-        return releases;
+    public List<Song> allSongs(){
+        return songs;
     }
 }
 
