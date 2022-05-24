@@ -32,5 +32,9 @@ public class Playlist extends PanacheEntityBase {
     public List<Song> allSongs(){
         return songs;
     }
+
+    public String getUserId() {
+        return userId;
+    }
 }
 

@@ -1,6 +1,6 @@
 <script>
     import { playlist } from "../storage/PlaylistStorage.js"
-    import { loadPlaylist } from "../rest/PlaylistController.js"
+    import { loadPlaylist, downloadSong } from "../rest/PlaylistController.js"
     import { onMount } from 'svelte';
     import { faCloudArrowDown }  from "@fortawesome/free-solid-svg-icons"
     import { toDuration} from "../Utils"
@@ -34,7 +34,7 @@
                 <th></th>
             </thead>
 
-            {#each $playlist as { id, title, artist, duration }, i }
+            {#each $playlist as { songId, title, artist, duration }, i }
                 {#if (i - (navigationPage -1) * maxPageSize < maxPageSize) && i >= (navigationPage -1) * maxPageSize } 
                     <tr>
                         <td> {i + 1} </td>
@@ -42,7 +42,7 @@
                         <td> {artist} </td>
                         <td> {toDuration(duration)} </td>
                         <!-- svelte-ignore a11y-missing-attribute -->
-                        <td><a><Fa icon={faCloudArrowDown} size="1.75x" /></a>
+                        <td><a on:click={downloadSong(songId, title)}><Fa icon={faCloudArrowDown} size="1.75x" /></a>
                         </td>
                     </tr>
                 {/if}
