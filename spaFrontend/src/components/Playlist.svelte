@@ -2,9 +2,8 @@
     import { playlist } from "../storage/PlaylistStorage.js"
     import { loadPlaylist } from "../rest/PlaylistController.js"
     import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
     import { faCloudArrowDown }  from "@fortawesome/free-solid-svg-icons"
-    import { Input, Button } from "svelma"
+    import { toDuration} from "../Utils"
     import Fa from "svelte-fa";
 
     onMount(async () => {
@@ -24,7 +23,7 @@
 </p>
 
 {#if $playlist.length !== 0}
-    <div transition:fly="{{ y: -50, duration: 1000 }}">
+    <div id:fly="{{ y: -50, duration: 1000 }}">
 
         <table class="table is-fullwidth has-background-link-light">
             <thead>
@@ -41,7 +40,8 @@
                         <td> {i + 1} </td>
                         <td> {title} </td>
                         <td> {artist} </td>
-                        <td> {duration} </td>
+                        <td> {toDuration(duration)} </td>
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <td><a><Fa icon={faCloudArrowDown} size="1.75x" /></a>
                         </td>
                     </tr>
@@ -55,20 +55,22 @@
 
                 <ul class="pagination-list">
                     {#if navigationPage !== 1}
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage = 1}>1</a></li>
 
                         <li><span class="pagination-ellipsis">&hellip;</span></li>
-
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage--}>{navigationPage - 1}</a></li>
                     {/if}
-
+                    <!-- svelte-ignore a11y-missing-attribute -->
                     <li><a class="pagination-link is-current">{navigationPage}</a></li>
 
                     {#if navigationPage !== pageCount}
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage++}>{navigationPage + 1}</a></li>
 
                         <li><span class="pagination-ellipsis">&hellip;</span></li>
-
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage = pageCount}>{pageCount}</a></li>
                     {/if}
                 </ul>

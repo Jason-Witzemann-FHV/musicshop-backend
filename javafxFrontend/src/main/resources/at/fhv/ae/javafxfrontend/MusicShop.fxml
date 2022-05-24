@@ -339,7 +339,7 @@
                                     <PropertyValueFactory property="amount"/>
                                 </cellValueFactory>
                             </TableColumn>
-                            <TableColumn text="Price per release" fx:id="itemColPrice" styleClass="center">
+                            <TableColumn text="Price per song" fx:id="itemColPrice" styleClass="center">
                                 <cellValueFactory>
                                     <PropertyValueFactory property="pricePerItem"/>
                                 </cellValueFactory>

@@ -1,7 +1,9 @@
 package at.fhv.ae.backend.application;
 
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
+import at.fhv.ae.backend.application.exceptions.InvalidCreditCardException;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
+import at.fhv.ae.shared.dto.customer.CreditCard;
 import org.bson.types.ObjectId;
 
 import javax.ejb.Local;
@@ -16,7 +18,7 @@ public interface SellService {
      */
     void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException;
 
-    void selfSale(String userId) throws OutOfStockException ;
+    void selfSale(String userId, CreditCard creditCardInfoToCheck) throws OutOfStockException, InvalidCreditCardException;
 
     List<SaleItemsDTO> allSales();
 

@@ -6,6 +6,7 @@
 	import { Snackbar, Button } from "svelma"
 	import { currentView } from "./storage/DisplayStorage.js"
     import { userName, password, token } from "./storage/SessionStorage.js"
+	import { number, type, cvc } from "./storage/CreditCardStorage.js";
 
 	import Fa from "svelte-fa";
 	import {
@@ -28,6 +29,9 @@
             type: "is-link",
             background: 'has-background-grey-lighter'
         })
+		$number = ""
+		$type = ""
+		$cvc = ""
 	}
 
 </script>
@@ -41,15 +45,18 @@
 
 	<div id="navbarBasicExample" class="navbar-menu">
 		<div class="navbar-start">
+			<!-- svelte-ignore a11y-missing-attribute -->
 			<a class="navbar-item ml-6" on:click={() => $currentView = "searchReleases"}>
 				<Fa icon={faMagnifyingGlass} /> &nbsp; Search Releases
 			</a>
 
 			{#if $token !== ""}
+			<!-- svelte-ignore a11y-missing-attribute -->
 				<a class="navbar-item ml-2" on:click={() => $currentView = "basket"}>
 					<Fa icon={faShoppingBasket} /> &nbsp; Basket
 				</a>
 
+				<!-- svelte-ignore a11y-missing-attribute -->
 				<a class="navbar-item ml-2" on:click={() => $currentView = "playlist"}>
 					<Fa icon={faMusic} /> &nbsp; My Playlist
 				</a>
@@ -69,6 +76,7 @@
 		</div>
 	</div>
 </nav>
+
 
 <div class="columns mt-6">
 	<div class="column is-2" />

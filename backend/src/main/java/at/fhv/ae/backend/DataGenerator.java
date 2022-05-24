@@ -3,6 +3,7 @@ package at.fhv.ae.backend;
 import at.fhv.ae.backend.domain.model.release.*;
 import at.fhv.ae.backend.domain.model.user.*;
 import at.fhv.ae.backend.domain.model.work.*;
+import org.bson.types.ObjectId;
 
 import javax.persistence.Persistence;
 import java.util.*;
@@ -25,6 +26,7 @@ public class DataGenerator {
         generateWorkAggregateData();
         generateReleaseAggregateData();
         prepareUsers();
+        generatePlaylistMP4Data();
         persistGeneratedData();
     }
 
@@ -32,13 +34,12 @@ public class DataGenerator {
 
         var adminRoles = Set.of(new Role("admin", Set.of(Permission.values())));
         var adminTopics = Set.of(SubscriptionTopics.values());
-        var admins = Stream.of(
-                "ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test")
-                .map(id -> new User(new UserId(id), adminRoles, adminTopics));
+        var admins = Stream.of("ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test")
+                .map(id -> new User(new UserId(id), adminRoles, adminTopics, new ObjectId("6221173fe0db2b163e99dfae")));
 
         var customerRoles = Set.of(new Role("customer", Set.of(Permission.SEARCH_RELEASES)));
 
-        var customers = Stream.of(new User(new UserId("max"), customerRoles, Set.of(SubscriptionTopics.POP_TOPIC)));
+        var customers = Stream.of(new User(new UserId("max"), customerRoles, Set.of(SubscriptionTopics.POP_TOPIC),  new ObjectId("6221173fe0db2b163e99dfae")));
 
         users = Stream.concat(admins, customers).collect(Collectors.toList());
     }
@@ -204,6 +205,45 @@ public class DataGenerator {
 
     }
 
+
+    private static Label mp3Label = new Label("Digital Media AG", "DMAG");
+    private static Supplier mp3Supplier = new Supplier("Digital Media AG", "Bahnhofstrasse 1337, 2313 Langen");
+    private static void generatePlaylistMP4Data() {
+        labels.add(mp3Label);
+        suppliers.add(mp3Supplier);
+
+        mp3song(1, "I beg to differ", "Billy Talent");
+        mp3song(2, "Red Flag", "Billy Talent");
+        mp3song(3, "Maniac", "Eric Speed");
+        mp3song(4, "Give That Wolf A Banana", "Subwoolfer");
+        mp3song(5, "Stitch Me Up", "Set If Off");
+        mp3song(6, "Why Worry", "Set It Off");
+        mp3song(7, "Ghost in the Machine", "Trivecta");
+        mp3song(8, "Anthem", "zebrahead");
+        mp3song(9, "Halo", "LUM!X");
+    }
+
+
+    public static void mp3song(int idEnding, String title, String artistString) {
+
+        var genre = randomElement(Arrays.stream(Genre.values()).collect(Collectors.toList()));
+        var price = random.nextDouble() + 1;
+        var year = 2000 + random.nextInt(20);
+        var duration = 120 + random.nextInt(120);
+
+        var work = new Work(title);
+        var artist = new Artist(artistString);
+        var recording = new Recording(new RecordingId(UUID.fromString("12345678-ffff-1234-abcd-00000000000" + idEnding)), title, duration, year, work, List.of(artist), List.of(genre));
+        var release = new Release(new ReleaseId(UUID.fromString("12345678-ffff-1234-abcd-00000000000" + idEnding)), 1, title, Medium.MP3, price, mp3Label, List.of(mp3Supplier), List.of(recording.recordingId()));
+
+       works.add(work);
+       artists.add(artist);
+       recordings.add(recording);
+       releases.add(release);
+
+
+    }
+
     private static void release(String title, String... songs) {
         release(title, Arrays.stream(songs).collect(Collectors.toList()));
     }
@@ -226,7 +266,7 @@ public class DataGenerator {
 
         // create releases for mediums
         for (Medium medium : Medium.values()) {
-            if (random.nextInt() > 0.25) {
+            if (random.nextInt() > 0.25 && medium != Medium.MP3) {
                 var price = recordingIds.size() * (0.79 + random.nextDouble() * 1.2); // price per song between 0.79 - 1.99
                 switch (medium) {
                     case CD:

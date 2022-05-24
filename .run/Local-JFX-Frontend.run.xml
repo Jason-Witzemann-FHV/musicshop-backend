@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Local-JFX-Frontend" type="Application" factoryName="Application">
+  <configuration default="false" name="Local-JFX-Frontend" type="Application" factoryName="Application" singleton="false">
     <option name="MAIN_CLASS_NAME" value="at.fhv.ae.javafxfrontend.Main" />
     <module name="musicshop-backend.javafxFrontend.main" />
     <extension name="coverage">

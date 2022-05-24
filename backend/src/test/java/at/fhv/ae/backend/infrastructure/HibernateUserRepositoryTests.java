@@ -7,6 +7,7 @@ import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
 import at.fhv.ae.backend.domain.repository.UserRepository;
 import at.fhv.ae.backend.infrastructure.hibernate.HibernateUserRepository;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ class HibernateUserRepositoryTests {
         var roleOperator = new Role("operator", Set.of(Permission.ORDER_RELEASES, Permission.PUBLISH_WEBFEED));
         var roleEmployee = new Role("employee", Set.of(Permission.SEARCH_RELEASES, Permission.SELL_RELEASES));
         var roles = Set.of(roleEmployee, roleOperator);
-        var user = new User(new UserId("Jason"), roles, null);
+        var user = new User(new UserId("Jason"), roles, null, ObjectId.get());
 
         var transaction = em.getTransaction();
         transaction.begin();

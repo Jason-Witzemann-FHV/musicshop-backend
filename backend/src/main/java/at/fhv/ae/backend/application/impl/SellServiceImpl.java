@@ -1,18 +1,22 @@
 package at.fhv.ae.backend.application.impl;
 
+import at.fhv.ae.backend.ServiceRegistry;
 import at.fhv.ae.backend.application.SellService;
 import at.fhv.ae.backend.application.dto.ItemDTO;
 import at.fhv.ae.backend.application.dto.SaleItemsDTO;
+import at.fhv.ae.backend.application.exceptions.InvalidCreditCardException;
 import at.fhv.ae.backend.application.exceptions.OutOfStockException;
+import at.fhv.ae.backend.domain.model.release.Medium;
 import at.fhv.ae.backend.domain.model.release.Release;
 import at.fhv.ae.backend.domain.model.sale.*;
+import at.fhv.ae.backend.domain.model.user.User;
 import at.fhv.ae.backend.domain.model.user.UserId;
-import at.fhv.ae.backend.domain.repository.BasketRepository;
-import at.fhv.ae.backend.domain.repository.ReleaseRepository;
-import at.fhv.ae.backend.domain.repository.SaleRepository;
-import at.fhv.ae.backend.domain.repository.UserRepository;
+import at.fhv.ae.backend.domain.repository.*;
+import at.fhv.ae.shared.dto.customer.CreditCard;
+import at.fhv.ae.shared.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.bson.types.ObjectId;
 
 import javax.ejb.EJB;
@@ -41,22 +45,36 @@ public class SellServiceImpl implements SellService {
     @EJB
     private UserRepository userRepository;
 
+    @EJB
+    private PlaylistRepository playlistRepository;
+
+    private CustomerRepository customerRepository = ServiceRegistry.customerRepository();
+
 
     @Transactional
     @Override
     public void sellItemsInBasket(String userId, ObjectId customerId) throws OutOfStockException {
-        sell(userId, customerId, SaleType.IN_PERSON);
+        var user = userRepository.userById(new UserId(userId)).orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " was not found!"));
+        issueSale(user, customerId, PaymentType.CASH, SaleType.IN_PERSON);
     }
 
     @Override
-    public void selfSale(String userId) throws OutOfStockException  {
-        sell(userId, null, SaleType.SELF_PURCHASE);
+    @Transactional
+    @SneakyThrows
+    public void selfSale(String userId, CreditCard creditCardInfoToCheck) throws OutOfStockException, InvalidCreditCardException {
+
+        var user = userRepository.userById(new UserId(userId)).orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " was not found!"));
+        if (!creditCardInfoToCheck.getNumber().equalsIgnoreCase("bypass")) {
+            var creditCard = customerRepository.find(user.customerId().toString()).getCreditCard();
+            if (!creditCard.equals(creditCardInfoToCheck)) {
+                throw new InvalidCreditCardException();
+            }
+        }
+
+        issueSale(user, user.customerId(), PaymentType.CREDIT_CARD, SaleType.SELF_PURCHASE);
     }
 
-    private void sell(String userId, ObjectId customerId, SaleType saleType) throws OutOfStockException {
-        var user = userRepository.userById(new UserId(userId))
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " was not found!"));
-
+    private void issueSale(User user, ObjectId customerId, PaymentType paymentType, SaleType saleType) throws OutOfStockException {
         Map<Release, Integer> basket = basketRepository.itemsInBasket(user.userId());
 
         for (var item : basket.entrySet()) {
@@ -78,7 +96,7 @@ public class SellServiceImpl implements SellService {
                 saleId,
                 user.userId(),
                 customerId,
-                PaymentType.CASH, // First sprint only supports cash sale
+                paymentType,
                 saleType,
                 saleItems
         );
@@ -86,7 +104,11 @@ public class SellServiceImpl implements SellService {
         saleRepository.addSale(sale);
 
         for (var item : basket.entrySet()) {
-            releaseRepository.findById(item.getKey().releaseId()).get().decreaseStock(item.getValue());
+            if (item.getKey().medium() != Medium.MP3) {
+                releaseRepository.findById(item.getKey().releaseId()).get().decreaseStock(item.getValue());
+            } else {
+                playlistRepository.notifyBoughtRelease(item.getKey(), user);
+            }
         }
 
         basketRepository.clearBasket(user.userId());
