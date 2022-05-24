@@ -52,13 +52,13 @@
 			</Select>
 		</Field>
 	</div>	
-	<div class="column is-2">
-		<Field label="&#8203 &zwnj;">
-			<Button type="is-info" on:click={() => {navigationPage = 1 ; searchReleases()} }>Check!</Button>
+	<div class="column is-2 mt-5">
+		<!-- <Field label="&#8203 &zwnj;"> -->
+			<button class="button is-info mt-2" on:click={() => {navigationPage = 1 ; searchReleases()} }>Check!</button>
 			{#if $releaseSearchResult.length > 0 } 
-				<button class="button is-link is-outlined" on:click={resetSearch}>Reset</button>
+				<button class="button is-link is-outlined mt-2" on:click={resetSearch}>Reset</button>
 			{/if}
-		</Field>
+		<!-- </Field> -->
 	</div>
 
 </div>
