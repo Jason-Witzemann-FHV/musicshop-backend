@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import java.util.UUID;
 
 @Path("/playlist")
@@ -26,9 +27,13 @@ public class PlaylistRestController {
     @Produces(MediaType.TEXT_PLAIN)
     public Response addRelease(@PathParam("userId") String userId, @PathParam("releaseId") String songId) {
 
-        Song song = Song.findById(UUID.fromString(songId));
-        if (song == null) {
-            Response.status(400, "SongId " + songId + " is not known");
+        var song =  Song.streamAll()
+                .filter(s -> ((Song) s).getSongId().equals(UUID.fromString(songId)))
+                .map(Song.class::cast)
+                .findAny();
+
+        if (song.isEmpty()) {
+            return Response.status(400, "SongId " + songId + " is not known").build();
         }
 
         Playlist playlist = Playlist.findById(userId);
@@ -37,7 +42,7 @@ public class PlaylistRestController {
             playlist.persist();
         }
 
-        playlist.addSong(song);
+        playlist.addSong(song.get());
         return Response.ok().build();
     }
 

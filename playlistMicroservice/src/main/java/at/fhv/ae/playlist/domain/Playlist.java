@@ -5,6 +5,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Playlist extends PanacheEntityBase {
@@ -24,11 +25,8 @@ public class Playlist extends PanacheEntityBase {
     }
 
     public void addSong(Song song) {
-        if(song != null) {
-            this.songs.add(song);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        Objects.requireNonNull(song);
+        this.songs.add(song);
     }
 
     public List<Song> allSongs(){

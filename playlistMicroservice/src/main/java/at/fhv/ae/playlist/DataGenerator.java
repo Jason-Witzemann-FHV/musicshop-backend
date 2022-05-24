@@ -3,6 +3,7 @@ package at.fhv.ae.playlist;
 import at.fhv.ae.playlist.domain.Song;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.Startup;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -13,7 +14,8 @@ import java.util.UUID;
 @Startup
 public class DataGenerator {
 
-    private boolean doRunDataGenerator = false;
+    @ConfigProperty(name = "do-run-data-generator")
+    boolean doRunDataGenerator;
 
     @PostConstruct
     public void runDataGenerator() {
@@ -23,6 +25,7 @@ public class DataGenerator {
         }
 
         QuarkusTransaction.begin();
+        Song.deleteAll();
         new Song(UUID.fromString("12345678-ffff-1234-abcd-000000000001"), "I beg to differ", "Billy Talent", 201).persistAndFlush();
         new Song(UUID.fromString("12345678-ffff-1234-abcd-000000000002"), "Red Flag", "Billy Talent", 123).persist();
         new Song(UUID.fromString("12345678-ffff-1234-abcd-000000000003"), "Maniac", "Eric Speed", 421).persist();

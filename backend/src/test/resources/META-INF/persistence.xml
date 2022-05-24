@@ -7,9 +7,9 @@
     <description>Hibernate EntityManager Demo</description>
     <class>at.fhv.ae.backend.domain.model.sale.Sale</class>
     <class>at.fhv.ae.backend.domain.model.sale.Item</class>
-    <class>at.fhv.ae.backend.domain.model.song.Label</class>
-    <class>at.fhv.ae.backend.domain.model.song.Release</class>
-    <class>at.fhv.ae.backend.domain.model.song.Supplier</class>
+    <class>at.fhv.ae.backend.domain.model.release.Label</class>
+    <class>at.fhv.ae.backend.domain.model.release.Release</class>
+    <class>at.fhv.ae.backend.domain.model.release.Supplier</class>
     <class>at.fhv.ae.backend.domain.model.work.Recording</class>
     <class>at.fhv.ae.backend.domain.model.work.Work</class>
     <class>at.fhv.ae.backend.domain.model.work.Artist</class>

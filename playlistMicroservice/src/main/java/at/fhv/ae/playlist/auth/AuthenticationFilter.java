@@ -4,8 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Priority;
+import javax.annotation.Resource;
 import javax.crypto.spec.SecretKeySpec;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
@@ -33,10 +35,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     @Inject
     @AuthenticatedUser
-    private Event<String> userAuthenticatedEvent;
+    Event<String> userAuthenticatedEvent;
 
     @Context
     private ResourceInfo resourceInfo;
+
+    @ConfigProperty(name = "auth.allow-test-user")
+    boolean allowTestUser;
 
     public static final Key KEY = Keys.hmacShaKeyFor("asdfaefasdascxaefaergdfbsasdfasdfcvydaeeafasdafewfasdfcvydaefsdadfdfscvdsfsdfasdfadsfafefwf".getBytes(StandardCharsets.UTF_8));
 
@@ -49,6 +54,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         // Validate the Authorization header
         if (!isTokenBasedAuthentication(authorizationHeader)) {
+            if (allowTestUser) { // in no token is provided in dev environvent, then do create test user instead of abort
+                userAuthenticatedEvent.fire("testuser");
+                return;
+            }
             abortWithUnauthorized(requestContext);
             return;
         }
