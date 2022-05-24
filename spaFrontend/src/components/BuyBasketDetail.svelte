@@ -41,7 +41,7 @@
                 </div>
                 <div class="column has-text-right is-right">
                     <button class="button is-link is-outlined" on:click={() => $showBuyDetails = false}>Cancel</button>
-                    <button class="button is-link" on:click={() => sellBasket()}>Buy</button>
+                    <button class="button is-link" on:click={() => {sellBasket() ; showBuyDetails.update(old => false)}}>Buy</button>
                 </div>
             </div>
         </section>
