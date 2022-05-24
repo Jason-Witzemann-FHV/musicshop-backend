@@ -5,6 +5,7 @@
 	import { fly } from 'svelte/transition';
     import { faTrashCan }  from "@fortawesome/free-solid-svg-icons"
     import { Input, Button } from "svelma"
+    import { toPrice} from "../Utils"
     import BuyBasketDetail from "./BuyBasketDetail.svelte";
     import Fa from "svelte-fa";
 
@@ -22,12 +23,12 @@
 
 <h1 class="title">Let's have a look in your basket!</h1>
 <p class="subtitle">
-	Manage your basket items here.<br>
-	If you are satisfied with your orders, then you can buy your songs. Digital mediums will be available in your playlist and the physical will be sent to your home.
+    Manage your basket items here.<br>
+    If you are satisfied with your orders, then you can buy your songs. Digital mediums will be available in your playlist and the physical will be sent to your home.
 </p>
 
 {#if $basket.length !== 0}
-    <div transition:fly="{{ y: -50, duration: 1000 }}">
+    <div in:fly="{{ y: -50, duration: 1000 }}">
 
         <table class="table is-fullwidth has-background-link-light">
             <thead>
@@ -46,8 +47,9 @@
                         <td> {title} </td>
                         <td> {medium} </td>
                         <td class="is-narrow"> <Input type="number" class="is-small" bind:value={quantity} max={stock} min={1} on:change={() => changeQuantity(releaseId, quantity)}/> </td>
-                        <td class="has-text-right"> {`${parseFloat(price).toFixed(2)} €`} </td>
+                        <td class="has-text-right"> {toPrice(price)} </td>
                         <td class="has-text-centered"> 
+                            <!-- svelte-ignore a11y-missing-attribute -->
                             <a on:click={() => removeFromBasket(releaseId)}>
                                 <Fa icon={faTrashCan} size="1.75x" />
                             </a>
@@ -63,20 +65,22 @@
 
                 <ul class="pagination-list">
                     {#if navigationPage !== 1}
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage = 1}>1</a></li>
 
                         <li><span class="pagination-ellipsis">&hellip;</span></li>
-
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage--}>{navigationPage - 1}</a></li>
                     {/if}
-
+                    <!-- svelte-ignore a11y-missing-attribute -->
                     <li><a class="pagination-link is-current">{navigationPage}</a></li>
 
                     {#if navigationPage !== pageCount}
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage++}>{navigationPage + 1}</a></li>
 
                         <li><span class="pagination-ellipsis">&hellip;</span></li>
-
+                        <!-- svelte-ignore a11y-missing-attribute -->
                         <li><a class="pagination-link" on:click={() => navigationPage = pageCount}>{pageCount}</a></li>
                     {/if}
                 </ul>

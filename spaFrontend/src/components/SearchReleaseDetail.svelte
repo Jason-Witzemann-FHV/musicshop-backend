@@ -1,8 +1,10 @@
 <script>
     import { isDetailActive, detailedSearchResult } from "../storage/ReleaseSearchStore.js";
     import { Field, Input, Modal } from "svelma";
+    import { toDuration, toPrice} from "../Utils"
 
-    $: formattedPrice = `${parseFloat($detailedSearchResult.price).toFixed(2)} €`
+
+    $: formattedPrice = toPrice($detailedSearchResult.price)
 
 </script>
 
@@ -45,7 +47,7 @@
                     <tr>
                         <td> {i + 1} </td>
                         <td> {title} </td>
-                        <td> {duration} </td>
+                        <td> {toDuration(duration)} </td>
                         <td> {artists.join(", ")} </td>
                     </tr>
                 {/each}

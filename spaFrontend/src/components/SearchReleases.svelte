@@ -11,6 +11,8 @@
 	import { faInfoCircle, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 	import { token } from "../storage/SessionStorage.js"
 	import { addToBasket } from "../rest/BasketController.js"
+	import { toPrice} from "../Utils"
+
 
     function resetSearch() {
 		$releaseSearchResult = [];
@@ -32,13 +34,13 @@
 <div class="columns">
 	<div class="column is-4">
 		<Field label="Title of album or song">
-            <Input type="text" bind:value={$releaseSearchTitle} />
-        </Field>
+			<Input type="text" bind:value={$releaseSearchTitle} />
+		</Field>
 	</div>
 	<div class="column is-4">
 		<Field label="Artist">
-            <Input type="text" bind:value={$releaseSearchArtist} />
-        </Field>
+			<Input type="text" bind:value={$releaseSearchArtist} />
+		</Field>
 	</div>
 	<div class="column is-2">
 		<Field label="Genre">
@@ -48,21 +50,21 @@
 					<option value={genre}>{genre}</option>
 				{/each}
 			</Select>
-        </Field>
+		</Field>
 	</div>	
 	<div class="column is-2">
 		<Field label="&#8203 &zwnj;">
-            <Button type="is-info" on:click={ searchReleases }>Check!</Button>
+			<Button type="is-info" on:click={() => {navigationPage = 1 ; searchReleases()} }>Check!</Button>
 			{#if $releaseSearchResult.length > 0 } 
 				<button class="button is-link is-outlined" on:click={resetSearch}>Reset</button>
 			{/if}
-        </Field>
+		</Field>
 	</div>
 
 </div>
 
 {#if $releaseSearchResult.length > 0 } 
-	<div transition:fly="{{ y: -50, duration: 1000 }}">
+	<div in:fly="{{ y: -50, duration: 1000 }}">
 
 		<table class="table is-fullwidth has-background-link-light">
 			<thead>
@@ -84,8 +86,9 @@
 						<td> {title} </td>
 						<td> {medium} </td>
 						<td> {stock} </td>
-						<td> {`${parseFloat(price).toFixed(2)} €`} </td>
+						<td> {toPrice(price)} </td>
 						<td class="has-text-centered"> 
+							<!-- svelte-ignore a11y-missing-attribute -->
 							<a on:click={() => {isDetailActive.update(active => !active) ; searchDetails(id)} } >
 								<Fa icon={faInfoCircle} size="1.75x" />
 							</a>
@@ -93,6 +96,7 @@
 
 						{#if $token !== ""}
 							<td class="has-text-centered"> 
+								<!-- svelte-ignore a11y-missing-attribute -->
 								<a on:click={() => addToBasket(id)}>
 									<Fa icon={faCartPlus} size="1.75x" />
 								</a>
@@ -109,20 +113,22 @@
 
 				<ul class="pagination-list">
 					{#if navigationPage !== 1}
+						<!-- svelte-ignore a11y-missing-attribute -->
 						<li><a class="pagination-link" on:click={() => navigationPage = 1}>1</a></li>
 
 						<li><span class="pagination-ellipsis">&hellip;</span></li>
-
+						<!-- svelte-ignore a11y-missing-attribute -->
 						<li><a class="pagination-link" on:click={() => navigationPage--}>{navigationPage - 1}</a></li>
 					{/if}
-
+					<!-- svelte-ignore a11y-missing-attribute -->
 					<li><a class="pagination-link is-current">{navigationPage}</a></li>
 
 					{#if navigationPage !== pageCount}
+						<!-- svelte-ignore a11y-missing-attribute -->
 						<li><a class="pagination-link" on:click={() => navigationPage++}>{navigationPage + 1}</a></li>
 
 						<li><span class="pagination-ellipsis">&hellip;</span></li>
-
+						<!-- svelte-ignore a11y-missing-attribute -->
 						<li><a class="pagination-link" on:click={() => navigationPage = pageCount}>{pageCount}</a></li>
 					{/if}
 				</ul>
@@ -135,8 +141,3 @@
 	<SearchReleaseDetail />
 
 {/if}
-
-
-
-
-
