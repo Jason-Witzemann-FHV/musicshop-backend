@@ -91,7 +91,7 @@ export function sellBasket() {
     axios.post(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/selfsell`, creditCard, config)
         .then(response => {
             Snackbar.create({ 
-                message: 'Item bought all items!',
+                message: 'Bought all items!',
                 type: "is-link",
                 background: 'has-background-grey-lighter'
             })
