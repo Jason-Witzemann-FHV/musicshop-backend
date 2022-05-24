@@ -13,3 +13,21 @@ export function loadPlaylist() {
     axios.get(`http://localhost:8083/playlist`, config)
         .then(response => playlist.update(old => response.data))
 }
+
+export function downloadSong(songId, name) {
+    const config = {
+        headers: { Authorization: `Bearer ${get(token)}` },
+        responseType: 'blob'
+    }
+
+    axios.get(`http://localhost:8082/download/${songId}`, config)
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${name}.mp3`); 
+            document.body.appendChild(link);
+            link.click();
+        });
+
+}

@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 import java.util.UUID;
 
 @Path("/playlist")
@@ -22,10 +21,10 @@ public class PlaylistRestController {
     User user;
 
     @PUT
-    @Path("/add/{userId}/{releaseId}")
+    @Path("/add/{userId}/{songId}")
     @Transactional
     @Produces(MediaType.TEXT_PLAIN)
-    public Response addRelease(@PathParam("userId") String userId, @PathParam("releaseId") String songId) {
+    public Response addRelease(@PathParam("userId") String userId, @PathParam("songId") String songId) {
 
         var song =  Song.streamAll()
                 .filter(s -> ((Song) s).getSongId().equals(UUID.fromString(songId)))
@@ -59,5 +58,21 @@ public class PlaylistRestController {
         } else {
             return Response.ok(playlist.allSongs()).build();
         }
+    }
+
+    @GET
+    @Transactional
+    @Path("/owns/{userId}/{songId}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response ownSong(@PathParam("userId") String userId, @PathParam("songId") String songId) {
+        return Playlist.streamAll()
+                .map(Playlist.class::cast)
+                .filter(p -> p.getUserId().equalsIgnoreCase(userId))
+                .flatMap(p -> p.allSongs().stream())
+                .filter(s -> s.getSongId().toString().equalsIgnoreCase(songId))
+                .map(s -> Response.ok())
+                .findFirst()
+                .orElse(Response.noContent())
+                .build();
     }
 }
