@@ -19,8 +19,8 @@ public class DownloadRestController {
                 .map(s -> Response
                         .ok(s.bytes(), s.contentType())
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + s.downloadName())
-                        .build()
                 )
-                .orElse(Response.status(404).build());
+                .orElse(Response.status(404))
+                .build();
     }
 }
