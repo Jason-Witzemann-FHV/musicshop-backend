@@ -3,17 +3,12 @@ package at.fhv.ae;
 import at.fhv.ae.playlist.domain.Playlist;
 import at.fhv.ae.playlist.domain.Song;
 import io.quarkus.narayana.jta.QuarkusTransaction;
-import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 class PlaylistTests {
