@@ -27,9 +27,9 @@ public class GetPlaylist implements HealthCheck {
         try {
             userProducer.handleAuthenticationEvent(userName);
             playlistRestController.getPlaylist();
-            return HealthCheckResponse.named("GET Playlist").up().build();
+            return HealthCheckResponse.named("2 - GET Playlist").up().build();
         } catch(Exception e){
-            return HealthCheckResponse.named("GET Playlist").down().build();
+            return HealthCheckResponse.named("2 - GET Playlist").down().build();
         }
     }
 }

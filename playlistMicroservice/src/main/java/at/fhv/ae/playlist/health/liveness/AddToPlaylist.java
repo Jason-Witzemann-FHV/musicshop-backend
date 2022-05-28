@@ -34,9 +34,9 @@ public class AddToPlaylist implements HealthCheck {
             userProducer.handleAuthenticationEvent(userName);
             playlistRestController.addRelease(userName, release);
 
-            return HealthCheckResponse.named("Add to Playlist").up().build();
+            return HealthCheckResponse.named("1 - Add to Playlist").up().build();
         } catch(Exception e){
-            return HealthCheckResponse.named("Add to Playlist").down().build();
+            return HealthCheckResponse.named("1 - Add to Playlist").down().build();
         }
 
     }
