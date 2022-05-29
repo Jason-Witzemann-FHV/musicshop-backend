@@ -1,6 +1,6 @@
 <script>
     import { playlist } from "../storage/PlaylistStorage.js"
-    import { loadPlaylist, downloadSong } from "../rest/PlaylistController.js"
+    import {loadPlaylist, downloadSong, getSongResource} from "../rest/PlaylistController.js"
     import { onMount } from 'svelte';
     import { faCloudArrowDown }  from "@fortawesome/free-solid-svg-icons"
     import { toDuration} from "../Utils"
@@ -32,6 +32,7 @@
                 <th>Artist</th>
                 <th>Duration</th>
                 <th></th>
+                <th></th>
             </thead>
 
             {#each $playlist as { songId, title, artist, duration }, i }
@@ -43,6 +44,15 @@
                         <td> {toDuration(duration)} </td>
                         <!-- svelte-ignore a11y-missing-attribute -->
                         <td><a on:click={downloadSong(songId, title)}><Fa icon={faCloudArrowDown} size="1.75x" /></a>
+                        </td>
+                        <td>
+                            <audio controls>
+                                {#await getSongResource(songId)}
+                                    loading...
+                                {:then url}
+                                    <source src="{url}">
+                                {/await}
+                            </audio>
                         </td>
                     </tr>
                 {/if}
