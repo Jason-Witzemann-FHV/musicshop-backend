@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class Song {
 
-    private static final File SONG_DIR = new File("songs");
+    private static final File SONG_DIR = new File("..\\..\\..\\..\\songs");
 
     private Song(String contentType, String downloadName, byte[] bytes) {
         this.contentType = contentType;
