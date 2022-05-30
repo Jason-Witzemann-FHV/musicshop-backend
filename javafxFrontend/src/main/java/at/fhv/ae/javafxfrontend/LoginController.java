@@ -53,7 +53,7 @@ public class LoginController {
             props.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
             props.put(Context.PROVIDER_URL, "http-remoting://" + ip + ":8080");
             Context ctx = new InitialContext(props);
-            BeanSession session = (BeanSession) ctx.lookup("ejb:/backend-1.0-SNAPSHOT/BeanSessionImpl!at.fhv.ae.shared.services.BeanSession?stateful");
+            BeanSession session = (BeanSession) ctx.lookup("ejb:/backend-1.0-SNAPSHOT/BeanSessionImpl!at.fhv.ae.shared.services.BeanSession");
             session.authenticate(userName.getText(), password.getText());
 
 
