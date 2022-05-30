@@ -31,3 +31,14 @@ export function downloadSong(songId, name) {
         });
 
 }
+
+export async function getSongResource(songId) {
+    const config = {
+        headers: { Authorization: `Bearer ${get(token)}` },
+        responseType: 'blob'
+    }
+
+    return await axios.get(`http://localhost:8082/download/${songId}`, config)
+        .then((response) => window.URL.createObjectURL(new Blob([response.data])));
+
+}
