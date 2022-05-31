@@ -28,6 +28,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+
+    implementation 'io.quarkus:quarkus-smallrye-health:2.9.1.Final'
 }
 
 group 'com.example'

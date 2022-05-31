@@ -1,9 +1,5 @@
 package at.fhv.ae.playlist.health.liveness;
 
-import at.fhv.ae.playlist.auth.AuthenticatedUser;
-import at.fhv.ae.playlist.auth.AuthenticatedUserProducer;
-import at.fhv.ae.playlist.auth.Secured;
-import at.fhv.ae.playlist.auth.User;
 import at.fhv.ae.playlist.presentation.PlaylistRestController;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
@@ -15,7 +11,10 @@ import javax.inject.Inject;
 
 @Liveness
 @ApplicationScoped
-public class AddToPlaylist2 implements HealthCheck {
+public class AddToPlaylistCheck implements HealthCheck {
+
+    @ConfigProperty(name = "default.userName")
+    String userName;
 
     @ConfigProperty(name = "default.release")
     String release;
@@ -23,24 +22,15 @@ public class AddToPlaylist2 implements HealthCheck {
     @Inject
     PlaylistRestController playlistRestController;
 
-    @Inject
-    @AuthenticatedUser
-    User user;
-
-    @Inject
-    AuthenticatedUserProducer userProducer;
-
-
     @Override
-    @Secured
     public HealthCheckResponse call() {
 
         try {
-            playlistRestController.addRelease(user.getUserId(), release);
+            playlistRestController.addRelease(userName, release);
 
-            return HealthCheckResponse.named("Add to Playlist").up().build();
+            return HealthCheckResponse.named("1 - Microservice REST: " + AddToPlaylistCheck.class.getSimpleName() + " - Liveness").up().build();
         } catch(Exception e){
-            return HealthCheckResponse.named("Add to Playlist").down().build();
+            return HealthCheckResponse.named("1 - Microservice REST: " + AddToPlaylistCheck.class.getSimpleName() + " - Liveness").down().build();
         }
 
     }
