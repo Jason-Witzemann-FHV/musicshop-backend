@@ -20,8 +20,9 @@ dependencies {
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation("io.quarkus:quarkus-jdbc-h2")
+    implementation 'io.quarkus:quarkus-smallrye-health:2.9.1.Final'
 
-
+    implementation("io.quarkus:quarkus-rest-client-reactive-jackson")
 
 }
 
