@@ -40,7 +40,7 @@ public class BasketRestController {
     private SellService sellService;
 
     @GET
-    @Secured(Permission.SELL_RELEASES)
+    @Secured(Permission.USE_BASKET)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary="Display basket")
     @APIResponses({
@@ -62,7 +62,7 @@ public class BasketRestController {
     // body not needed here
     @PUT
     @Path("/add/{id}")
-    @Secured(Permission.BUY_RELEASES)
+    @Secured(Permission.USE_BASKET)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary="Add item once to basket")
     @APIResponses({
@@ -77,7 +77,7 @@ public class BasketRestController {
 
     @PUT
     @Path("/add/{id}/{amount}")
-    @Secured(Permission.BUY_RELEASES)
+    @Secured(Permission.USE_BASKET)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary="Add item to basket")
     @APIResponses({
@@ -92,7 +92,7 @@ public class BasketRestController {
 
     @DELETE
     @Path("/remove/{id}")
-    @Secured(Permission.SELL_RELEASES)
+    @Secured(Permission.USE_BASKET)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary="Remove item from basket")
     @APIResponses({
@@ -111,7 +111,7 @@ public class BasketRestController {
 
     @DELETE
     @Path("/clear")
-    @Secured(Permission.SELL_RELEASES)
+    @Secured(Permission.USE_BASKET)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary="Clear basket")
     @APIResponses({
@@ -149,7 +149,7 @@ public class BasketRestController {
 
     @POST
     @Path("/selfsell")
-    @Secured(Permission.SELL_RELEASES)
+    @Secured(Permission.BUY_RELEASES)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response selfSellBasket(CreditCard creditCard) {

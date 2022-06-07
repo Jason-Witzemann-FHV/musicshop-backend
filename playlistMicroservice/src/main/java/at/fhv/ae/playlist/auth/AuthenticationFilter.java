@@ -62,12 +62,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             return;
         }
 
-
         // Extract the token from the Authorization header
         String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
-
         try {
-
             // Fire UserAuthenticatedEvent to enable Injection of User
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(KEY)
@@ -76,9 +73,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     .getBody();
 
             var username = claims.getSubject();
-
-            // authorize the user
-            // todo get permission claim out of user
+            boolean hasPerm = claims.get("use_webshop", Boolean.class);
+            if (!hasPerm) {
+                throw new IllegalArgumentException("invalid perms");
+            }
 
             userAuthenticatedEvent.fire(username);
         } catch (Exception e) {
