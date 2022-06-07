@@ -64,7 +64,7 @@ public class BeanSessionImpl implements BeanSession {
     public RemoteBasketService remoteBasketService() throws AuthorizationException {
         return Optional.ofNullable(user)
                 .stream()
-                .filter(u -> u.hasPermission(Permission.SELL_RELEASES))
+                .filter(u -> u.hasPermission(Permission.USE_BASKET))
                 .map(u -> remoteBasketService)
                 .findFirst()
                 .orElseThrow(AuthorizationException::new);

@@ -103,7 +103,9 @@ export function sellBasket() {
         }).catch(error => {
 
             let errorMessage;
-            if (error.code === "ERR_BAD_REQUEST") {
+            if (error.response.status === 401 ){
+                errorMessage = "Error: You do not have permissions to buy Releases for yourself!"
+            } else if (error.code === "ERR_BAD_REQUEST") {
                 errorMessage = "Error: Invalid credit card information!"
             } else {
                 errorMessage = "Error: at least one item is out of stock!'"

@@ -1,9 +1,10 @@
 package at.fhv.ae.backend.middleware.rest.auth;
 
-import at.fhv.ae.backend.application.dto.ReleaseDTO;
+import at.fhv.ae.backend.domain.model.user.Permission;
+import at.fhv.ae.backend.domain.model.user.UserId;
+import at.fhv.ae.backend.domain.repository.UserRepository;
 import at.fhv.ae.backend.middleware.CredentialsService;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -34,6 +35,9 @@ public class AuthenticationEndpoint {
 
     @EJB
     private CredentialsService credentialsService;
+
+    @EJB
+    private UserRepository userRepository;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -79,9 +83,11 @@ public class AuthenticationEndpoint {
     private String issueToken(String username) {
         // Issue a token (can be a random String persisted to a database or a JWT token)
 
+        var user = userRepository.userById(new UserId(username)).orElseThrow();
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuer("my_little_server")
+                .claim("use_webshop", user.hasPermission(Permission.BUY_RELEASES) && user.hasPermission(Permission.USE_BASKET))
                 .setExpiration(Date.from(LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.UTC))) // utc offest = +2 hours => token is 5 hours valid
                 .signWith(KEY)
                 .compact();

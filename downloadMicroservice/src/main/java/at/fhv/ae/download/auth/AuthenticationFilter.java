@@ -62,9 +62,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     .getBody();
 
             var username = claims.getSubject();
-
-            // authorize the user
-            // todo get permission claim out of user
+            boolean hasPerm = claims.get("use_webshop", Boolean.class);
+            if (!hasPerm) {
+                throw new IllegalArgumentException("invalid perms");
+            }
 
             userAuthenticatedEvent.fire(username);
         } catch (Exception e) {

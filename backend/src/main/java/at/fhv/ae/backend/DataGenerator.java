@@ -32,13 +32,11 @@ public class DataGenerator {
 
     private static void prepareUsers() {
 
-        var adminRoles = Set.of(new Role("admin", Set.of(Permission.values())));
+        var adminRoles = Set.of(new Role("admin", Set.of(Permission.SEARCH_RELEASES, Permission.USE_BASKET, Permission.SELL_RELEASES, Permission.ORDER_RELEASES, Permission.PUBLISH_WEBFEED)));
         var adminTopics = Set.of(SubscriptionTopics.values());
-        var admins = Stream.of("ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test")
-                .map(id -> new User(new UserId(id), adminRoles, adminTopics, new ObjectId("6221173fe0db2b163e99dfae")));
+        var admins = Stream.of("ago8927", "jwi6503", "nsu3146", "tku8427", "tfi7196", "mbr6504", "jhe6245", "tf-test").map(id -> new User(new UserId(id), adminRoles, adminTopics, new ObjectId("6221173fe0db2b163e99dfae")));
 
-        var customerRoles = Set.of(new Role("customer", Set.of(Permission.SEARCH_RELEASES)));
-
+        var customerRoles = Set.of(new Role("customer", Set.of(Permission.SEARCH_RELEASES, Permission.USE_BASKET, Permission.BUY_RELEASES)));
         var customers = Stream.of(new User(new UserId("max"), customerRoles, Set.of(SubscriptionTopics.POP_TOPIC),  new ObjectId("6221173fe0db2b163e99dfae")));
 
         users = Stream.concat(admins, customers).collect(Collectors.toList());
