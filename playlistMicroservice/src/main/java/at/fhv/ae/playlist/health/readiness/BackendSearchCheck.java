@@ -19,7 +19,7 @@ public class BackendSearchCheck {
 
     @Readiness
     HealthCheck searchReleaseById() {
-        return new UrlHealthCheck(searchURL + "/id/c4d4c18b-b80a-45c3-a321-5e1d1d21edeb")
+        return new UrlHealthCheck(searchURL + "/id/ec8c15b9-18e2-47d0-ad7a-0c45438c7302")
                 .name("3 - Backend REST: " + BackendSearchCheck.class.getSimpleName() + " - Query by   Readiness")
                 .requestMethod(HttpMethod.GET)
                 .statusCode(200);
