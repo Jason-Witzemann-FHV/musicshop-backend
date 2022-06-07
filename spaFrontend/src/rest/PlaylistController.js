@@ -2,6 +2,7 @@
 import { playlist } from '../storage/PlaylistStorage.js';
 import { token } from '../storage/SessionStorage.js'
 import { get } from 'svelte/store';
+import { getDownload, getPlaylist } from "./Adresses.js";
 import axios from "axios";
 
 export function loadPlaylist() {
@@ -10,7 +11,7 @@ export function loadPlaylist() {
         headers: { Authorization: `Bearer ${get(token)}` }
     }
 
-    axios.get(`http://localhost:8083/playlist`, config)
+    axios.get(`http://${getPlaylist()}:8083/playlist`, config)
         .then(response => playlist.update(old => response.data))
 }
 
@@ -20,7 +21,7 @@ export function downloadSong(songId, name) {
         responseType: 'blob'
     }
 
-    axios.get(`http://localhost:8082/download/${songId}`, config)
+    axios.get(`http://${getDownload()}:8082/download/${songId}`, config)
         .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
@@ -38,7 +39,7 @@ export async function getSongResource(songId) {
         responseType: 'blob'
     }
 
-    return await axios.get(`http://localhost:8082/download/${songId}`, config)
+    return await axios.get(`http://${getDownload()}:8082/download/${songId}`, config)
         .then((response) => window.URL.createObjectURL(new Blob([response.data])));
 
 }

@@ -12,7 +12,7 @@
 
 	$: pageCount = parseInt($playlist.length / maxPageSize) + ($playlist.length % maxPageSize !== 0 ? 1 : 0)
 	let navigationPage = 1
-	let maxPageSize = 12
+	let maxPageSize = 7
 
 </script>
 

@@ -4,6 +4,7 @@ import { Snackbar } from "svelma"
 
 import { userName, password, token } from '../storage/SessionStorage.js';
 import { currentView } from '../storage/DisplayStorage.js';
+import { getMainBackend } from "./Adresses.js";
 
 export function login() {
 
@@ -19,7 +20,7 @@ export function login() {
         "password": get(password)
     })
 
-    axios.post(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/authentication`, bodyContent, config)
+    axios.post(`http://${getMainBackend()}:8080/backend-1.0-SNAPSHOT/soundkraut/authentication`, bodyContent, config)
         .then(response => { 
             token.update(old => response.data) 
             currentView.update(old => "searchReleases")

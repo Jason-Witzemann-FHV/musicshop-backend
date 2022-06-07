@@ -47,13 +47,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             abortWithUnauthorized(requestContext);
             return;
         }
-
-
         // Extract the token from the Authorization header
         String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
 
         try {
-
             // Fire UserAuthenticatedEvent to enable Injection of User
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(KEY)

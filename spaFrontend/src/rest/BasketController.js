@@ -4,6 +4,7 @@ import { get } from 'svelte/store'
 import { token } from '../storage/SessionStorage.js'
 import { basket, showBuyDetails } from '../storage/BasketStorage.js'
 import { Snackbar } from "svelma"
+import { getMainBackend } from "./Adresses.js";
 
 export function addToBasket(releaseId) {
 
@@ -11,7 +12,7 @@ export function addToBasket(releaseId) {
         headers: { Authorization: `Bearer ${get(token)}` }
     }
 
-    axios.put(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/add/${releaseId}`, {}, config)
+    axios.put(`http://${getMainBackend()}:8080/backend-1.0-SNAPSHOT/soundkraut/basket/add/${releaseId}`, {}, config)
         .then(response => {
             Snackbar.create({ 
                 message: 'Item added to basket!',
@@ -27,7 +28,7 @@ export function getBasket() {
         headers: { Authorization: `Bearer ${get(token)}` }
     }
 
-    axios.get(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket`, config)
+    axios.get(`http://${getMainBackend()}:8080/backend-1.0-SNAPSHOT/soundkraut/basket`, config)
         .then(response => basket.update(old => response.data) )
 
 }
@@ -37,7 +38,7 @@ export function removeFromBasket(releaseId) {
         headers: { Authorization: `Bearer ${get(token)}` }
     }
 
-    axios.delete(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/remove/${releaseId}`, config)
+    axios.delete(`http://${getMainBackend()}:8080/backend-1.0-SNAPSHOT/soundkraut/basket/remove/${releaseId}`, config)
         .then(response => {
             Snackbar.create({ 
                 message: 'Item removed from basket!',
@@ -54,7 +55,7 @@ export function changeQuantity(releaseId, newQuantity) {
         headers: { Authorization: `Bearer ${get(token)}` }
     }
 
-    axios.put(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/add/${releaseId}/${newQuantity}`, {}, config)
+    axios.put(`http://${getMainBackend()}:8080/backend-1.0-SNAPSHOT/soundkraut/basket/add/${releaseId}/${newQuantity}`, {}, config)
 }
 
 export function clearBasket() {
@@ -62,7 +63,7 @@ export function clearBasket() {
         headers: { Authorization: `Bearer ${get(token)}` }
     }
 
-    axios.delete(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/clear`, config)
+    axios.delete(`http://${getMainBackend()}:8080/backend-1.0-SNAPSHOT/soundkraut/basket/clear`, config)
         .then(response => {
             Snackbar.create({ 
                 message: 'Basket cleared!',
@@ -88,7 +89,7 @@ export function sellBasket() {
         cvc: get(cvc)
     })
 
-    axios.post(`http://localhost:8080/backend-1.0-SNAPSHOT/soundkraut/basket/selfsell`, creditCard, config)
+    axios.post(`http://${getMainBackend()}:8080/backend-1.0-SNAPSHOT/soundkraut/basket/selfsell`, creditCard, config)
         .then(response => {
             Snackbar.create({ 
                 message: 'Bought all items!',

@@ -14,7 +14,8 @@
 		faMagnifyingGlass,
 		faMusic,
 		faShoppingBasket,
-		faUser
+		faUser,
+		faCode
 	} from "@fortawesome/free-solid-svg-icons";
 
 	import "bulma/css/bulma.css";
@@ -61,6 +62,11 @@
 					<Fa icon={faMusic} /> &nbsp; My Playlist
 				</a>
 			{/if}
+
+			<a class="navbar-item ml-2" href="https://app.swaggerhub.com/apis/Soundkraut/backend-1_0_snapshot_war/1.0">
+				<Fa icon={faCode} /> &nbsp; Developer API
+			</a>
+
 		</div>
 
 		<div class="navbar-end">
