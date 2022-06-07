@@ -1,7 +1,7 @@
 <script>
     import { playlist } from "../storage/PlaylistStorage.js"
     import {loadPlaylist, downloadSong, getSongResource} from "../rest/PlaylistController.js"
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import { faCloudArrowDown }  from "@fortawesome/free-solid-svg-icons"
     import { toDuration} from "../Utils"
     import Fa from "svelte-fa";
@@ -13,6 +13,38 @@
 	$: pageCount = parseInt($playlist.length / maxPageSize) + ($playlist.length % maxPageSize !== 0 ? 1 : 0)
 	let navigationPage = 1
 	let maxPageSize = 7
+
+    function audioId(i) {
+        return `audio-${i}`;
+    }
+
+    function onAudioStarted(i) {
+
+        // stop and reset all other players
+        for (let audio of document.getElementsByTagName(`audio`)) {
+            if(audio.id !== audioId(i)) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+    }
+
+    async function onAudioEnded(i) {
+
+        // number of next song
+        let next = (i + 1) % $playlist.length;
+
+        // go to its page
+        navigationPage = 1 + parseInt(next / maxPageSize);
+        // wait until navigation page is loaded into DOM
+        await tick();
+
+        // start playback (calls onAudioStarted)
+        let audio = document.getElementById(audioId(next));
+
+        audio.load();
+        audio.play();
+    }
 
 </script>
 
@@ -46,7 +78,9 @@
                         <td><a on:click={downloadSong(songId, title)}><Fa icon={faCloudArrowDown} size="1.75x" /></a>
                         </td>
                         <td>
-                            <audio controls>
+                            <audio controls id="{audioId(i)}"
+                                   on:play={() => onAudioStarted(i)}
+                                   on:ended={async () => await onAudioEnded(i)}>
                                 {#await getSongResource(songId)}
                                     loading...
                                 {:then url}
