@@ -3,6 +3,8 @@
 	import { releaseSearchResult, isDetailActive, releaseSearchTitle, releaseSearchArtist, releaseSearchGenre } from '../storage/ReleaseSearchStore.js';
 	import { searchReleases, searchDetails} from '../rest/ReleaseSearchController.js'
 
+	import { currentView } from "../storage/DisplayStorage.js"
+
 	import { fly } from 'svelte/transition';
 	import { Field, Input, Button, Select } from 'svelma'
 	import SearchReleaseDetail from "./SearchReleaseDetail.svelte";
@@ -74,9 +76,7 @@
 				<th>Stock</th>
 				<th>Price</th>
 				<th></th>
-				{#if $token !== ""}
-					<th></th>
-				{/if}
+				<th></th>
 			</thead>
 
 			{#each $releaseSearchResult as { id, title, medium, stock, price }, i }
@@ -94,14 +94,24 @@
 							</a>
 						</td>
 
-						{#if $token !== ""}
+						
 							<td class="has-text-centered"> 
-								<!-- svelte-ignore a11y-missing-attribute -->
-								<a on:click={() => addToBasket(id)}>
-									<Fa icon={faCartPlus} size="1.75x" />
-								</a>
+
+								{#if $token !== ""}
+									<!-- svelte-ignore a11y-missing-attribute -->
+									<a on:click={() => addToBasket(id)}>
+										<Fa icon={faCartPlus} size="1.75x" />
+									</a>
+								{:else}
+									<!-- svelte-ignore a11y-missing-attribute -->
+									<a on:click={() => currentView.update(current => "login")}>
+										<Fa icon={faCartPlus} size="1.75x" />
+									</a>
+								{/if}
+
+
 							</td>
-						{/if}
+						
 					</tr>
 				{/if}
 			{/each}
