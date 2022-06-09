@@ -14,12 +14,6 @@ public class BackendBasketCheck {
     @ConfigProperty(name = "default.basket")
     String basketUrl;
 
-    @ConfigProperty(name = "default.userName")
-    String userName;
-
-    @Inject
-    AuthenticatedUserProducer userProducer;
-
     @Readiness
     HealthCheck addToBasket() {
         return new UrlHealthCheck(basketUrl)
